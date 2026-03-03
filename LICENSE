@@ -1,0 +1,38 @@
+Proprietary Software License
+
+Copyright (c) 2026 Beryndil. All rights reserved.
+
+1. PERMITTED USE
+You are granted a non-exclusive, non-transferable, revocable license to use
+the Spyglass Connect application as distributed through official release
+channels for personal, non-commercial purposes.
+
+2. RESTRICTIONS
+You may NOT, without the prior written consent of the copyright holder:
+  a. Copy, reproduce, or duplicate the source code or application;
+  b. Modify, adapt, translate, or create derivative works based on the
+     source code or application;
+  c. Distribute, sublicense, lease, rent, loan, or otherwise transfer the
+     source code or application to any third party;
+  d. Reverse-engineer, decompile, disassemble, or otherwise attempt to
+     derive the source code from the compiled application;
+  e. Use the source code or application for any commercial purpose;
+  f. Remove, alter, or obscure any proprietary notices, labels, or marks.
+
+3. THIRD-PARTY LIBRARIES
+This application includes third-party open-source libraries that are subject
+to their own licenses. See build.gradle.kts for dependency details.
+
+4. NO WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING
+FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+5. TERMINATION
+This license is effective until terminated. It will terminate automatically
+if you fail to comply with any term of this license. Upon termination, you
+must destroy all copies of the software in your possession.

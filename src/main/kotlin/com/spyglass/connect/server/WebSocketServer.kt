@@ -45,7 +45,12 @@ class WebSocketServer {
     fun start(port: Int = DEFAULT_PORT) {
         state.value = ServerState.STARTING
         try {
-            server = embeddedServer(Netty, port = port) {
+            server = embeddedServer(Netty, configure = {
+                configureBootstrap = {
+                    childOption(io.netty.channel.ChannelOption.SO_REUSEADDR, true)
+                    option(io.netty.channel.ChannelOption.SO_REUSEADDR, true)
+                }
+            }, module = {
                 install(WebSockets) {
                     pingPeriod = 15.seconds
                     timeout = 30.seconds
@@ -57,7 +62,7 @@ class WebSocketServer {
                         handleClientConnection(this)
                     }
                 }
-            }.also {
+            }).also {
                 it.start(wait = false)
             }
             state.value = ServerState.RUNNING
