@@ -13,6 +13,8 @@ import io.ktor.websocket.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.json.Json
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 /**
@@ -23,6 +25,8 @@ class WebSocketServer {
 
     companion object {
         const val DEFAULT_PORT = 29170
+        private val timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss")
+        private fun log(msg: String) = println("[${LocalTime.now().format(timeFmt)}] $msg")
     }
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
@@ -60,10 +64,10 @@ class WebSocketServer {
             }.also {
                 it.start(wait = false)
             }
+            log("Server started on port $port")
             state.value = ServerState.RUNNING
         } catch (e: Exception) {
-            System.err.println("Server start failed: ${e.message}")
-            e.printStackTrace()
+            log("Server start FAILED: ${e.message}")
             state.value = ServerState.ERROR
         }
     }
@@ -77,10 +81,11 @@ class WebSocketServer {
 
     /** Handle a new WebSocket client connection. */
     private suspend fun handleClientConnection(session: DefaultWebSocketServerSession) {
-        val clientId = UUID.randomUUID().toString()
+        val clientId = UUID.randomUUID().toString().take(8)
         // Use the server's encryption (whose public key is in the QR code) so ECDH keys match
         val clientEncryption = encryption
         val clientSession = sessionManager.addSession(clientId, session, clientEncryption)
+        log("Client connected [$clientId]")
 
         try {
             // Send world list on connect
@@ -133,7 +138,10 @@ class WebSocketServer {
                     }
                 }
             }
+        } catch (e: Exception) {
+            log("Client [$clientId] error: ${e.message}")
         } finally {
+            log("Client disconnected [$clientId]")
             sessionManager.removeSession(clientId)
         }
     }
@@ -146,10 +154,12 @@ class WebSocketServer {
         session: WebSocketSession,
     ) {
         val payload = json.decodeFromJsonElement(PairRequestPayload.serializer(), message.payload)
+        log("Pair request from '${payload.deviceName}' [$clientId]")
 
         // Derive shared key from phone's public key
         clientEncryption.deriveSharedKey(payload.pubkey)
         sessionManager.markPaired(clientId, payload.deviceName)
+        log("Paired with '${payload.deviceName}' [$clientId]")
 
         // Send acceptance as plaintext (pairing handshake completes before encryption begins)
         val accept = SpyglassMessage(
