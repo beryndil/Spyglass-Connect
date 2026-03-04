@@ -57,8 +57,8 @@ fun MainWindow(
         MaterialTheme(
             colorScheme = darkColorScheme(
                 primary = Color(0xFF7CBD6B),
-                surface = Color(0xFF1E1E1E),
-                background = Color(0xFF121212),
+                surface = Color(0xFF111111),
+                background = Color.Black,
                 onSurface = Color(0xFFE0E0E0),
                 onBackground = Color(0xFFE0E0E0),
             ),

@@ -45,12 +45,7 @@ class WebSocketServer {
     fun start(port: Int = DEFAULT_PORT) {
         state.value = ServerState.STARTING
         try {
-            server = embeddedServer(Netty, configure = {
-                configureBootstrap = {
-                    childOption(io.netty.channel.ChannelOption.SO_REUSEADDR, true)
-                    option(io.netty.channel.ChannelOption.SO_REUSEADDR, true)
-                }
-            }, module = {
+            server = embeddedServer(Netty, port = port) {
                 install(WebSockets) {
                     pingPeriod = 15.seconds
                     timeout = 30.seconds
@@ -62,11 +57,13 @@ class WebSocketServer {
                         handleClientConnection(this)
                     }
                 }
-            }).also {
+            }.also {
                 it.start(wait = false)
             }
             state.value = ServerState.RUNNING
         } catch (e: Exception) {
+            System.err.println("Server start failed: ${e.message}")
+            e.printStackTrace()
             state.value = ServerState.ERROR
         }
     }
@@ -81,7 +78,8 @@ class WebSocketServer {
     /** Handle a new WebSocket client connection. */
     private suspend fun handleClientConnection(session: DefaultWebSocketServerSession) {
         val clientId = UUID.randomUUID().toString()
-        val clientEncryption = EncryptionManager()
+        // Use the server's encryption (whose public key is in the QR code) so ECDH keys match
+        val clientEncryption = encryption
         val clientSession = sessionManager.addSession(clientId, session, clientEncryption)
 
         try {
@@ -153,7 +151,7 @@ class WebSocketServer {
         clientEncryption.deriveSharedKey(payload.pubkey)
         sessionManager.markPaired(clientId, payload.deviceName)
 
-        // Send acceptance (encrypted)
+        // Send acceptance as plaintext (pairing handshake completes before encryption begins)
         val accept = SpyglassMessage(
             type = MessageType.PAIR_ACCEPT,
             payload = json.encodeToJsonElement(
@@ -162,7 +160,7 @@ class WebSocketServer {
             ),
         )
         val acceptJson = json.encodeToString(SpyglassMessage.serializer(), accept)
-        session.send(Frame.Text(clientEncryption.encrypt(acceptJson)))
+        session.send(Frame.Text(acceptJson))
     }
 
     /** Notify all connected clients of a world change. */

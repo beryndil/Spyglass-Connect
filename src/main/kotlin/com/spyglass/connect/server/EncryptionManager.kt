@@ -1,8 +1,8 @@
 package com.spyglass.connect.server
 
-import org.bouncycastle.jce.ECNamedCurveTable
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.*
+import java.security.spec.ECGenParameterSpec
+import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.KeyAgreement
@@ -12,12 +12,7 @@ import javax.crypto.spec.SecretKeySpec
 
 /**
  * ECDH key exchange + AES-256-GCM encryption for Spyglass Connect.
- *
- * Flow:
- * 1. Generate ECDH key pair (secp256r1)
- * 2. Exchange public keys during pairing
- * 3. Derive shared AES-256 key via ECDH + HKDF-SHA256
- * 4. Encrypt/decrypt all messages with AES-256-GCM (12-byte random IV)
+ * Uses standard java.security (compatible with Android's java.security).
  */
 class EncryptionManager {
 
@@ -27,12 +22,6 @@ class EncryptionManager {
         private const val GCM_IV_BYTES = 12
         private const val GCM_TAG_BITS = 128
         private val INFO = "spyglass-connect-v1".toByteArray()
-
-        init {
-            if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-                Security.addProvider(BouncyCastleProvider())
-            }
-        }
     }
 
     private val keyPair: KeyPair
@@ -40,9 +29,8 @@ class EncryptionManager {
     private val secureRandom = SecureRandom()
 
     init {
-        val spec = ECNamedCurveTable.getParameterSpec(CURVE)
-        val keyGen = KeyPairGenerator.getInstance("EC", "BC")
-        keyGen.initialize(spec, secureRandom)
+        val keyGen = KeyPairGenerator.getInstance("EC")
+        keyGen.initialize(ECGenParameterSpec(CURVE), secureRandom)
         keyPair = keyGen.generateKeyPair()
     }
 
@@ -59,14 +47,13 @@ class EncryptionManager {
 
     /**
      * Derive shared AES-256 key from the peer's public key.
-     * Call this after receiving the phone's public key during pairing.
      */
     fun deriveSharedKey(peerPublicKeyBase64: String) {
         val peerKeyBytes = Base64.getDecoder().decode(peerPublicKeyBase64)
-        val keyFactory = KeyFactory.getInstance("EC", "BC")
-        val peerPublicKey = keyFactory.generatePublic(java.security.spec.X509EncodedKeySpec(peerKeyBytes))
+        val keyFactory = KeyFactory.getInstance("EC")
+        val peerPublicKey = keyFactory.generatePublic(X509EncodedKeySpec(peerKeyBytes))
 
-        val keyAgreement = KeyAgreement.getInstance("ECDH", "BC")
+        val keyAgreement = KeyAgreement.getInstance("ECDH")
         keyAgreement.init(keyPair.private)
         keyAgreement.doPhase(peerPublicKey, true)
         val sharedSecret = keyAgreement.generateSecret()
@@ -90,7 +77,6 @@ class EncryptionManager {
         cipher.init(Cipher.ENCRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, iv))
         val ciphertext = cipher.doFinal(plaintext.toByteArray(Charsets.UTF_8))
 
-        // Prepend IV to ciphertext
         val result = ByteArray(iv.size + ciphertext.size)
         System.arraycopy(iv, 0, result, 0, iv.size)
         System.arraycopy(ciphertext, 0, result, iv.size, ciphertext.size)
@@ -110,8 +96,6 @@ class EncryptionManager {
         cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, iv))
         return String(cipher.doFinal(ciphertext), Charsets.UTF_8)
     }
-
-    // ── HKDF-SHA256 implementation ──────────────────────────────────────────
 
     private fun hkdfExtract(salt: ByteArray, ikm: ByteArray): ByteArray {
         val mac = Mac.getInstance("HmacSHA256")
