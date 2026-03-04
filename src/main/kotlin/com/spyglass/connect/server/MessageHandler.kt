@@ -71,10 +71,15 @@ class MessageHandler(
 
     private fun handleRequestPlayer(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
-            ?: return errorResponse(message.requestId, "no_world", "No world selected")
+            ?: return errorResponse(message.requestId, "no_world", "No world selected").also {
+                println("[MessageHandler] REQUEST_PLAYER failed: no world selected")
+            }
 
         val playerData = PlayerParser.parse(worldDir)
-            ?: return errorResponse(message.requestId, "no_player", "No player data found")
+            ?: return errorResponse(message.requestId, "no_player", "No player data found in $worldDir").also {
+                println("[MessageHandler] REQUEST_PLAYER failed: PlayerParser.parse returned null for $worldDir")
+            }
+        println("[MessageHandler] REQUEST_PLAYER success: ${playerData.worldName}, health=${playerData.health}, inv=${playerData.inventory.size} items")
 
         return SpyglassMessage(
             type = MessageType.PLAYER_DATA,
