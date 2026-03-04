@@ -48,6 +48,8 @@ Automatically finds Minecraft worlds from:
 | **Structures** | Locations of villages, temples, monuments, and more |
 | **Overhead Map** | Terrain map with structure markers and player position |
 | **Player Stats** | Health, food, XP level, coordinates, and dimension |
+| **Statistics** | Lifetime stats — blocks mined, mobs killed, distance walked, play time, and more |
+| **Advancements** | All 125 advancements with completion status pulled from your save file |
 
 ### Live Updates
 
@@ -66,6 +68,8 @@ Spyglass Connect reads your Minecraft save files directly (it never modifies the
 - `level.dat` — world metadata and player data
 - `region/*.mca` — Anvil region files for chest contents, structures, and map rendering
 - `playerdata/*.dat` — player inventory and stats
+- `stats/<uuid>.json` — player lifetime statistics (blocks mined, distance, kills, etc.)
+- `advancements/<uuid>.json` — advancement completion status and criteria
 
 Data is served over a local WebSocket server (port 29170) to the Spyglass Android app on the same WiFi network. The phone discovers the desktop via mDNS for automatic reconnection.
 
