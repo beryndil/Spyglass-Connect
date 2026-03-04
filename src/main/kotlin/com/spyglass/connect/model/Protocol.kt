@@ -215,4 +215,5 @@ data class PairRequestPayload(
 data class PairAcceptPayload(
     val deviceName: String,
     val accepted: Boolean = true,
+    val pubkey: String? = null,
 )

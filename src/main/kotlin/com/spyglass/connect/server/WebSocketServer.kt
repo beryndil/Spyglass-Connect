@@ -32,7 +32,7 @@ class WebSocketServer {
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
     val sessionManager = SessionManager()
-    val encryption = EncryptionManager()
+    val encryption = EncryptionManager.loadOrCreate()
     private val searchIndex = ItemSearchIndex()
     private val messageHandler = MessageHandler(
         worldsProvider = { SaveDetector.detectWorlds() },
@@ -192,7 +192,11 @@ class WebSocketServer {
             type = MessageType.PAIR_ACCEPT,
             payload = json.encodeToJsonElement(
                 PairAcceptPayload.serializer(),
-                PairAcceptPayload(deviceName = "Spyglass Connect", accepted = true),
+                PairAcceptPayload(
+                    deviceName = "Spyglass Connect",
+                    accepted = true,
+                    pubkey = encryption.getPublicKeyBase64(),
+                ),
             ),
         )
         val acceptJson = json.encodeToString(SpyglassMessage.serializer(), accept)

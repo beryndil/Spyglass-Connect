@@ -1,7 +1,9 @@
 package com.spyglass.connect.server
 
+import java.io.File
 import java.security.*
 import java.security.spec.ECGenParameterSpec
+import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 import javax.crypto.Cipher
@@ -13,6 +15,9 @@ import javax.crypto.spec.SecretKeySpec
 /**
  * ECDH key exchange + AES-256-GCM encryption for Spyglass Connect.
  * Uses standard java.security (compatible with Android's java.security).
+ *
+ * The server's key pair is persisted to disk so the phone's stored
+ * public key remains valid across desktop restarts.
  */
 class EncryptionManager internal constructor(private val keyPair: KeyPair) {
 
@@ -23,17 +28,64 @@ class EncryptionManager internal constructor(private val keyPair: KeyPair) {
         private const val GCM_TAG_BITS = 128
         private val INFO = "spyglass-connect-v1".toByteArray()
 
+        private val KEY_FILE = File(
+            System.getProperty("user.home"), ".config/spyglass-connect/ecdh-keypair"
+        )
+
         private fun generateKeyPair(): KeyPair {
             val keyGen = KeyPairGenerator.getInstance("EC")
             keyGen.initialize(ECGenParameterSpec(CURVE), SecureRandom())
             return keyGen.generateKeyPair()
+        }
+
+        /** Load a persisted key pair from disk, or generate and save a new one. */
+        fun loadOrCreate(): EncryptionManager {
+            val loaded = loadKeyPair()
+            if (loaded != null) return EncryptionManager(loaded)
+
+            val keyPair = generateKeyPair()
+            saveKeyPair(keyPair)
+            return EncryptionManager(keyPair)
+        }
+
+        private fun loadKeyPair(): KeyPair? {
+            if (!KEY_FILE.exists()) return null
+            return try {
+                val lines = KEY_FILE.readLines()
+                if (lines.size < 2) return null
+                val pubBytes = Base64.getDecoder().decode(lines[0])
+                val privBytes = Base64.getDecoder().decode(lines[1])
+                val kf = KeyFactory.getInstance("EC")
+                val pub = kf.generatePublic(X509EncodedKeySpec(pubBytes))
+                val priv = kf.generatePrivate(PKCS8EncodedKeySpec(privBytes))
+                KeyPair(pub, priv)
+            } catch (e: Exception) {
+                println("[EncryptionManager] Failed to load key pair: ${e.message}, generating new one")
+                null
+            }
+        }
+
+        private fun saveKeyPair(keyPair: KeyPair) {
+            try {
+                KEY_FILE.parentFile?.mkdirs()
+                val pub = Base64.getEncoder().encodeToString(keyPair.public.encoded)
+                val priv = Base64.getEncoder().encodeToString(keyPair.private.encoded)
+                KEY_FILE.writeText("$pub\n$priv\n")
+                // Restrict permissions to owner only
+                KEY_FILE.setReadable(false, false)
+                KEY_FILE.setReadable(true, true)
+                KEY_FILE.setWritable(false, false)
+                KEY_FILE.setWritable(true, true)
+            } catch (e: Exception) {
+                println("[EncryptionManager] Failed to save key pair: ${e.message}")
+            }
         }
     }
 
     private var sharedKey: SecretKeySpec? = null
     private val secureRandom = SecureRandom()
 
-    /** Primary constructor — generates a new ECDH key pair. */
+    /** Primary constructor — generates a new ECDH key pair (not persisted). */
     constructor() : this(generateKeyPair())
 
     /**
