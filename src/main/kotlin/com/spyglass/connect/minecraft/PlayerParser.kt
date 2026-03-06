@@ -142,13 +142,40 @@ object PlayerParser {
         return parseItemList(player, "Inventory") { slot -> slot in 0..35 }
     }
 
-    /** Parse armor slots (100-103). */
+    /**
+     * Parse armor slots.
+     * Pre-1.21: slots 100-103 in Inventory list.
+     * 1.21+: equipment compound with feet/legs/chest/head keys.
+     */
     private fun parseArmor(player: CompoundTag): List<ItemStack> {
+        // Try 1.21+ equipment compound first
+        val equipment = NbtHelper.compound(player, "equipment")
+        if (equipment != null) {
+            val slotMap = mapOf("feet" to 100, "legs" to 101, "chest" to 102, "head" to 103)
+            val items = mutableListOf<ItemStack>()
+            for ((key, slot) in slotMap) {
+                val itemTag = NbtHelper.compound(equipment, key) ?: continue
+                parseItem(itemTag)?.let { items.add(it.copy(slot = slot)) }
+            }
+            if (items.isNotEmpty()) return items
+        }
+        // Fallback: pre-1.21 format (slots 100-103 in Inventory)
         return parseItemList(player, "Inventory") { slot -> slot in 100..103 }
     }
 
-    /** Parse offhand (slot -106). */
+    /**
+     * Parse offhand item.
+     * Pre-1.21: slot -106 in Inventory list.
+     * 1.21+: equipment compound with "offhand" key.
+     */
     private fun parseOffhand(player: CompoundTag): ItemStack? {
+        // Try 1.21+ equipment compound first
+        val equipment = NbtHelper.compound(player, "equipment")
+        if (equipment != null) {
+            val itemTag = NbtHelper.compound(equipment, "offhand")
+            if (itemTag != null) return parseItem(itemTag)?.copy(slot = -106)
+        }
+        // Fallback: pre-1.21 format
         return parseItemList(player, "Inventory") { slot -> slot == -106 }.firstOrNull()
     }
 
@@ -173,7 +200,9 @@ object PlayerParser {
     private fun parseItem(item: CompoundTag): ItemStack? {
         val id = NbtHelper.string(item, "id").removePrefix("minecraft:")
         if (id.isBlank()) return null
-        val count = NbtHelper.int(item, "Count", 1).coerceAtLeast(1)
+        // 1.21+ uses lowercase "count" (IntTag); older uses "Count" (ByteTag)
+        val count = maxOf(NbtHelper.int(item, "Count", 0), NbtHelper.int(item, "count", 0))
+            .coerceAtLeast(1)
         val slot = NbtHelper.int(item, "Slot", -1)
         val enchantments = parseEnchantments(item)
         val damage = extractDamage(item)
