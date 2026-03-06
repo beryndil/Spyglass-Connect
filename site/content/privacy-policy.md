@@ -1,12 +1,12 @@
 ---
 title: "Privacy Policy"
-description: "Spyglass privacy policy — what data the app collects, how it is used, and the choices you have."
-subtitle: "Spyglass — Minecraft Companion App &bull; Last updated: March 3, 2026"
+description: "Spyglass Connect privacy policy — what data the app collects, how it is used, and the choices you have."
+subtitle: "Spyglass Connect — Minecraft Companion App &bull; Last updated: March 4, 2026"
 aliases:
   - /privacy-policy.html
 ---
 
-> Spyglass is a free, ad-supported Android app created by Beryndil. This policy explains what data the app collects, how it is used, and the choices you have.
+> Spyglass Connect is a free, ad-supported Android app created by Beryndil. This policy explains what data the app collects, how it is used, and the choices you have.
 
 ## 1. Information We Collect
 
