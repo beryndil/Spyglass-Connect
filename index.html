@@ -129,44 +129,49 @@
             position: relative;
             z-index: 1;
             line-height: 1.6;
+            margin-bottom: 3rem;
         }
 
-        /* ── Spyglass Connect Banner ── */
+        /* ── Spyglass Connect Ad Banner ── */
         .banner-section {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 4rem 2rem 3rem;
+            position: relative;
+            z-index: 1;
+            max-width: 520px;
+            width: 100%;
+            padding: 0 2rem;
         }
 
         .banner {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             align-items: center;
             transition: border-color 0.3s ease;
+            opacity: 0.7;
         }
 
         .banner:hover {
             border-color: var(--primary-dark);
+            opacity: 1;
         }
 
         .banner-icon {
             flex-shrink: 0;
-            width: 80px;
-            height: 80px;
-            background: rgba(251, 191, 36, 0.1);
-            border-radius: 16px;
+            width: 48px;
+            height: 48px;
+            background: rgba(251, 191, 36, 0.08);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .banner-icon svg {
-            width: 44px;
-            height: 44px;
+            width: 26px;
+            height: 26px;
         }
 
         .banner-content {
@@ -174,28 +179,27 @@
         }
 
         .banner-label {
-            font-family: 'Syne', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.65rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--primary);
-            margin-bottom: 0.25rem;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
         }
 
         .banner-title {
             font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .banner-desc {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1.25rem;
-            line-height: 1.6;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
         }
 
         .banner-actions {
@@ -280,7 +284,7 @@
             .banner {
                 flex-direction: column;
                 text-align: center;
-                padding: 2rem 1.5rem;
+                padding: 1rem 1.25rem;
             }
 
             .banner-actions {
@@ -288,7 +292,7 @@
             }
 
             .banner-section {
-                padding: 3rem 1.25rem 2rem;
+                padding: 0 1.25rem;
             }
         }
     </style>
@@ -320,27 +324,26 @@
         <h1><span>404</span> &mdash; No Education Found</h1>
         <p class="hero-sub">Continue through sheer force of will.</p>
         <p class="hero-muted">hardknocks.university is the personal studio of Beryndil, leveraging modern tools to solve modern problems.</p>
-    </section>
 
-    <!-- Spyglass Connect Banner -->
-    <section class="banner-section">
-        <div class="banner">
-            <div class="banner-icon">
-                <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Spyglass icon -->
-                    <circle cx="18" cy="18" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
-                    <line x1="25.5" y1="25.5" x2="36" y2="36" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
-                    <circle cx="18" cy="18" r="5" stroke="#fbbf24" stroke-width="1.5" fill="none" opacity="0.4"/>
-                </svg>
-            </div>
-            <div class="banner-content">
-                <div class="banner-label">Featured Project</div>
-                <div class="banner-title">Spyglass Connect</div>
-                <p class="banner-desc">The complete Minecraft Java Edition companion. Browse blocks, items, mobs, biomes, enchantments, and more &mdash; offline. Connect to your PC to view inventory, search chests, and explore your world in real time.</p>
-                <div class="banner-actions">
-                    <a href="/spyglass-connect.html" class="btn btn-primary">Learn More</a>
-                    <a href="#" class="btn btn-outline" onclick="return false;" title="Coming soon to Google Play">Google Play</a>
-                    <a href="https://github.com/beryndil/Spyglass-Connect/releases" class="btn btn-outline">Desktop App</a>
+        <!-- Ad banner -->
+        <div class="banner-section">
+            <div class="banner">
+                <div class="banner-icon">
+                    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="18" cy="18" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
+                        <line x1="25.5" y1="25.5" x2="36" y2="36" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="18" cy="18" r="5" stroke="#fbbf24" stroke-width="1.5" fill="none" opacity="0.4"/>
+                    </svg>
+                </div>
+                <div class="banner-content">
+                    <div class="banner-label">Sponsored</div>
+                    <div class="banner-title">Spyglass Connect</div>
+                    <p class="banner-desc">Minecraft companion app. Browse everything, connect to your PC, explore your world.</p>
+                    <div class="banner-actions">
+                        <a href="/spyglass-connect.html" class="btn btn-primary">Learn More</a>
+                        <a href="#" class="btn btn-outline" onclick="return false;" title="Coming soon to Google Play">Google Play</a>
+                        <a href="https://github.com/beryndil/Spyglass-Connect/releases" class="btn btn-outline">Desktop</a>
+                    </div>
                 </div>
             </div>
         </div>
