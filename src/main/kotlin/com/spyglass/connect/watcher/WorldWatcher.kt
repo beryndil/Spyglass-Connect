@@ -6,11 +6,12 @@ import java.io.File
 import java.nio.file.*
 
 /**
- * Watch a Minecraft world folder for changes using Java NIO WatchService.
- * Monitors: level.dat, playerdata/, region/, DIM-1/region/, DIM1/region/
+ * Watch a Minecraft world folder for changes.
+ * Uses Java NIO WatchService (inotify) for instant detection, plus a polling
+ * fallback every 3 seconds for cases where inotify misses events (e.g. Flatpak
+ * sandboxed games that write files atomically via rename).
  *
- * Inspired by minecolony-manager/electron/main.js polling pattern,
- * but using native filesystem events instead.
+ * Monitors: level.dat, playerdata/, region/, DIM-1/region/, DIM1/region/
  */
 class WorldWatcher(
     private val scope: CoroutineScope,
@@ -18,10 +19,12 @@ class WorldWatcher(
 ) {
 
     private var watchJob: Job? = null
+    private var pollJob: Job? = null
     private var watchService: WatchService? = null
 
     companion object {
         private const val TAG = "Watcher"
+        private const val POLL_INTERVAL_MS = 3000L
     }
 
     /** Start watching a world directory. Cancels any previous watch. */
@@ -29,6 +32,9 @@ class WorldWatcher(
         stop()
         Log.i(TAG, "Watching ${worldDir.absolutePath}")
 
+        val debouncer = ChangeDebouncer(scope, 500L, onChanged)
+
+        // inotify-based watcher (instant but may miss atomic renames)
         watchJob = scope.launch(Dispatchers.IO) {
             val ws = FileSystems.getDefault().newWatchService()
             watchService = ws
@@ -47,7 +53,6 @@ class WorldWatcher(
                 }
             }
 
-            val debouncer = ChangeDebouncer(this, 500L, onChanged)
             val keyToCategory = mutableMapOf<WatchKey, String>()
 
             for ((path, category) in dirsToWatch) {
@@ -84,12 +89,64 @@ class WorldWatcher(
                 Log.d(TAG, "Watch service closed")
             }
         }
+
+        // Polling fallback — catches changes inotify misses
+        pollJob = scope.launch(Dispatchers.IO) {
+            val trackedFiles = buildList {
+                add(File(worldDir, "level.dat") to "level")
+                val playerDataDir = File(worldDir, "playerdata")
+                if (playerDataDir.isDirectory) {
+                    playerDataDir.listFiles()?.filter { it.name.endsWith(".dat") }?.forEach {
+                        add(it to "player")
+                    }
+                }
+            }
+
+            // Snapshot initial timestamps
+            val lastModified = trackedFiles.associate { (f, _) ->
+                f.absolutePath to f.lastModified()
+            }.toMutableMap()
+
+            Log.d(TAG, "Poll fallback tracking ${lastModified.size} files")
+
+            while (isActive) {
+                delay(POLL_INTERVAL_MS)
+
+                // Also pick up new playerdata files
+                val currentFiles = buildList {
+                    addAll(trackedFiles)
+                    val playerDataDir = File(worldDir, "playerdata")
+                    if (playerDataDir.isDirectory) {
+                        playerDataDir.listFiles()?.filter { it.name.endsWith(".dat") }?.forEach { f ->
+                            if (trackedFiles.none { it.first.absolutePath == f.absolutePath }) {
+                                add(f to "player")
+                            }
+                        }
+                    }
+                }
+
+                for ((file, category) in currentFiles) {
+                    val path = file.absolutePath
+                    val mod = file.lastModified()
+                    val prev = lastModified[path]
+                    if (prev == null || mod > prev) {
+                        lastModified[path] = mod
+                        if (prev != null) { // Skip initial snapshot
+                            Log.d(TAG, "Poll detected change: ${file.name} ($category)")
+                            debouncer.onChange(category)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /** Stop watching. */
     fun stop() {
         watchJob?.cancel()
         watchJob = null
+        pollJob?.cancel()
+        pollJob = null
         try { watchService?.close() } catch (_: Exception) {}
         watchService = null
     }

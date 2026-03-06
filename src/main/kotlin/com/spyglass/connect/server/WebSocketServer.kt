@@ -152,9 +152,10 @@ class WebSocketServer {
                 }
             }
         } catch (e: Exception) {
-            log("Client [$clientId] error: ${e.message}")
+            Log.e(TAG, "Client [$clientId] error", e)
         } finally {
-            log("Client disconnected [$clientId]")
+            val reason = session.closeReason.await()
+            Log.i(TAG, "Client disconnected [$clientId] reason=${reason?.code}:${reason?.message}")
             sessionManager.removeSession(clientId)
             connectedDevices.removeAll { it.id == clientId }
         }
