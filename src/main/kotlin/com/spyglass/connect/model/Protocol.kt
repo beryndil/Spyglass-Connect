@@ -21,6 +21,7 @@ data class SpyglassMessage(
 object MessageType {
     // Desktop → Phone
     const val WORLD_LIST = "world_list"
+    const val PLAYER_LIST = "player_list"
     const val PLAYER_DATA = "player_data"
     const val CHEST_CONTENTS = "chest_contents"
     const val STRUCTURE_LOCATIONS = "structure_locations"
@@ -34,6 +35,7 @@ object MessageType {
 
     // Phone → Desktop
     const val SELECT_WORLD = "select_world"
+    const val REQUEST_PLAYER_LIST = "request_player_list"
     const val REQUEST_PLAYER = "request_player"
     const val REQUEST_CHESTS = "request_chests"
     const val REQUEST_STRUCTURES = "request_structures"
@@ -67,6 +69,20 @@ data class WorldInfo(
 @Serializable
 data class WorldListPayload(
     val worlds: List<WorldInfo>,
+)
+
+@Serializable
+data class PlayerSummary(
+    val uuid: String,
+    val name: String?,
+    val lastPlayed: Long = 0,
+    val isOwner: Boolean = false,
+)
+
+@Serializable
+data class PlayerListPayload(
+    val worldName: String,
+    val players: List<PlayerSummary>,
 )
 
 @Serializable
@@ -206,6 +222,11 @@ data class PlayerAdvancementsPayload(
 @Serializable
 data class SelectWorldPayload(
     val folderName: String,
+)
+
+@Serializable
+data class RequestPlayerPayload(
+    val playerUuid: String? = null,
 )
 
 @Serializable

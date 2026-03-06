@@ -34,6 +34,7 @@ class MessageHandler(
         Log.d(TAG, "Handling ${message.type}")
         return when (message.type) {
             MessageType.SELECT_WORLD -> handleSelectWorld(message)
+            MessageType.REQUEST_PLAYER_LIST -> handleRequestPlayerList(message)
             MessageType.REQUEST_PLAYER -> handleRequestPlayer(message)
             MessageType.REQUEST_CHESTS -> handleRequestChests(message)
             MessageType.REQUEST_STRUCTURES -> handleRequestStructures(message)
@@ -83,18 +84,43 @@ class MessageHandler(
         return worldListMessage()
     }
 
+    private fun handleRequestPlayerList(message: SpyglassMessage): SpyglassMessage {
+        val worldDir = selectedWorldDir
+            ?: return errorResponse(message.requestId, "no_world", "No world selected").also {
+                Log.w(TAG, "REQUEST_PLAYER_LIST failed: no world selected")
+            }
+
+        val players = PlayerParser.listPlayers(worldDir)
+        Log.i(TAG, "REQUEST_PLAYER_LIST: ${players.size} players in ${worldDir.name}")
+
+        val payload = PlayerListPayload(worldName = worldDir.name, players = players)
+        return SpyglassMessage(
+            type = MessageType.PLAYER_LIST,
+            requestId = message.requestId,
+            payload = json.encodeToJsonElement(payload),
+        )
+    }
+
     private fun handleRequestPlayer(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, "no_world", "No world selected").also {
                 Log.w(TAG, "REQUEST_PLAYER failed: no world selected")
             }
 
-        val playerData = PlayerParser.parse(worldDir)
-            ?: return errorResponse(message.requestId, "no_player", "No player data found in $worldDir").also {
-                Log.w(TAG, "REQUEST_PLAYER failed: PlayerParser.parse returned null for $worldDir")
+        // Check if a specific player UUID was requested
+        val requestedUuid = try {
+            val req = json.decodeFromJsonElement(RequestPlayerPayload.serializer(), message.payload)
+            req.playerUuid
+        } catch (_: Exception) {
+            null // Backwards-compatible: no payload means default player
+        }
+
+        val playerData = PlayerParser.parseByUuid(worldDir, requestedUuid)
+            ?: return errorResponse(message.requestId, "no_player", "No player data found").also {
+                Log.w(TAG, "REQUEST_PLAYER failed: no player found for uuid=$requestedUuid in $worldDir")
             }
         cachedPlayerUuid = playerData.playerUuid
-        Log.i(TAG, "REQUEST_PLAYER success: ${playerData.worldName}, health=${playerData.health}, inv=${playerData.inventory.size} items")
+        Log.i(TAG, "REQUEST_PLAYER success: ${playerData.worldName}, player=${playerData.playerName}, health=${playerData.health}, inv=${playerData.inventory.size} items")
 
         return SpyglassMessage(
             type = MessageType.PLAYER_DATA,

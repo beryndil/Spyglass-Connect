@@ -3,6 +3,7 @@ package com.spyglass.connect.minecraft
 import com.spyglass.connect.model.EnchantmentData
 import com.spyglass.connect.model.ItemStack
 import com.spyglass.connect.model.PlayerData
+import com.spyglass.connect.model.PlayerSummary
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -31,6 +32,77 @@ object PlayerParser {
     )
 
     private val jsonParser = Json { ignoreUnknownKeys = true }
+
+    /** List all players in a world (owner + anyone in playerdata/). */
+    fun listPlayers(worldDir: File): List<PlayerSummary> {
+        val players = mutableListOf<PlayerSummary>()
+        val levelDat = File(worldDir, "level.dat")
+        val root = NbtHelper.readCompressed(levelDat) ?: return emptyList()
+        val data = NbtHelper.compound(root, "Data") ?: return emptyList()
+
+        // Owner from level.dat → Data → Player
+        val ownerUuid = NbtHelper.compound(data, "Player")?.let { extractUuid(it) }
+
+        // All players from playerdata/
+        val playerDataDir = File(worldDir, "playerdata")
+        if (playerDataDir.isDirectory) {
+            playerDataDir.listFiles { f -> f.extension == "dat" }
+                ?.sortedByDescending { it.lastModified() }
+                ?.forEach { datFile ->
+                    val uuid = datFile.nameWithoutExtension.takeIf { it.contains("-") } ?: return@forEach
+                    val name = resolvePlayerName(uuid, worldDir)
+                    players.add(PlayerSummary(
+                        uuid = uuid,
+                        name = name,
+                        lastPlayed = datFile.lastModified(),
+                        isOwner = uuid.equals(ownerUuid, ignoreCase = true),
+                    ))
+                }
+        }
+
+        // If owner wasn't in playerdata (pure singleplayer), add from level.dat
+        if (ownerUuid != null && players.none { it.uuid.equals(ownerUuid, ignoreCase = true) }) {
+            val name = resolvePlayerName(ownerUuid, worldDir)
+            players.add(0, PlayerSummary(
+                uuid = ownerUuid,
+                name = name,
+                lastPlayed = levelDat.lastModified(),
+                isOwner = true,
+            ))
+        }
+
+        return players
+    }
+
+    /** Parse a specific player by UUID. Falls back to owner if UUID is null. */
+    fun parseByUuid(worldDir: File, playerUuid: String?): PlayerData? {
+        val levelDat = File(worldDir, "level.dat")
+        val root = NbtHelper.readCompressed(levelDat) ?: return null
+        val data = NbtHelper.compound(root, "Data") ?: return null
+        val worldName = NbtHelper.string(data, "LevelName", worldDir.name)
+
+        // If no UUID specified, use the default parse (owner first)
+        if (playerUuid == null) return parse(worldDir)
+
+        // Check if the owner matches the requested UUID
+        NbtHelper.compound(data, "Player")?.let { player ->
+            val ownerUuid = extractUuid(player)
+            if (ownerUuid.equals(playerUuid, ignoreCase = true)) {
+                val playerName = resolvePlayerName(playerUuid, worldDir)
+                return parsePlayerCompound(player, worldName, ownerUuid, playerName)
+            }
+        }
+
+        // Look in playerdata/
+        val datFile = File(worldDir, "playerdata/$playerUuid.dat")
+        if (datFile.exists()) {
+            val playerRoot = NbtHelper.readCompressed(datFile) ?: return null
+            val playerName = resolvePlayerName(playerUuid, worldDir)
+            return parsePlayerCompound(playerRoot, worldName, playerUuid, playerName)
+        }
+
+        return null
+    }
 
     /** Parse player data from a world directory. Tries singleplayer first, then playerdata. */
     fun parse(worldDir: File): PlayerData? {
