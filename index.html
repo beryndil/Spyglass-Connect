@@ -70,7 +70,8 @@
             justify-content: center;
             text-align: center;
             position: relative;
-            padding: 2rem;
+            padding: 2rem 2rem 3rem;
+            gap: 0;
         }
 
         .hero-404 {
@@ -79,13 +80,14 @@
             font-weight: 800;
             color: rgba(251, 191, 36, 0.06);
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
-            transform: translate(-50%, -55%);
+            transform: translate(-50%, -50%);
             user-select: none;
             pointer-events: none;
             line-height: 1;
             letter-spacing: -0.04em;
+            z-index: 0;
         }
 
         .hero-icon {
@@ -129,13 +131,11 @@
             position: relative;
             z-index: 1;
             line-height: 1.6;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         /* ── Spyglass Connect Ad Banner ── */
         .banner-section {
-            position: relative;
-            z-index: 1;
             max-width: 520px;
             width: 100%;
             padding: 0 2rem;
