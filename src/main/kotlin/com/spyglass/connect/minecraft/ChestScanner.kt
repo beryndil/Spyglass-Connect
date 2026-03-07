@@ -114,7 +114,9 @@ object ChestScanner {
             val item = itemList[i]
             val id = NbtHelper.string(item, "id").removePrefix("minecraft:")
             if (id.isBlank()) return@mapNotNull null
-            val count = NbtHelper.int(item, "Count", 1).coerceAtLeast(1)
+            // 1.21+ uses lowercase "count" (IntTag); older uses "Count" (ByteTag)
+            val count = maxOf(NbtHelper.int(item, "Count", 0), NbtHelper.int(item, "count", 0))
+                .coerceAtLeast(1)
             val slot = NbtHelper.int(item, "Slot", -1)
             ItemStack(id = id, count = count, slot = slot)
         }
