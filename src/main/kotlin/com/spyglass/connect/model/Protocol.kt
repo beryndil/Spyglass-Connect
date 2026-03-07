@@ -45,6 +45,7 @@ object MessageType {
     const val REQUEST_STATS = "request_stats"
     const val REQUEST_ADVANCEMENTS = "request_advancements"
     const val REQUEST_PETS = "request_pets"
+    const val DEVICE_LOG = "device_log"
 
     // Pairing
     const val PAIR_REQUEST = "pair_request"
@@ -298,6 +299,22 @@ data class RequestMapPayload(
 data class SearchItemsPayload(
     val query: String,
     val maxResults: Int = 50,
+)
+
+// ── Device Log payloads ─────────────────────────────────────────────────────
+
+@Serializable
+data class DeviceLogEntry(
+    val timestamp: Long,
+    val level: String,
+    val tag: String,
+    val message: String,
+    val throwable: String? = null,
+)
+
+@Serializable
+data class DeviceLogPayload(
+    val entries: List<DeviceLogEntry>,
 )
 
 // ── Pairing ─────────────────────────────────────────────────────────────────

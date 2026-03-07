@@ -44,6 +44,7 @@ class MessageHandler(
             MessageType.REQUEST_STATS -> handleRequestStats(message)
             MessageType.REQUEST_ADVANCEMENTS -> handleRequestAdvancements(message)
             MessageType.REQUEST_PETS -> handleRequestPets(message)
+            MessageType.DEVICE_LOG -> { handleDeviceLog(message); null }
             else -> errorResponse(message.requestId, "unknown_type", "Unknown message type: ${message.type}")
         }
     }
@@ -297,6 +298,52 @@ class MessageHandler(
             payload = json.encodeToJsonElement(ErrorPayload(code, message)),
         )
     }
+
+    private fun handleDeviceLog(message: SpyglassMessage) {
+        try {
+            val payload = json.decodeFromJsonElement(DeviceLogPayload.serializer(), message.payload)
+            val logDir = File(System.getProperty("user.home"), ".spyglass-connect/device-logs")
+            logDir.mkdirs()
+
+            val logFile = File(logDir, "device.log")
+
+            // Rotate if over 2 MB
+            if (logFile.exists() && logFile.length() > 2 * 1024 * 1024) {
+                val old = File(logDir, "device.log.old")
+                old.delete()
+                logFile.renameTo(old)
+            }
+
+            val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+            logFile.appendText(buildString {
+                for (entry in payload.entries) {
+                    val ts = dateFormat.format(java.util.Date(entry.timestamp))
+                    append("[$ts] ${entry.level}/${entry.tag}: ${entry.message}\n")
+                    if (entry.throwable != null) {
+                        append(entry.throwable)
+                        if (!entry.throwable.endsWith("\n")) append("\n")
+                    }
+                }
+            })
+
+            val errorCount = payload.entries.count { it.level == "E" || it.level == "WTF" }
+            val warnCount = payload.entries.count { it.level == "W" }
+            if (errorCount > 0 || warnCount > 0) {
+                Log.w(TAG, "Received device logs: $errorCount errors, $warnCount warnings — saved to ${logFile.absolutePath}")
+            } else {
+                Log.d(TAG, "Received ${payload.entries.size} device log entries")
+            }
+
+            // Update the observable log count for UI notification
+            _deviceLogCount.value += payload.entries.size
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to handle device log", e)
+        }
+    }
+
+    /** Observable count of received device log entries (for UI notification). */
+    private val _deviceLogCount = kotlinx.coroutines.flow.MutableStateFlow(0)
+    val deviceLogCount: kotlinx.coroutines.flow.StateFlow<Int> = _deviceLogCount
 
     /** Invalidate cached data (called when file watcher detects changes). */
     fun invalidateCache() {

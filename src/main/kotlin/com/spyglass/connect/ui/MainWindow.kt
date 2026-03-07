@@ -26,6 +26,9 @@ import com.spyglass.connect.model.WorldInfo
 import com.spyglass.connect.pairing.QrCodeGenerator
 import com.spyglass.connect.server.EncryptionManager
 import com.spyglass.connect.server.WebSocketServer
+import kotlinx.coroutines.flow.StateFlow
+import java.awt.Desktop
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.imageio.ImageIO
@@ -39,6 +42,7 @@ fun MainWindow(
     connectedDevices: List<WebSocketServer.ConnectedDevice>,
     lanIp: String,
     serverPort: Int,
+    deviceLogCount: StateFlow<Int>,
     onRefreshWorlds: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
@@ -97,6 +101,12 @@ fun MainWindow(
 
                     // Server status
                     ServerStatusCard(serverState.value, connectedDevices, lanIp, serverPort)
+
+                    // Device logs notification
+                    val logCount by deviceLogCount.collectAsState()
+                    if (logCount > 0) {
+                        DeviceLogsCard(logCount)
+                    }
 
                     if (showSettings) {
                         SettingsSection(onRefreshWorlds)
@@ -469,6 +479,58 @@ private fun QrCodeSection(lanIp: String, port: Int) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             )
+        }
+    }
+}
+
+@Composable
+private fun DeviceLogsCard(logCount: Int) {
+    val logDir = File(System.getProperty("user.home"), ".spyglass-connect/device-logs")
+    val logFile = File(logDir, "device.log")
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A2E)),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Icon(
+                Icons.Filled.Warning,
+                contentDescription = null,
+                tint = Color(0xFFFFC107),
+                modifier = Modifier.size(20.dp),
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Device Logs",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium,
+                )
+                Text(
+                    "$logCount entries received this session",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                )
+            }
+            if (logFile.exists()) {
+                OutlinedButton(
+                    onClick = {
+                        try {
+                            Desktop.getDesktop().open(logFile)
+                        } catch (_: Exception) {
+                            try { Desktop.getDesktop().open(logDir) } catch (_: Exception) {}
+                        }
+                    },
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFFFC107)),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                ) {
+                    Text("Open Log", style = MaterialTheme.typography.labelSmall)
+                }
+            }
         }
     }
 }

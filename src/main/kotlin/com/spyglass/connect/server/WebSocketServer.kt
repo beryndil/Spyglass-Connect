@@ -212,4 +212,7 @@ class WebSocketServer {
     fun invalidateCache() {
         messageHandler.invalidateCache()
     }
+
+    /** Observable count of device log entries received (for UI notification). */
+    val deviceLogCount: kotlinx.coroutines.flow.StateFlow<Int> = messageHandler.deviceLogCount
 }

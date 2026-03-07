@@ -153,6 +153,7 @@ private fun startApp(lock: ServerSocket) {
             connectedDevices = server.connectedDevices,
             lanIp = lanIp,
             serverPort = WebSocketServer.DEFAULT_PORT,
+            deviceLogCount = server.deviceLogCount,
             onRefreshWorlds = { refreshTrigger++ },
             onCloseRequest = shutdown,
         )
