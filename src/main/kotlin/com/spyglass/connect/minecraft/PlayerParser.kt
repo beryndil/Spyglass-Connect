@@ -102,6 +102,7 @@ object PlayerParser {
         val root = NbtHelper.readCompressed(levelDat) ?: return null
         val data = NbtHelper.compound(root, "Data") ?: return null
         val worldName = NbtHelper.string(data, "LevelName", worldDir.name)
+        val worldSpawn = extractWorldSpawn(data)
 
         // If no UUID specified, use the default parse (owner first)
         if (playerUuid == null) return parse(worldDir)
@@ -111,7 +112,7 @@ object PlayerParser {
             val ownerUuid = extractUuid(player)
             if (ownerUuid.equals(playerUuid, ignoreCase = true)) {
                 val playerName = resolvePlayerName(playerUuid, worldDir)
-                return parsePlayerCompound(player, worldName, ownerUuid, playerName)
+                return parsePlayerCompound(player, worldName, ownerUuid, playerName, worldSpawn)
             }
         }
 
@@ -120,7 +121,7 @@ object PlayerParser {
         if (datFile.exists()) {
             val playerRoot = NbtHelper.readCompressed(datFile) ?: return null
             val playerName = resolvePlayerName(playerUuid, worldDir)
-            return parsePlayerCompound(playerRoot, worldName, playerUuid, playerName)
+            return parsePlayerCompound(playerRoot, worldName, playerUuid, playerName, worldSpawn)
         }
 
         return null
@@ -133,12 +134,13 @@ object PlayerParser {
         val root = NbtHelper.readCompressed(levelDat) ?: return null
         val data = NbtHelper.compound(root, "Data") ?: return null
         val worldName = NbtHelper.string(data, "LevelName", worldDir.name)
+        val worldSpawn = extractWorldSpawn(data)
 
         // Singleplayer player compound
         NbtHelper.compound(data, "Player")?.let { player ->
             val uuid = extractUuid(player)
             val playerName = uuid?.let { resolvePlayerName(it, worldDir) }
-            return parsePlayerCompound(player, worldName, uuid, playerName)
+            return parsePlayerCompound(player, worldName, uuid, playerName, worldSpawn)
         }
 
         // Fall back to playerdata directory (multiplayer or dedicated server)
@@ -150,7 +152,7 @@ object PlayerParser {
                 val playerRoot = NbtHelper.readCompressed(datFile) ?: return null
                 val uuid = datFile.nameWithoutExtension.takeIf { it.contains("-") }
                 val playerName = uuid?.let { resolvePlayerName(it, worldDir) }
-                return parsePlayerCompound(playerRoot, worldName, uuid, playerName)
+                return parsePlayerCompound(playerRoot, worldName, uuid, playerName, worldSpawn)
             }
         }
 
@@ -163,6 +165,7 @@ object PlayerParser {
         worldName: String,
         playerUuid: String? = null,
         playerName: String? = null,
+        worldSpawn: LocationData? = null,
     ): PlayerData {
         val pos = extractPosition(player)
         val dimension = extractDimension(player)
@@ -188,6 +191,18 @@ object PlayerParser {
             spawnLocation = extractSpawnLocation(player),
             spawnForced = NbtHelper.boolean(player, "SpawnForced"),
             activeEffects = extractActiveEffects(player),
+            worldSpawn = worldSpawn,
+        )
+    }
+
+    /** Extract world spawn from level.dat Data root (SpawnX/Y/Z). Always overworld. */
+    private fun extractWorldSpawn(data: CompoundTag): LocationData? {
+        if (!data.containsKey("SpawnX")) return null
+        return LocationData(
+            x = NbtHelper.int(data, "SpawnX"),
+            y = NbtHelper.int(data, "SpawnY"),
+            z = NbtHelper.int(data, "SpawnZ"),
+            dimension = "overworld",
         )
     }
 
