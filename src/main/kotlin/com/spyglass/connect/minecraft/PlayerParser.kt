@@ -195,8 +195,18 @@ object PlayerParser {
         )
     }
 
-    /** Extract world spawn from level.dat Data root (SpawnX/Y/Z). Always overworld. */
+    /** Extract world spawn from level.dat Data root. Handles both old (SpawnX/Y/Z) and 1.21+ (spawn compound) formats. */
     private fun extractWorldSpawn(data: CompoundTag): LocationData? {
+        // 1.21+ format: spawn compound with pos IntArray and dimension string
+        NbtHelper.compound(data, "spawn")?.let { spawn ->
+            val posArray = (spawn.get("pos") as? IntArrayTag)?.value
+            if (posArray != null && posArray.size >= 3) {
+                val dim = NbtHelper.string(spawn, "dimension", "minecraft:overworld")
+                val dimension = DIMENSION_MAP[dim] ?: dim.removePrefix("minecraft:")
+                return LocationData(x = posArray[0], y = posArray[1], z = posArray[2], dimension = dimension)
+            }
+        }
+        // Legacy format: flat SpawnX/Y/Z ints
         if (!data.containsKey("SpawnX")) return null
         return LocationData(
             x = NbtHelper.int(data, "SpawnX"),
@@ -216,8 +226,18 @@ object PlayerParser {
         return LocationData(x = posArray[0], y = posArray[1], z = posArray[2], dimension = dimension)
     }
 
-    /** Extract spawn location from SpawnX/Y/Z tags. */
+    /** Extract spawn location (bed/respawn anchor). Handles both old (SpawnX/Y/Z) and 1.21+ (respawn compound) formats. */
     private fun extractSpawnLocation(player: CompoundTag): LocationData? {
+        // 1.21+ format: respawn compound with pos IntArray and dimension string
+        NbtHelper.compound(player, "respawn")?.let { respawn ->
+            val posArray = (respawn.get("pos") as? IntArrayTag)?.value
+            if (posArray != null && posArray.size >= 3) {
+                val dim = NbtHelper.string(respawn, "dimension", "minecraft:overworld")
+                val dimension = DIMENSION_MAP[dim] ?: dim.removePrefix("minecraft:")
+                return LocationData(x = posArray[0], y = posArray[1], z = posArray[2], dimension = dimension)
+            }
+        }
+        // Legacy format: flat SpawnX/Y/Z ints
         if (!player.containsKey("SpawnX")) return null
         val x = NbtHelper.int(player, "SpawnX")
         val y = NbtHelper.int(player, "SpawnY")
