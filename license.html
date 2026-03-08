@@ -1,91 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Spyglass Connect Software License - Proprietary, personal use only.">
-    <meta name="robots" content="index, follow">
-    <title>License - Spyglass Connect</title>
-    <link rel="icon" href="data:image/png;base64,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" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #fbbf24; --primary-dark: #f59e0b; --primary-light: #fcd34d;
-            --bg-dark: #000000; --bg-card: #1a1a1a; --bg-accent: #0f0f0f;
-            --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --text-muted: #94a3b8;
-            --border: #333333;
-        }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background: #000; color: var(--text-primary); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 50%, rgba(251,191,36,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(251,191,36,0.02) 0%, transparent 50%); pointer-events: none; z-index: -1; }
-        header { position: sticky; top: 0; z-index: 1000; background: #000; border-bottom: 1px solid var(--border); }
-        .header-nav { max-width: 1200px; margin: 0 auto; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -1px; color: #fcd34d; text-decoration: none; }
-        .logo:hover { color: var(--primary); }
-        .back-link { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease; }
-        .back-link:hover { color: var(--primary); }
-        main { max-width: 800px; margin: 0 auto; padding: 3rem 2rem 4rem; }
-        h1 { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
-        .last-updated { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; }
-        h2 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--primary-light); }
-        p, li { color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.7; }
-        ul { margin-left: 1.5rem; margin-bottom: 1rem; }
-        a { color: var(--primary); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; }
-        footer p { color: var(--text-muted); font-size: 0.85rem; }
-        @media (max-width: 768px) { main { padding: 2rem 1.25rem 3rem; } h1 { font-size: 1.8rem; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>License — Spyglass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-void: #000000;
+  --bg-deep: #060604;
+  --bg-card: #0c0b08;
+  --bg-card-hover: #141208;
+  --glow-primary: #d4af37;
+  --glow-secondary: #f0d060;
+  --glow-accent: #c49b2a;
+  --text-bright: #f5f0e0;
+  --text-mid: #a89e82;
+  --text-dim: #5c5540;
+  --border-subtle: rgba(212,175,55,0.08);
+  --gradient-glow: linear-gradient(135deg, var(--glow-primary), var(--glow-secondary));
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-void);
+  color: var(--text-bright);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav-logo {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-bright);
+  text-decoration: none;
+}
+.nav-logo span {
+  background: var(--gradient-glow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--glow-primary);
+  text-decoration: none;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 6px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.nav-back:hover {
+  background: rgba(212,175,55,0.08);
+  border-color: rgba(212,175,55,0.4);
+}
+.page-header {
+  text-align: center;
+  padding: 4rem 1.5rem 2rem;
+}
+.page-badge {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--glow-primary);
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 4px;
+  background: rgba(212,175,55,0.05);
+  margin-bottom: 1.2rem;
+}
+.page-title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.page-title .glow {
+  background: var(--gradient-glow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-subtitle {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  font-weight: 300;
+}
+.divider {
+  height: 1px;
+  max-width: 720px;
+  margin: 0 auto;
+  background: linear-gradient(to right, transparent, var(--border-subtle), rgba(212,175,55,0.15), var(--border-subtle), transparent);
+}
+.content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+.content h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  color: var(--glow-primary);
+}
+.content p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+.content strong {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+.content a {
+  color: var(--glow-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(240,208,96,0.3);
+  transition: border-color 0.3s;
+}
+.content a:hover {
+  border-color: var(--glow-secondary);
+}
+.content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+.content ul li {
+  position: relative;
+  padding-left: 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+.content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--glow-primary);
+  opacity: 0.6;
+}
+.content .legal-block {
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+  line-height: 1.8;
+  padding: 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.footer-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+.footer-note {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.footer-links a {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--glow-primary); }
+</style>
 </head>
 <body>
-    <header>
-        <nav class="header-nav">
-            <a href="https://hardknocks.university/" class="logo">Spyglass Connect</a>
-            <a href="https://hardknocks.university/" class="back-link">&larr; Back to Home</a>
-        </nav>
-    </header>
 
-    <main>
-        <h1>License</h1>
-        <p class="last-updated">Proprietary Software License</p>
+<nav class="nav">
+  <a href="https://hardknocks.university/" class="nav-logo">⬡ <span>Spyglass</span></a>
+  <a href="https://hardknocks.university/" class="nav-back">← Back</a>
+</nav>
 
-        <p>Copyright &copy; 2026 Beryndil. All rights reserved.</p>
+<div class="page-header">
+  <div class="page-badge">Legal</div>
+  <h1 class="page-title"><span class="glow">License</span></h1>
+  <p class="page-subtitle">Proprietary Software License</p>
+</div>
 
-        <h2>1. Permitted Use</h2>
-        <p>You are granted a non-exclusive, non-transferable, revocable license to use the Spyglass Connect application as distributed through official release channels for personal, non-commercial purposes.</p>
+<div class="divider"></div>
 
-        <h2>2. Restrictions</h2>
-        <p>You may NOT, without the prior written consent of the copyright holder:</p>
-        <ul>
-            <li>Copy, reproduce, or duplicate the source code or application</li>
-            <li>Modify, adapt, translate, or create derivative works based on the source code or application</li>
-            <li>Distribute, sublicense, lease, rent, loan, or otherwise transfer the source code or application to any third party</li>
-            <li>Reverse-engineer, decompile, disassemble, or otherwise attempt to derive the source code from the compiled application</li>
-            <li>Use the source code or application for any commercial purpose</li>
-            <li>Remove, alter, or obscure any proprietary notices, labels, or marks</li>
-        </ul>
+<div class="content">
 
-        <h2>3. Third-Party Assets</h2>
-        <p>This application includes third-party assets that are subject to their own licenses:</p>
-        <ul>
-            <li><strong>Pixel Perfection</strong> textures by XSSheep: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a></li>
-            <li><strong>Entity-Icons</strong> by Simplexity Development: <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a></li>
-        </ul>
-        <p>These assets remain governed by their respective licenses as noted above.</p>
+  <p><strong>Copyright © 2026 Beryndil. All rights reserved.</strong></p>
 
-        <h2>4. No Warranty</h2>
-        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+  <h2>1. Permitted Use</h2>
 
-        <h2>5. Termination</h2>
-        <p>This license is effective until terminated. It will terminate automatically if you fail to comply with any term of this license. Upon termination, you must destroy all copies of the software in your possession.</p>
-    </main>
+  <p>You are granted a non-exclusive, non-transferable, revocable license to use the Spyglass Connect application as distributed through official release channels for personal, non-commercial purposes.</p>
 
-    <footer>
-        <p>&copy; 2026 Beryndil. All rights reserved.</p>
-        <p><strong>Disclaimer:</strong> Spyglass is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</p>
-    </footer>
+  <h2>2. Restrictions</h2>
+
+  <p>You may NOT, without the prior written consent of the copyright holder:</p>
+
+  <ul>
+    <li>Copy, reproduce, or duplicate the source code or application</li>
+    <li>Modify, adapt, translate, or create derivative works based on the source code or application</li>
+    <li>Distribute, sublicense, lease, rent, loan, or otherwise transfer the source code or application to any third party</li>
+    <li>Reverse-engineer, decompile, disassemble, or otherwise attempt to derive the source code from the compiled application</li>
+    <li>Use the source code or application for any commercial purpose</li>
+    <li>Remove, alter, or obscure any proprietary notices, labels, or marks</li>
+  </ul>
+
+  <h2>3. Third-Party Assets</h2>
+
+  <p>This application includes third-party assets that are subject to their own licenses:</p>
+
+  <ul>
+    <li><strong>Pixel Perfection</strong> textures by XSSheep: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a></li>
+    <li><strong>Entity-Icons</strong> by Simplexity Development: <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a></li>
+  </ul>
+
+  <p>These assets remain governed by their respective licenses as noted above.</p>
+
+  <h2>4. No Warranty</h2>
+
+  <div class="legal-block">
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  </div>
+
+  <h2>5. Termination</h2>
+
+  <p>This license is effective until terminated. It will terminate automatically if you fail to comply with any term of this license. Upon termination, you must destroy all copies of the software in your possession.</p>
+
+</div>
+
+<footer>
+  <div class="footer-logo">⬡ Spyglass</div>
+  <p class="footer-note">
+    Spyglass is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft.
+    Minecraft is a trademark of Mojang Studios. All game data is used for informational purposes only.
+  </p>
+  <div class="footer-links">
+    <a href="https://hardknocks.university/privacy-policy.html">Privacy</a>
+    <a href="https://hardknocks.university/license.html">License</a>
+    <a href="https://hardknocks.university/disclaimer.html">Disclaimer</a>
+    <a href="https://github.com/beryndil">GitHub</a>
+  </div>
+</footer>
+
 </body>
 </html>
