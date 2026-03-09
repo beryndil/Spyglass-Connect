@@ -62,6 +62,7 @@ fun ApplicationScope.SystemTray(
         state = trayState,
         icon = icon,
         tooltip = tooltip,
+        onAction = onShowWindow,
         menu = {
             Item("Show", onClick = onShowWindow)
             Separator()
