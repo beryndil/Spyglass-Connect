@@ -1,5 +1,7 @@
 package com.spyglass.connect.ui
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -121,10 +123,15 @@ fun MainWindow(
                             val hasConnectedDevice = connectedDevices.any { it.isPaired }
                             if (!hasConnectedDevice) {
                                 item {
-                                    if (isReady) {
-                                        QrCodeSection(lanIp, serverPort)
-                                    } else {
-                                        LoadingSection(serverState.value, worldsLoaded)
+                                    Crossfade(
+                                        targetState = isReady,
+                                        animationSpec = tween(600),
+                                    ) { ready ->
+                                        if (ready) {
+                                            QrCodeSection(lanIp, serverPort)
+                                        } else {
+                                            ChestLoadingAnimation(serverState.value, worldsLoaded)
+                                        }
                                     }
                                 }
                             }
@@ -164,36 +171,6 @@ fun MainWindow(
     }
 }
 
-@Composable
-private fun LoadingSection(serverState: WebSocketServer.ServerState, worldsLoaded: Boolean) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(32.dp),
-                color = MaterialTheme.colorScheme.primary,
-                strokeWidth = 3.dp,
-            )
-            val message = when {
-                serverState == WebSocketServer.ServerState.STARTING -> "Starting server..."
-                serverState == WebSocketServer.ServerState.ERROR -> "Server error — check port"
-                !worldsLoaded -> "Scanning for worlds..."
-                else -> "Getting ready..."
-            }
-            Text(
-                message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            )
-        }
-    }
-}
 
 @Composable
 private fun SettingsSection(onRefreshWorlds: () -> Unit) {
