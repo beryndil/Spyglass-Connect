@@ -321,8 +321,10 @@ class MessageHandler(
                     val ts = dateFormat.format(java.util.Date(entry.timestamp))
                     append("[$ts] ${entry.level}/${entry.tag}: ${entry.message}\n")
                     if (entry.throwable != null) {
-                        append(entry.throwable)
-                        if (!entry.throwable.endsWith("\n")) append("\n")
+                        // Indent throwable cause chain for readability
+                        for (line in entry.throwable.lines()) {
+                            if (line.isNotBlank()) append("  $line\n")
+                        }
                     }
                 }
             })
