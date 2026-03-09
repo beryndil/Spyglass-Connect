@@ -318,12 +318,19 @@ data class DeviceLogPayload(
     val entries: List<DeviceLogEntry>,
 )
 
+// ── Protocol versioning ──────────────────────────────────────────────────────
+
+object ProtocolInfo {
+    const val PROTOCOL_VERSION = 2
+    const val MIN_COMPATIBLE_VERSION = 2
+}
+
 // ── Pairing ─────────────────────────────────────────────────────────────────
 
 @Serializable
 data class QrPairingData(
     val app: String = "spyglass-connect",
-    val version: Int = 1,
+    val version: Int = 2,
     val ip: String,
     val port: Int,
     val pubkey: String,
@@ -334,6 +341,9 @@ data class QrPairingData(
 data class PairRequestPayload(
     val deviceName: String,
     val pubkey: String,
+    val protocolVersion: Int = 1,
+    val minCompatibleVersion: Int = 1,
+    val appVersion: String = "",
 )
 
 @Serializable
@@ -341,4 +351,8 @@ data class PairAcceptPayload(
     val deviceName: String,
     val accepted: Boolean = true,
     val pubkey: String? = null,
+    val protocolVersion: Int = 1,
+    val minCompatibleVersion: Int = 1,
+    val appVersion: String = "",
+    val rejectionReason: String? = null,
 )

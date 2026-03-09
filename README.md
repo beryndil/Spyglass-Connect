@@ -58,6 +58,7 @@ A file watcher monitors your world folder and pushes changes to your phone autom
 ### Encryption
 
 All communication is encrypted with ECDH key exchange + AES-256-GCM. Keys are persisted so you only need to scan the QR code once.
+Both apps negotiate protocol versions during pairing — if either side is outdated, you'll see a clear message explaining which app to update.
 
 ---
 
@@ -94,7 +95,8 @@ Settings are stored in `~/.spyglass-connect/config.json`.
 | UI | Compose Multiplatform |
 | Server | Ktor + Netty WebSocket |
 | NBT Parsing | Querz NBT |
-| Encryption | BouncyCastle (ECDH) + javax.crypto (AES-GCM) |
+| Encryption | java.security (ECDH) + javax.crypto (AES-256-GCM) |
+| Protocol Version | v2 (encrypted, with version negotiation) |
 | QR Code | ZXing |
 | Discovery | JmDNS (mDNS) |
 

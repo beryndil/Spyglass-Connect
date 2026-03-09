@@ -14,6 +14,7 @@ import io.ktor.websocket.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.json.Json
+import com.spyglass.connect.BuildConfig
 import com.spyglass.connect.Log
 import java.util.UUID
 
@@ -169,11 +170,50 @@ class WebSocketServer {
         session: WebSocketSession,
     ) {
         val payload = json.decodeFromJsonElement(PairRequestPayload.serializer(), message.payload)
-        log("Pair request from '${payload.deviceName}' [$clientId]")
+        log("Pair request from '${payload.deviceName}' [$clientId] (protocol v${payload.protocolVersion}, min v${payload.minCompatibleVersion})")
 
-        // Encryption disabled — ECDH shared secret differs between JVM SunEC and Android Conscrypt.
-        // Local network traffic for Minecraft data doesn't need AES-256-GCM.
-        log("Paired (plaintext mode) [$clientId]")
+        // Protocol version check — reject incompatible clients with actionable message
+        if (payload.protocolVersion < ProtocolInfo.MIN_COMPATIBLE_VERSION) {
+            log("Rejecting [$clientId]: client protocol v${payload.protocolVersion} < min v${ProtocolInfo.MIN_COMPATIBLE_VERSION}")
+            val reject = SpyglassMessage(
+                type = MessageType.PAIR_ACCEPT,
+                payload = json.encodeToJsonElement(
+                    PairAcceptPayload.serializer(),
+                    PairAcceptPayload(
+                        deviceName = "Spyglass Connect",
+                        accepted = false,
+                        protocolVersion = ProtocolInfo.PROTOCOL_VERSION,
+                        minCompatibleVersion = ProtocolInfo.MIN_COMPATIBLE_VERSION,
+                        rejectionReason = "Spyglass Connect requires protocol version ${ProtocolInfo.MIN_COMPATIBLE_VERSION}+. Update your Spyglass app.",
+                    ),
+                ),
+            )
+            session.send(Frame.Text(json.encodeToString(SpyglassMessage.serializer(), reject)))
+            return
+        }
+        if (ProtocolInfo.PROTOCOL_VERSION < payload.minCompatibleVersion) {
+            log("Rejecting [$clientId]: our protocol v${ProtocolInfo.PROTOCOL_VERSION} < client min v${payload.minCompatibleVersion}")
+            val reject = SpyglassMessage(
+                type = MessageType.PAIR_ACCEPT,
+                payload = json.encodeToJsonElement(
+                    PairAcceptPayload.serializer(),
+                    PairAcceptPayload(
+                        deviceName = "Spyglass Connect",
+                        accepted = false,
+                        protocolVersion = ProtocolInfo.PROTOCOL_VERSION,
+                        minCompatibleVersion = ProtocolInfo.MIN_COMPATIBLE_VERSION,
+                        rejectionReason = "Your Spyglass app requires a newer desktop version. Update Spyglass Connect.",
+                    ),
+                ),
+            )
+            session.send(Frame.Text(json.encodeToString(SpyglassMessage.serializer(), reject)))
+            return
+        }
+
+        // Derive shared encryption key from client's ECDH public key
+        clientEncryption.deriveSharedKey(payload.pubkey)
+        log("Encryption established [$clientId]")
+
         sessionManager.markPaired(clientId, payload.deviceName)
         val idx = connectedDevices.indexOfFirst { it.id == clientId }
         if (idx >= 0) {
@@ -190,6 +230,9 @@ class WebSocketServer {
                     deviceName = "Spyglass Connect",
                     accepted = true,
                     pubkey = encryption.getPublicKeyBase64(),
+                    protocolVersion = ProtocolInfo.PROTOCOL_VERSION,
+                    minCompatibleVersion = ProtocolInfo.MIN_COMPATIBLE_VERSION,
+                    appVersion = BuildConfig.VERSION_NAME,
                 ),
             ),
         )

@@ -20,6 +20,7 @@ Pair your phone with the [Spyglass Connect](https://github.com/beryndil/Spyglass
 | **Overhead Map** | Interactive terrain map with structure markers and player position |
 
 Fully encrypted (ECDH + AES-256-GCM). Auto-reconnects via mDNS.
+Protocol v2 with version negotiation — incompatible versions show a clear update message.
 
 [Learn more about Connect](/connect/)
 

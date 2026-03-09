@@ -123,10 +123,12 @@ class EncryptionManager internal constructor(private val keyPair: KeyPair) {
         val keyAgreement = KeyAgreement.getInstance("ECDH")
         keyAgreement.init(keyPair.private)
         keyAgreement.doPhase(peerPublicKey, true)
-        val sharedSecret = keyAgreement.generateSecret()
+        val rawSecret = keyAgreement.generateSecret()
+        val sharedSecret = normalizeSecret(rawSecret)
 
         Log.d(TAG, "ECDH provider: ${keyAgreement.provider.name}")
-        Log.d(TAG, "Shared secret (${sharedSecret.size} bytes): ${sharedSecret.take(8).joinToString("") { "%02x".format(it) }}...")
+        Log.d(TAG, "Raw secret (${rawSecret.size} bytes), normalized to ${sharedSecret.size} bytes")
+        Log.d(TAG, "Shared secret (first 8): ${sharedSecret.take(8).joinToString("") { "%02x".format(it) }}...")
         Log.d(TAG, "Our pubkey hash: ${keyPair.public.encoded.take(8).joinToString("") { "%02x".format(it) }}...")
         Log.d(TAG, "Peer pubkey hash: ${peerKeyBytes.take(8).joinToString("") { "%02x".format(it) }}...")
 
@@ -168,6 +170,19 @@ class EncryptionManager internal constructor(private val keyPair: KeyPair) {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, iv))
         return String(cipher.doFinal(ciphertext), Charsets.UTF_8)
+    }
+
+    /**
+     * Normalize the raw ECDH shared secret to exactly [expectedLen] bytes.
+     * SunEC (JVM) and Conscrypt (Android) may produce different-length X coordinate
+     * outputs — this ensures HKDF input is identical on both platforms.
+     */
+    private fun normalizeSecret(secret: ByteArray, expectedLen: Int = 32): ByteArray {
+        return when {
+            secret.size == expectedLen -> secret
+            secret.size > expectedLen -> secret.copyOfRange(secret.size - expectedLen, secret.size)
+            else -> ByteArray(expectedLen - secret.size) + secret
+        }
     }
 
     private fun hkdfExtract(salt: ByteArray, ikm: ByteArray): ByteArray {
