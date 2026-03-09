@@ -1,6 +1,7 @@
 package com.spyglass.connect.ui
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,16 +9,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -112,16 +118,15 @@ fun MainWindow(
                     // Server status
                     ServerStatusCard(serverState.value, connectedDevices, lanIp, serverPort)
 
-                    // Device logs notification
                     val logCount by deviceLogCount.collectAsState()
-                    if (logCount > 0) {
-                        DeviceLogsCard(logCount)
-                    }
 
                     if (showSettings) {
-                        SettingsSection(onRefreshWorlds)
+                        SettingsSection(onRefreshWorlds, logCount)
                     } else {
                         // Main content
+                        val compatibleWorlds = worlds.filter { !it.isModded }
+                        var worldsExpanded by remember { mutableStateOf(false) }
+
                         LazyColumn(
                             modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -144,32 +149,35 @@ fun MainWindow(
                                 }
                             }
 
-                            // Worlds section
+                            // Detected Worlds accordion card
                             item {
-                                Text(
-                                    "Detected Worlds (${worlds.size})",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                DetectedWorldsCard(
+                                    count = compatibleWorlds.size,
+                                    expanded = worldsExpanded,
+                                    worldsLoaded = worldsLoaded,
+                                    onClick = { worldsExpanded = !worldsExpanded },
                                 )
                             }
 
-                            if (worlds.isEmpty() && worldsLoaded) {
-                                item {
-                                    Card(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                                    ) {
-                                        Text(
-                                            "No Minecraft worlds found.\nAdd save directories in Settings (gear icon).",
-                                            modifier = Modifier.padding(16.dp),
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                        )
+                            if (worldsExpanded) {
+                                if (compatibleWorlds.isEmpty() && worldsLoaded) {
+                                    item {
+                                        Card(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                        ) {
+                                            Text(
+                                                "No Minecraft worlds found.\nAdd save directories in Settings (gear icon).",
+                                                modifier = Modifier.padding(16.dp),
+                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                            )
+                                        }
                                     }
                                 }
-                            }
 
-                            items(worlds) { world ->
-                                WorldCard(world)
+                                items(compatibleWorlds) { world ->
+                                    WorldCard(world)
+                                }
                             }
                         }
                     }
@@ -181,7 +189,7 @@ fun MainWindow(
 
 
 @Composable
-private fun SettingsSection(onRefreshWorlds: () -> Unit) {
+private fun SettingsSection(onRefreshWorlds: () -> Unit, logCount: Int = 0) {
     val config = remember { mutableStateOf(ConfigStore.load()) }
 
     LazyColumn(
@@ -338,6 +346,60 @@ private fun SettingsSection(onRefreshWorlds: () -> Unit) {
                 }
             }
         }
+
+        // Device Logs section
+        item {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Device Logs",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                "$logCount entries received this session",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            )
+        }
+
+        item {
+            val logFile = File(System.getProperty("user.home"), ".spyglass-connect/device-logs/device.log")
+            var logText by remember { mutableStateOf("") }
+
+            LaunchedEffect(logCount) {
+                logText = try {
+                    if (logFile.exists()) logFile.readText() else ""
+                } catch (_: Exception) { "" }
+            }
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A2E)),
+            ) {
+                if (logText.isBlank()) {
+                    Text(
+                        "No device logs this session",
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                    )
+                } else {
+                    SelectionContainer {
+                        Text(
+                            logText,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 200.dp)
+                                .verticalScroll(rememberScrollState())
+                                .padding(12.dp),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -463,6 +525,57 @@ private fun QrCodeSection(lanIp: String, port: Int) {
                 "Open Spyglass → Connect to PC → Scan QR",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            )
+        }
+    }
+}
+
+@Composable
+private fun DetectedWorldsCard(
+    count: Int,
+    expanded: Boolean,
+    worldsLoaded: Boolean,
+    onClick: () -> Unit,
+) {
+    val chevronRotation by animateFloatAsState(
+        targetValue = if (expanded) 180f else 0f,
+        animationSpec = tween(200),
+    )
+
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A2E)),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Icon(
+                Icons.Filled.Public,
+                contentDescription = null,
+                tint = Color(0xFF4CAF50),
+                modifier = Modifier.size(20.dp),
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Detected Worlds",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium,
+                )
+                Text(
+                    if (!worldsLoaded) "Scanning..."
+                    else "$count compatible ${if (count == 1) "world" else "worlds"}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                )
+            }
+            Icon(
+                Icons.Filled.KeyboardArrowDown,
+                contentDescription = if (expanded) "Collapse" else "Expand",
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                modifier = Modifier.size(20.dp).rotate(chevronRotation),
             )
         }
     }
