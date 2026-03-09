@@ -64,9 +64,11 @@ class SessionManager {
     /** Get count of connected clients. */
     suspend fun connectionCount(): Int = mutex.withLock { sessions.size }
 
-    /** Send an encrypted message to all paired sessions. */
-    suspend fun broadcast(message: String) {
-        val active = activeSessions().filter { it.isPaired }
+    /** Send an encrypted message to all paired sessions that support the given capability. */
+    suspend fun broadcast(message: String, requiredCapability: String? = null) {
+        val active = activeSessions().filter {
+            it.isPaired && (requiredCapability == null || it.negotiatedCapabilities.contains(requiredCapability))
+        }
         for (client in active) {
             try {
                 if (client.encryption.isReady) {

@@ -316,7 +316,7 @@ class WebSocketServer {
             payload = json.encodeToJsonElement(WorldChangedPayload.serializer(), payload),
         )
         val messageJson = json.encodeToString(SpyglassMessage.serializer(), message)
-        sessionManager.broadcast(messageJson)
+        sessionManager.broadcast(messageJson, requiredCapability = Capability.WORLD_CHANGED)
     }
 
     /** Invalidate cached data (when file watcher detects changes). */

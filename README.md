@@ -96,7 +96,7 @@ Settings are stored in `~/.spyglass-connect/config.json`.
 | Server | Ktor + Netty WebSocket |
 | NBT Parsing | Querz NBT |
 | Encryption | java.security (ECDH) + javax.crypto (AES-256-GCM) |
-| Protocol Version | v2 (encrypted, with version negotiation) |
+| Protocol Version | v3 (encrypted, with capability negotiation) |
 | QR Code | ZXing |
 | Discovery | JmDNS (mDNS) |
 
