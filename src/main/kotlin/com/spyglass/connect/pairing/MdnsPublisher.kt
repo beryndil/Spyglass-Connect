@@ -41,17 +41,20 @@ class MdnsPublisher {
         }
     }
 
-    /** Stop publishing. */
+    /** Stop publishing. Fire-and-forget — JmDNS close is slow (3-6s) so we don't block on it. */
     fun stop() {
-        try {
-            serviceInfo?.let { jmdns?.unregisterService(it) }
-            jmdns?.close()
+        val j = jmdns
+        val s = serviceInfo
+        jmdns = null
+        serviceInfo = null
+        if (j != null) {
+            Thread({
+                try {
+                    s?.let { j.unregisterService(it) }
+                    j.close()
+                } catch (_: Exception) {}
+            }, "mdns-shutdown").apply { isDaemon = true; start() }
             Log.i(TAG, "Stopped")
-        } catch (e: Exception) {
-            Log.w(TAG, "Error during mDNS shutdown: ${e.message}")
-        } finally {
-            jmdns = null
-            serviceInfo = null
         }
     }
 }

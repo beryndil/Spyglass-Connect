@@ -86,7 +86,7 @@ class WebSocketServer {
 
     /** Stop the server. */
     fun stop() {
-        server?.stop(1000, 2000)
+        server?.stop(200, 500)
         server = null
         state.value = ServerState.STOPPED
     }
