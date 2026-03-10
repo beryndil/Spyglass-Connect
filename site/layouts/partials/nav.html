@@ -27,9 +27,6 @@
           {{- $targetURL := index $translations .Lang | default (printf "%s%s" $.Site.BaseURL (cond (eq .Lang "en") "" (printf "%s/" .Lang))) -}}
           <li><a href="{{ $targetURL }}"{{ if eq $currentPage.Language.Lang .Lang }} aria-current="true"{{ end }}>{{ .LanguageName }}</a></li>
           {{ end }}
-          <li class="lang-translate-link" id="google_translate_trigger" style="border-top: 1px solid var(--border); margin-top: 0.25rem; padding-top: 0.25rem;">
-            <a href="#" onclick="document.getElementById('google_translate_element').style.display='block';return false;">More languages...</a>
-          </li>
         </ul>
       </li>
     </ul>

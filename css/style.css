@@ -517,18 +517,6 @@ a:hover { text-decoration: underline; }
   }
 }
 
-/* ── Google Translate ────────────────────────────── */
-#google_translate_element {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 9999;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.5rem;
-}
-
 /* ── Footer ───────────────────────────────────────── */
 .site-footer {
   border-top: 1px solid var(--border);
