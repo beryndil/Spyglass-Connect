@@ -554,32 +554,3 @@ a:hover { text-decoration: underline; }
   color: #555;
   font-size: 0.75rem;
 }
-
-/* ── Report Translation FAB ──────────────────────────── */
-.report-fab {
-  position: fixed;
-  bottom: 1.25rem;
-  left: 1.25rem;
-  z-index: 9999;
-}
-.report-fab-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: border-color 0.3s, color 0.3s;
-  text-decoration: none;
-}
-.report-fab-btn:hover {
-  border-color: var(--gold-dim);
-  color: var(--gold);
-  text-decoration: none;
-}
-.report-fab-btn svg { flex-shrink: 0; }
