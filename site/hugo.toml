@@ -80,155 +80,155 @@ defaultContentLanguageInSubdir = false
 # ── Menus (per language) ─────────────────────────────
 [[menus.main]]
   name = "Features"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[menus.main]]
   name = "Privacy"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[menus.main]]
   name = "License"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[menus.main]]
   name = "Disclaimer"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5
 
 # Spanish menu
 [[languages.es.menus.main]]
   name = "Características"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[languages.es.menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[languages.es.menus.main]]
   name = "Privacidad"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[languages.es.menus.main]]
   name = "Licencia"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[languages.es.menus.main]]
   name = "Aviso legal"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5
 
 # Portuguese menu
 [[languages.pt.menus.main]]
   name = "Recursos"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[languages.pt.menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[languages.pt.menus.main]]
   name = "Privacidade"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[languages.pt.menus.main]]
   name = "Licença"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[languages.pt.menus.main]]
   name = "Aviso legal"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5
 
 # French menu
 [[languages.fr.menus.main]]
   name = "Fonctionnalités"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[languages.fr.menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[languages.fr.menus.main]]
   name = "Confidentialité"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[languages.fr.menus.main]]
   name = "Licence"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[languages.fr.menus.main]]
   name = "Avertissement"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5
 
 # German menu
 [[languages.de.menus.main]]
   name = "Funktionen"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[languages.de.menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[languages.de.menus.main]]
   name = "Datenschutz"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[languages.de.menus.main]]
   name = "Lizenz"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[languages.de.menus.main]]
   name = "Haftungsausschluss"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5
 
 # Japanese menu
 [[languages.ja.menus.main]]
   name = "機能"
-  url = "/features/"
+  pageRef = "/features"
   weight = 1
 
 [[languages.ja.menus.main]]
   name = "Connect"
-  url = "/connect/"
+  pageRef = "/connect"
   weight = 2
 
 [[languages.ja.menus.main]]
   name = "プライバシー"
-  url = "/privacy-policy/"
+  pageRef = "/privacy-policy"
   weight = 3
 
 [[languages.ja.menus.main]]
   name = "ライセンス"
-  url = "/license/"
+  pageRef = "/license"
   weight = 4
 
 [[languages.ja.menus.main]]
   name = "免責事項"
-  url = "/disclaimer/"
+  pageRef = "/disclaimer"
   weight = 5

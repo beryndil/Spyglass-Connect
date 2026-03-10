@@ -1,15 +1,16 @@
+{{ $langPrefix := cond (eq .Language.Lang "en") "" (printf "/%s" .Language.Lang) }}
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-links">
-      <a href="{{ "features/" | relURL }}">Features</a>
-      <a href="{{ "connect/" | relURL }}">Connect</a>
-      <a href="{{ "privacy-policy/" | relURL }}">Privacy</a>
-      <a href="{{ "license/" | relURL }}">License</a>
-      <a href="{{ "disclaimer/" | relURL }}">Disclaimer</a>
+      <a href="{{ $langPrefix }}/features/">{{ i18n "footerFeatures" }}</a>
+      <a href="{{ $langPrefix }}/connect/">{{ i18n "footerConnect" }}</a>
+      <a href="{{ $langPrefix }}/privacy-policy/">{{ i18n "footerPrivacy" }}</a>
+      <a href="{{ $langPrefix }}/license/">{{ i18n "footerLicense" }}</a>
+      <a href="{{ $langPrefix }}/disclaimer/">{{ i18n "footerDisclaimer" }}</a>
       <a href="{{ .Site.Params.repoURL }}" rel="noopener">GitHub</a>
     </div>
-    <p class="footer-alpha">Spyglass Connect is in alpha. Expect bugs, missing features, and rough edges.</p>
-    <p class="footer-copy">&copy; 2026 Beryndil. All rights reserved.</p>
-    <p class="footer-disclaimer">Spyglass Connect is not affiliated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</p>
+    <p class="footer-alpha">{{ i18n "footerAlpha" }}</p>
+    <p class="footer-copy">{{ i18n "footerCopy" | safeHTML }}</p>
+    <p class="footer-disclaimer">{{ i18n "footerTrademark" }}</p>
   </div>
 </footer>

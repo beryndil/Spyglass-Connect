@@ -1,0 +1,26 @@
+[footerFeatures]
+other = "機能"
+
+[footerConnect]
+other = "Connect"
+
+[footerPrivacy]
+other = "プライバシー"
+
+[footerLicense]
+other = "ライセンス"
+
+[footerDisclaimer]
+other = "免責事項"
+
+[footerAlpha]
+other = "Spyglass Connectはアルファ版です。バグ、未実装の機能、荒削りな部分があります。"
+
+[footerCopy]
+other = "&copy; 2026 Beryndil. All rights reserved."
+
+[footerTrademark]
+other = "Spyglass ConnectはMojang StudiosおよびMicrosoftとは提携していません。MinecraftはMojang Studiosの商標です。"
+
+[seeAllFeatures]
+other = "すべての機能を見る"

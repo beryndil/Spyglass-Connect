@@ -79,7 +79,8 @@
     <div class="stat"><span class="stat-num">{{ .Site.Params.themes }}</span><span class="stat-label">Themes</span></div>
   </div>
   <div class="section" style="text-align:center; padding-bottom:0;">
-    <a href="{{ "features/" | relURL }}" class="btn btn-outline">See All Features</a>
+    {{ $langPrefix := cond (eq .Language.Lang "en") "" (printf "/%s" .Language.Lang) }}
+    <a href="{{ $langPrefix }}/features/" class="btn btn-outline">{{ i18n "seeAllFeatures" }}</a>
   </div>
 </section>
 

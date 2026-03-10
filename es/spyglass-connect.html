@@ -147,6 +147,26 @@ body {
   100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
 }
 
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  bottom: 80px;
+  background: url('/images/hero-bg-mobile.webp') center top / cover no-repeat;
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+@media (min-width: 768px) {
+  .hero::after {
+    background-image: url('/images/hero-bg.webp');
+  }
+}
+
+.hero > * { position: relative; z-index: 1; }
+
 .hero-badge {
   display: inline-flex;
   align-items: center;

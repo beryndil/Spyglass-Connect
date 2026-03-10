@@ -9,7 +9,7 @@
     </button>
     <ul class="nav-links">
       {{ range .Site.Menus.main }}
-      <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
+      <li><a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
       {{ end }}
       <li class="nav-lang-switcher">
         <button class="lang-toggle" aria-label="Change language" aria-expanded="false">

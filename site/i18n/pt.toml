@@ -1,0 +1,26 @@
+[footerFeatures]
+other = "Recursos"
+
+[footerConnect]
+other = "Connect"
+
+[footerPrivacy]
+other = "Privacidade"
+
+[footerLicense]
+other = "Licença"
+
+[footerDisclaimer]
+other = "Aviso legal"
+
+[footerAlpha]
+other = "Spyglass Connect está em alfa. Espere bugs, recursos ausentes e arestas."
+
+[footerCopy]
+other = "&copy; 2026 Beryndil. Todos os direitos reservados."
+
+[footerTrademark]
+other = "Spyglass Connect não é afiliado à Mojang Studios ou Microsoft. Minecraft é uma marca registrada da Mojang Studios."
+
+[seeAllFeatures]
+other = "Ver todos os recursos"
