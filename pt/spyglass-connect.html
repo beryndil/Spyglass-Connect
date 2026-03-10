@@ -387,6 +387,29 @@ section { position: relative; z-index: 1; padding: 5rem 1.5rem; }
   background: #543B30;
 }
 
+/* ── Security section background ── */
+.security-section {
+  position: relative;
+  overflow: hidden;
+}
+.security-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/images/screenshots-bg-mobile.webp') center center / cover no-repeat;
+  opacity: 0.2;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+@media (min-width: 768px) {
+  .security-section::after {
+    background-image: url('/images/screenshots-bg.webp');
+  }
+}
+.security-section > * { position: relative; z-index: 1; }
+
 /* ═══════════════════════════════════════
    SIGNAL SECTION (The Pitch)
    ═══════════════════════════════════════ */
@@ -1167,7 +1190,7 @@ footer {
 <div class="divider"></div>
 
 <!-- ═══════ SECURITY ═══════ -->
-<section>
+<section class="security-section">
   <div class="section-inner">
     <span class="section-label reveal">Privacidade em Primeiro</span>
     <h2 class="section-title reveal reveal-delay-1">Seus dados nunca<br>saem da sua rede</h2>
