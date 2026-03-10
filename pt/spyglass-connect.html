@@ -127,6 +127,7 @@ body {
   text-align: center;
   padding: 2rem 1.5rem;
   z-index: 1;
+  overflow: hidden;
 }
 
 .hero::before {
@@ -600,6 +601,7 @@ section { position: relative; z-index: 1; padding: 5rem 1.5rem; }
   text-align: center;
   padding: 6rem 1.5rem 4rem;
   position: relative;
+  overflow: hidden;
 }
 .final-cta::before {
   content: '';
@@ -860,7 +862,7 @@ footer {
 
 /* ── Report FAB ── */
 .report-fab{position:fixed;bottom:1.25rem;left:1.25rem;z-index:9999}
-.report-fab-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;background:var(--bg-deep);border:1px solid var(--border-subtle);border-radius:50%;color:var(--text-dim);cursor:pointer;transition:border-color .3s,color .3s;text-decoration:none}
+.report-fab-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;background:var(--bg-deep);border:1px solid rgba(212,175,55,.15);border-radius:50%;color:var(--text-mid);cursor:pointer;transition:border-color .3s,color .3s;text-decoration:none}
 .report-fab-btn:hover{border-color:rgba(212,175,55,.3);color:var(--glow-primary)}
 .report-fab-btn svg{flex-shrink:0}
 </style>
