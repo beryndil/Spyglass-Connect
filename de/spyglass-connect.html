@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spyglass Connect — Your World. Your Phone. Live.</title>
-<meta name="description" content="Stream your Minecraft world to your phone in real time. Inventory, chests, structures, and an overhead map — all live over local WiFi.">
+<title>Spyglass Connect — Deine Welt. Dein Handy. Live.</title>
+<meta name="description" content="Streame deine Minecraft-Welt in Echtzeit auf dein Handy. Inventar, Truhen, Strukturen und eine Übersichtskarte — alles live über lokales WLAN.">
 <meta name="robots" content="index, follow">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://hardknocks.university/spyglass-connect.html">
-<meta property="og:title" content="Spyglass Connect — Your World. Your Phone. Live.">
-<meta property="og:description" content="Stream your Minecraft world to your phone in real time. Inventory, chests, structures, and an overhead map — all live over local WiFi.">
+<meta property="og:url" content="https://hardknocks.university/de/spyglass-connect.html">
+<meta property="og:title" content="Spyglass Connect — Deine Welt. Dein Handy. Live.">
+<meta property="og:description" content="Streame deine Minecraft-Welt in Echtzeit auf dein Handy. Inventar, Truhen, Strukturen und eine Übersichtskarte — alles live über lokales WLAN.">
 <meta property="og:image" content="https://hardknocks.university/images/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -19,8 +19,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Spyglass Connect — Your World. Your Phone. Live.">
-<meta name="twitter:description" content="Stream your Minecraft world to your phone in real time. Inventory, chests, structures, and an overhead map — all live over local WiFi.">
+<meta name="twitter:title" content="Spyglass Connect — Deine Welt. Dein Handy. Live.">
+<meta name="twitter:description" content="Streame deine Minecraft-Welt in Echtzeit auf dein Handy. Inventar, Truhen, Strukturen und eine Übersichtskarte — alles live über lokales WLAN.">
 <meta name="twitter:image" content="https://hardknocks.university/images/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -379,7 +379,7 @@ section { position: relative; z-index: 1; padding: 5rem 1.5rem; }
   animation: signal-ring 3s infinite;
 }
 .signal-icon::after {
-  content: '⚡';
+  content: '';
   position: absolute;
   inset: 0;
   display: flex;
@@ -857,23 +857,36 @@ footer {
 .lang-fab-menu li a{display:block;padding:.35rem .85rem;font-size:.85rem;color:var(--text-mid);text-decoration:none;transition:background .15s,color .15s}
 .lang-fab-menu li a:hover{background:rgba(212,175,55,.06);color:var(--glow-primary)}
 .lang-fab-menu li a[aria-current="true"]{color:var(--glow-primary);font-weight:600}
+
+/* ── Report FAB ── */
+.report-fab{position:fixed;bottom:1.25rem;left:1.25rem;z-index:9999}
+.report-fab-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;background:var(--bg-deep);border:1px solid var(--border-subtle);border-radius:50%;color:var(--text-dim);cursor:pointer;transition:border-color .3s,color .3s;text-decoration:none}
+.report-fab-btn:hover{border-color:rgba(212,175,55,.3);color:var(--glow-primary)}
+.report-fab-btn svg{flex-shrink:0}
 </style>
 </head>
 <body>
 
 <!-- Language Chooser -->
 <div class="lang-fab">
-  <button class="lang-fab-btn" onclick="document.querySelector('.lang-fab-menu').classList.toggle('open')">
+  <button class="lang-fab-btn" onclick="this.nextElementSibling.classList.toggle('open')">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
   </button>
   <ul class="lang-fab-menu">
-    <li><a href="/spyglass-connect.html" aria-current="true">English</a></li>
+    <li><a href="/spyglass-connect.html">English</a></li>
     <li><a href="/es/spyglass-connect.html">Español</a></li>
     <li><a href="/pt/spyglass-connect.html">Português</a></li>
     <li><a href="/fr/spyglass-connect.html">Français</a></li>
-    <li><a href="/de/spyglass-connect.html">Deutsch</a></li>
+    <li><a href="/de/spyglass-connect.html" aria-current="true">Deutsch</a></li>
     <li><a href="/ja/spyglass-connect.html">日本語</a></li>
   </ul>
+</div>
+
+<!-- Report Translation Error FAB -->
+<div class="report-fab">
+  <a class="report-fab-btn" href="https://github.com/beryndil/Spyglass-Connect/issues/new?title=Translation+Error&body=Sprache%3A%20Deutsch%0ASeite%3A%20Spyglass%20Connect%0A%0AWelcher%20Text%20ist%20falsch%3F%0A%0AVorgeschlagene%20Korrektur%3A" target="_blank" rel="noopener" title="Übersetzungsfehler melden">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+  </a>
 </div>
 
 <!-- Ambient particles -->
@@ -888,33 +901,31 @@ footer {
 <section class="hero">
   <div class="hero-badge">
     <span class="dot"></span>
-    Coming Soon
+    Demnächst Verfügbar
   </div>
 
   <h1 class="hero-title">
-    <span class="line">Your World.</span>
-    <span class="line">Your Phone.</span>
-    <span class="line line-glow">Connected.</span>
+    <span class="line">Deine Welt.</span>
+    <span class="line">Dein Handy.</span>
+    <span class="line line-glow">Verbunden.</span>
   </h1>
 
   <p class="hero-sub">
-    Spyglass Connect streams your Minecraft world
-    to your phone in real time. Inventory, chests, structures, map —
-    all live over local WiFi.
+    Spyglass Connect streamt deine Minecraft-Welt in Echtzeit auf dein Handy. Inventar, Truhen, Strukturen, Karte — alles live über lokales WLAN.
   </p>
 
   <div class="hero-cta-group">
     <a href="https://github.com/beryndil/Spyglass-Connect" class="cta-primary">
-      <span>Coming Soon</span>
+      <span>Demnächst Verfügbar</span>
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h8M9 8l4 4-4 4"/></svg>
     </a>
     <a href="https://github.com/beryndil/Spyglass-Connect/wiki" class="cta-secondary">
-      Read the Docs
+      Dokumentation Lesen
     </a>
   </div>
 
   <div class="hero-scroll-hint">
-    <span>Discover</span>
+    <span>Entdecken</span>
     <div class="scroll-arrow"></div>
   </div>
 </section>
@@ -926,9 +937,9 @@ footer {
   <div class="section-inner">
     <div class="signal-icon reveal"></div>
     <p class="signal-text reveal reveal-delay-1">
-      Every Minecraft companion app gives you a <strong>static database</strong>.
-      Spyglass gives you that — <em>plus a live bridge to your actual world</em>.
-      No mods. No Realms subscription. Just your PC, your phone, and your WiFi.
+      Jede Minecraft-Begleiter-App gibt dir eine <strong>statische Datenbank</strong>.
+      Spyglass gibt dir das — <em>plus eine Live-Brücke zu deiner echten Welt</em>.
+      Keine Mods. Kein Realms-Abo. Nur dein PC, dein Handy und dein WLAN.
     </p>
   </div>
 </section>
@@ -938,9 +949,9 @@ footer {
 <!-- ═══════ PHONE MOCKUP + FEATURES ═══════ -->
 <section>
   <div class="section-inner" style="text-align:center;">
-    <span class="section-label reveal">What You'll See</span>
+    <span class="section-label reveal">Was Du Sehen Wirst</span>
     <h2 class="section-title reveal reveal-delay-1" style="margin-left:auto;margin-right:auto;">
-      Your entire world,<br>in the palm of your hand
+      Deine ganze Welt,<br>in deiner Handfläche
     </h2>
 
     <!-- CSS Phone Mockup -->
@@ -953,20 +964,20 @@ footer {
         </div>
         <div class="phone-content">
           <div class="phone-header">⬡ SPYGLASS</div>
-          <div class="phone-connected"><span class="dot-live"></span> CONNECTED — LIVE</div>
+          <div class="phone-connected"><span class="dot-live"></span> VERBUNDEN — LIVE</div>
 
           <div class="phone-card-mini">
-            <div class="card-label">Player Position</div>
+            <div class="card-label">Spielerposition</div>
             <div class="card-value"><span class="hl">X</span> 142 &nbsp;<span class="hl">Y</span> 68 &nbsp;<span class="hl">Z</span> -391</div>
           </div>
 
           <div class="phone-card-mini">
-            <div class="card-label">Health / Food / XP</div>
+            <div class="card-label">Gesundheit / Nahrung / XP</div>
             <div class="card-value">❤ 18 &nbsp; 🍖 20 &nbsp; ✦ Lvl <span class="hl">27</span></div>
           </div>
 
           <div class="phone-card-mini">
-            <div class="card-label">Inventory (36 slots)</div>
+            <div class="card-label">Inventar (36 Plätze)</div>
             <div class="phone-inv-grid">
               <div class="inv-slot filled"></div>
               <div class="inv-slot filled"></div>
@@ -1009,7 +1020,7 @@ footer {
         </div>
       </div>
       <div class="phone-overlay">
-        <span class="phone-overlay-text">Screenshots<br>Coming Soon</span>
+        <span class="phone-overlay-text">Screenshots<br>Demnächst</span>
       </div>
     </div>
 
@@ -1021,42 +1032,42 @@ footer {
 <!-- ═══════ FEATURES ═══════ -->
 <section>
   <div class="section-inner">
-    <span class="section-label reveal">Live Features</span>
-    <h2 class="section-title reveal reveal-delay-1">Everything updates<br>while you play</h2>
+    <span class="section-label reveal">Live-Funktionen</span>
+    <h2 class="section-title reveal reveal-delay-1">Alles aktualisiert sich<br>während du spielst</h2>
     <p class="section-desc reveal reveal-delay-2">
-      A file watcher on your desktop monitors every save. Changes push to your phone instantly.
+      Ein Datei-Überwacher auf deinem Desktop überwacht jedes Speichern. Änderungen werden sofort an dein Handy gesendet.
     </p>
 
     <div class="features-grid">
       <div class="feature-card reveal reveal-delay-1">
         <div class="feature-icon">🎒</div>
-        <div class="feature-name">Live Inventory</div>
-        <div class="feature-desc">Full 36-slot inventory, armor, offhand, and ender chest — updated every time Minecraft saves.</div>
+        <div class="feature-name">Live-Inventar</div>
+        <div class="feature-desc">Komplettes 36-Platz-Inventar, Rüstung, Nebenhand und Endertruhe — aktualisiert bei jedem Minecraft-Speichern.</div>
       </div>
       <div class="feature-card reveal reveal-delay-2">
         <div class="feature-icon">🔍</div>
-        <div class="feature-name">Storage</div>
-        <div class="feature-desc">Search for any item across every container in your world. Find that lost diamond pick in seconds.</div>
+        <div class="feature-name">Lagerung</div>
+        <div class="feature-desc">Suche nach jedem Gegenstand in jedem Behälter deiner Welt. Finde die verlorene Diamantspitzhacke in Sekunden.</div>
       </div>
       <div class="feature-card reveal reveal-delay-3">
         <div class="feature-icon">🗺️</div>
-        <div class="feature-name">Overhead Map</div>
-        <div class="feature-desc">Terrain map with structure markers and your live position. Navigate without leaving the game.</div>
+        <div class="feature-name">Übersichtskarte</div>
+        <div class="feature-desc">Geländekarte mit Strukturmarkierungen und deiner Live-Position. Navigiere ohne das Spiel zu verlassen.</div>
       </div>
       <div class="feature-card reveal reveal-delay-4">
         <div class="feature-icon">🏘️</div>
-        <div class="feature-name">Structure Locator</div>
-        <div class="feature-desc">Villages, temples, monuments, strongholds — pinpointed on the map with exact coordinates.</div>
+        <div class="feature-name">Struktur-Finder</div>
+        <div class="feature-desc">Dörfer, Tempel, Monumente, Festungen — auf der Karte mit exakten Koordinaten markiert.</div>
       </div>
       <div class="feature-card reveal reveal-delay-5">
         <div class="feature-icon">📊</div>
-        <div class="feature-name">Player Stats</div>
-        <div class="feature-desc">Health, food, XP, coordinates, dimension. Plus lifetime stats — blocks mined, mobs killed, distance walked.</div>
+        <div class="feature-name">Spielerstatistiken</div>
+        <div class="feature-desc">Gesundheit, Nahrung, XP, Koordinaten, Dimension. Plus Lebenszeit-Statistiken — abgebaute Blöcke, getötete Mobs, zurückgelegte Distanz.</div>
       </div>
       <div class="feature-card reveal reveal-delay-6">
         <div class="feature-icon">🏆</div>
-        <div class="feature-name">Advancements</div>
-        <div class="feature-desc">All 125 advancements with completion status, pulled directly from your save file.</div>
+        <div class="feature-name">Fortschritte</div>
+        <div class="feature-desc">Alle 125 Fortschritte mit Abschlussstatus, direkt aus deiner Speicherdatei gezogen.</div>
       </div>
     </div>
   </div>
@@ -1067,29 +1078,29 @@ footer {
 <!-- ═══════ HOW IT WORKS ═══════ -->
 <section>
   <div class="section-inner">
-    <span class="section-label reveal">Setup</span>
-    <h2 class="section-title reveal reveal-delay-1">Connected in<br>only seconds</h2>
+    <span class="section-label reveal">Einrichtung</span>
+    <h2 class="section-title reveal reveal-delay-1">Verbunden in<br>nur Sekunden</h2>
 
     <div class="steps">
       <div class="step reveal reveal-delay-1">
         <div class="step-num">01</div>
         <div class="step-content">
-          <div class="step-title">Launch Spyglass Connect on your PC</div>
-          <div class="step-desc">It auto-detects your Minecraft worlds from the default launcher, Prism Launcher, or any custom path you add.</div>
+          <div class="step-title">Starte Spyglass Connect auf deinem PC</div>
+          <div class="step-desc">Es erkennt automatisch deine Minecraft-Welten vom Standard-Launcher, Prism Launcher oder jedem benutzerdefinierten Pfad, den du hinzufügst.</div>
         </div>
       </div>
       <div class="step reveal reveal-delay-2">
         <div class="step-num">02</div>
         <div class="step-content">
-          <div class="step-title">Scan the QR code with Spyglass on your phone</div>
-          <div class="step-desc">One scan establishes a persistent encrypted connection. Keys are saved — you'll never need to scan again.</div>
+          <div class="step-title">Scanne den QR-Code mit Spyglass auf deinem Handy</div>
+          <div class="step-desc">Ein Scan stellt eine dauerhafte verschlüsselte Verbindung her. Die Schlüssel werden gespeichert — du musst nie wieder scannen.</div>
         </div>
       </div>
       <div class="step reveal reveal-delay-3">
         <div class="step-num">03</div>
         <div class="step-content">
-          <div class="step-title">Play. Your phone keeps up.</div>
-          <div class="step-desc">Every time Minecraft auto-saves, your phone gets the latest data. Inventory, chests, map — all live.</div>
+          <div class="step-title">Spiel. Dein Handy hält mit.</div>
+          <div class="step-desc">Jedes Mal, wenn Minecraft automatisch speichert, erhält dein Handy die neuesten Daten. Inventar, Truhen, Karte — alles live.</div>
         </div>
       </div>
     </div>
@@ -1101,24 +1112,24 @@ footer {
 <!-- ═══════ TRUST NUMBERS ═══════ -->
 <section>
   <div class="section-inner" style="text-align:center;">
-    <span class="section-label reveal">Also Included</span>
-    <h2 class="section-title reveal reveal-delay-1" style="margin-left:auto;margin-right:auto;">The most complete<br>offline reference, period</h2>
+    <span class="section-label reveal">Ebenfalls Enthalten</span>
+    <h2 class="section-title reveal reveal-delay-1" style="margin-left:auto;margin-right:auto;">Die vollständigste<br>Offline-Referenz, Punkt</h2>
     <p class="section-desc reveal reveal-delay-2" style="margin-left:auto;margin-right:auto;">
-      Even without Connect, Spyglass is a complete Minecraft reference — database, calculators, and search that works offline.
+      Auch ohne Connect ist Spyglass eine komplette Minecraft-Referenz — Datenbank, Rechner und Suche, die offline funktioniert.
     </p>
 
     <div class="trust-bar reveal reveal-delay-3">
       <div class="trust-item">
         <div class="trust-value">3,500+</div>
-        <div class="trust-label">Database Entries</div>
+        <div class="trust-label">Datenbankeinträge</div>
       </div>
       <div class="trust-item">
         <div class="trust-value">19</div>
-        <div class="trust-label">Calculators</div>
+        <div class="trust-label">Rechner</div>
       </div>
       <div class="trust-item">
         <div class="trust-value">13</div>
-        <div class="trust-label">Categories</div>
+        <div class="trust-label">Kategorien</div>
       </div>
     </div>
   </div>
@@ -1129,29 +1140,29 @@ footer {
 <!-- ═══════ SECURITY ═══════ -->
 <section>
   <div class="section-inner">
-    <span class="section-label reveal">Privacy-First</span>
-    <h2 class="section-title reveal reveal-delay-1">Your data never<br>leaves your network</h2>
+    <span class="section-label reveal">Datenschutz Zuerst</span>
+    <h2 class="section-title reveal reveal-delay-1">Deine Daten verlassen<br>nie dein Netzwerk</h2>
 
     <div class="security-grid">
       <div class="sec-card reveal reveal-delay-2">
         <div class="sec-icon">🔐</div>
-        <div class="sec-title">End-to-End Encrypted</div>
-        <div class="sec-desc">ECDH key exchange with AES-256-GCM encryption. The same standard protecting your bank.</div>
+        <div class="sec-title">Ende-zu-Ende Verschlüsselt</div>
+        <div class="sec-desc">ECDH-Schlüsselaustausch mit AES-256-GCM-Verschlüsselung. Derselbe Standard, der deine Bank schützt.</div>
       </div>
       <div class="sec-card reveal reveal-delay-3">
         <div class="sec-icon">📡</div>
-        <div class="sec-title">Local WiFi Only</div>
-        <div class="sec-desc">All data stays on your network. No cloud. No accounts. No external servers, ever.</div>
+        <div class="sec-title">Nur Lokales WLAN</div>
+        <div class="sec-desc">Alle Daten bleiben in deinem Netzwerk. Keine Cloud. Keine Konten. Keine externen Server, niemals.</div>
       </div>
       <div class="sec-card reveal reveal-delay-4">
         <div class="sec-icon">👁️</div>
-        <div class="sec-title">Read-Only</div>
-        <div class="sec-desc">Spyglass Connect reads your save files. It never writes to them. Your world is never touched.</div>
+        <div class="sec-title">Nur Lesen</div>
+        <div class="sec-desc">Spyglass Connect liest deine Speicherdateien. Es schreibt nie in sie. Deine Welt wird nie berührt.</div>
       </div>
       <div class="sec-card reveal reveal-delay-5">
         <div class="sec-icon">🎯</div>
-        <div class="sec-title">No Mods Required</div>
-        <div class="sec-desc">Works with completely vanilla Minecraft. No forge, no fabric, no server plugins. Just your saves.</div>
+        <div class="sec-title">Keine Mods Erforderlich</div>
+        <div class="sec-desc">Funktioniert mit komplett vanilla Minecraft. Kein Forge, kein Fabric, keine Server-Plugins. Nur deine Speicherstände.</div>
       </div>
     </div>
   </div>
@@ -1163,12 +1174,12 @@ footer {
 <section class="final-cta">
   <div class="section-inner">
     <h2 class="final-title reveal">
-      Stop alt-tabbing.<br>
-      <span class="glow">Start playing.</span>
+      Hör auf mit Alt-Tab.<br>
+      <span class="glow">Fang an zu spielen.</span>
     </h2>
     <p class="final-sub reveal reveal-delay-1">
-      Spyglass + Spyglass Connect launch on Google Play soon.
-      Be the first to know.
+      Spyglass + Spyglass Connect kommen bald auf Google Play.
+      Sei der Erste, der es erfährt.
     </p>
   </div>
 </section>
@@ -1177,13 +1188,13 @@ footer {
 <footer>
   <div class="footer-logo">⬡ Spyglass</div>
   <p class="footer-note">
-    Spyglass is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft.
-    Minecraft is a trademark of Mojang Studios. All game data is used for informational purposes only.
+    Spyglass ist nicht mit Mojang Studios oder Microsoft verbunden, wird nicht von ihnen unterstützt oder ist mit ihnen assoziiert.
+    Minecraft ist eine Marke von Mojang Studios. Alle Spieldaten werden nur zu Informationszwecken verwendet.
   </p>
   <div class="footer-links">
-    <a href="https://hardknocks.university/privacy-policy.html">Privacy</a>
-    <a href="https://hardknocks.university/license.html">License</a>
-    <a href="https://hardknocks.university/disclaimer.html">Disclaimer</a>
+    <a href="https://hardknocks.university/privacy-policy.html">Datenschutz</a>
+    <a href="https://hardknocks.university/license.html">Lizenz</a>
+    <a href="https://hardknocks.university/disclaimer.html">Haftungsausschluss</a>
     <a href="https://github.com/beryndil">GitHub</a>
   </div>
 </footer>
