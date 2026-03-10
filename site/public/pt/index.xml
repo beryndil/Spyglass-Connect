@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spyglass Connect</title>
+    <link>https://hardknocks.university/pt/</link>
+    <description>Recent content on Spyglass Connect</description>
+    <generator>Hugo</generator>
+    <language>pt</language>
+    <atom:link href="https://hardknocks.university/pt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Aviso Legal</title>
+      <link>https://hardknocks.university/pt/disclaimer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/pt/disclaimer/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;em&gt;Esta é uma tradução do original em inglês. Em caso de discrepância, prevalece a &lt;a href=&#34;https://hardknocks.university/pt/disclaimer/&#34;&gt;versão em inglês&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Software Alfa&lt;/strong&gt; — O Spyglass e o Spyglass Connect estão em desenvolvimento ativo. Espere bugs, funcionalidades incompletas e imperfeições.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;sem-afiliação-com-a-mojang&#34;&gt;Sem Afiliação com a Mojang&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;O Spyglass não é afiliado, endossado ou associado à Mojang Studios ou à Microsoft.&lt;/strong&gt; Minecraft é uma marca registrada da Mojang Studios. Todos os dados do jogo, nomes e imagens são usados apenas para fins informativos e de referência.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Connect</title>
+      <link>https://hardknocks.university/pt/connect/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/pt/connect/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Software Alfa&lt;/strong&gt; — O Spyglass Connect está em desenvolvimento ativo. Espere bugs, funcionalidades incompletas e imperfeições.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;visão-geral&#34;&gt;Visão Geral&lt;/h2&gt;&#xA;&lt;p&gt;O Spyglass Connect é um aplicativo desktop que lê os arquivos de save do Minecraft Java Edition e transmite os dados para o seu celular via WiFi local. Sem servidores na nuvem, sem contas — tudo permanece na sua rede.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/beryndil/Spyglass-Connect&#34;&gt;Baixe o Spyglass Connect para Desktop&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;como-funciona&#34;&gt;Como Funciona&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;Abra&lt;/strong&gt; o Spyglass Connect no seu PC (Windows, macOS ou Linux)&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Escaneie&lt;/strong&gt; o QR code mostrado no seu PC pelo app Spyglass no celular&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Pronto&lt;/strong&gt; — seu celular reconecta automaticamente sempre que ambos os dispositivos estiverem na mesma rede WiFi&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Por trás dos panos: o QR code conecta os dispositivos via troca de chaves ECDH, depois se comunica por WebSocket criptografado (AES-256-GCM). O mDNS cuida da reconexão automática.&#xA;A negociação de versão do protocolo garante que ambos os apps sejam compatíveis — se algum dos lados estiver desatualizado, você verá uma mensagem de erro clara.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Funcionalidades</title>
+      <link>https://hardknocks.university/pt/features/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/pt/features/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Software Alfa&lt;/strong&gt; — O Spyglass Connect está em desenvolvimento ativo. Espere bugs, funcionalidades incompletas e imperfeições.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;spyglass-connect&#34;&gt;Spyglass Connect&lt;/h2&gt;&#xA;&lt;p&gt;Conecte seu celular ao aplicativo desktop &lt;a href=&#34;https://github.com/beryndil/Spyglass-Connect&#34;&gt;Spyglass Connect&lt;/a&gt; para acessar os dados do seu mundo de Minecraft via WiFi local. Sem servidores na nuvem, sem contas — tudo permanece na sua rede.&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Funcionalidade&lt;/th&gt;&#xA;          &lt;th&gt;Descrição&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Pareamento por QR&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Escaneie um QR code para conectar — reconecta automaticamente sempre que estiver na mesma rede WiFi&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Visualizador de Personagem&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Veja seu equipamento completo — armadura, armas, ferramentas e encantamentos&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Visualizador de Inventário&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Explore seu inventário completo, armadura, mão secundária e baú do End&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Localizador de Baús&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pesquise qualquer item em todos os contêineres — baús, barris, caixas de shulker, funis&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Localizador de Estruturas&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Encontre vilas, templos, monumentos, fortalezas e muito mais com coordenadas e distância&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Mapa Aéreo&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Mapa interativo do terreno com marcadores de estruturas e posição do jogador&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;Totalmente criptografado (ECDH + AES-256-GCM). Reconecta automaticamente via mDNS.&#xA;Protocolo v2 com negociação de versão — versões incompatíveis mostram uma mensagem clara de atualização.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Licença</title>
+      <link>https://hardknocks.university/pt/license/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/pt/license/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;em&gt;Esta é uma tradução do original em inglês. Em caso de discrepância, prevalece a &lt;a href=&#34;https://hardknocks.university/pt/license/&#34;&gt;versão em inglês&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;p&gt;Copyright (c) 2026 Beryndil. Todos os direitos reservados.&lt;/p&gt;&#xA;&lt;h2 id=&#34;1-uso-permitido&#34;&gt;1. Uso Permitido&lt;/h2&gt;&#xA;&lt;p&gt;É concedida a você uma licença não exclusiva, intransferível e revogável para usar o aplicativo Spyglass conforme distribuído pelos canais oficiais de lançamento, para fins pessoais e não comerciais.&lt;/p&gt;&#xA;&lt;h2 id=&#34;2-restrições&#34;&gt;2. Restrições&lt;/h2&gt;&#xA;&lt;p&gt;Você NÃO pode, sem o consentimento prévio por escrito do detentor dos direitos autorais:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Política de Privacidade</title>
+      <link>https://hardknocks.university/pt/privacy-policy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/pt/privacy-policy/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;em&gt;Esta é uma tradução do original em inglês. Em caso de discrepância, prevalece a &lt;a href=&#34;https://hardknocks.university/pt/privacy-policy/&#34;&gt;versão em inglês&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;O Spyglass Connect é um aplicativo Android gratuito com suporte a anúncios, criado por Beryndil. Esta política explica quais dados o app coleta, como são usados e as escolhas que você tem.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;1-informações-que-coletamos&#34;&gt;1. Informações que Coletamos&lt;/h2&gt;&#xA;&lt;p&gt;O Spyglass em si &lt;strong&gt;não&lt;/strong&gt; coleta nenhuma informação pessoal, como nomes, endereços de e-mail ou credenciais de conta. O app não exige a criação de uma conta.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

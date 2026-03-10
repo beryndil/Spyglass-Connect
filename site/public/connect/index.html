@@ -2,22 +2,42 @@
 <html lang="en">
 <head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spyglass Connect | Spyglass Connect</title>
+<title>Connect | Spyglass Connect</title>
 <meta name="description" content="Pair your phone with the Spyglass Connect desktop companion to view inventory, find chests, locate structures, and explore a map — all over local WiFi.">
 <link rel="canonical" href="https://hardknocks.university/connect/">
 
 
-<meta property="og:title" content="Spyglass Connect | Spyglass Connect">
+<meta property="og:title" content="Connect | Spyglass Connect">
 <meta property="og:description" content="Pair your phone with the Spyglass Connect desktop companion to view inventory, find chests, locate structures, and explore a map — all over local WiFi.">
 <meta property="og:url" content="https://hardknocks.university/connect/">
 <meta property="og:site_name" content="Spyglass Connect">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://hardknocks.university/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
 
-
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spyglass Connect | Spyglass Connect">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Connect | Spyglass Connect">
 <meta name="twitter:description" content="Pair your phone with the Spyglass Connect desktop companion to view inventory, find chests, locate structures, and explore a map — all over local WiFi.">
+<meta name="twitter:image" content="https://hardknocks.university/images/og-image.png">
+
+
+
+
+<link rel="alternate" hreflang="es" href="https://hardknocks.university/es/connect/">
+
+<link rel="alternate" hreflang="pt" href="https://hardknocks.university/pt/connect/">
+
+<link rel="alternate" hreflang="fr" href="https://hardknocks.university/fr/connect/">
+
+<link rel="alternate" hreflang="de" href="https://hardknocks.university/de/connect/">
+
+<link rel="alternate" hreflang="ja" href="https://hardknocks.university/ja/connect/">
+
+<link rel="alternate" hreflang="en-us" href="https://hardknocks.university/connect/">
+
+<link rel="alternate" hreflang="x-default" href="https://hardknocks.university/">
 
 
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -34,10 +54,24 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Spyglass Connect",
-  "url": "https:\/\/hardknocks.university\/"
+  "url": "https:\/\/hardknocks.university\/",
+  "inLanguage": "en-us"
 }
 </script>
 
+
+<div id="google_translate_element" style="display:none;"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'en,es,pt,fr,de,ja',
+    layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
 </head>
 <body><nav class="site-nav" role="navigation" aria-label="Main">
   <div class="nav-inner">
@@ -60,6 +94,30 @@
       
       <li><a href="/disclaimer/">Disclaimer</a></li>
       
+      <li class="nav-lang-switcher">
+        <button class="lang-toggle" aria-label="Change language" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="lang-current">English</span>
+        </button>
+        <ul class="lang-dropdown">
+          
+          <li><a href="https://hardknocks.university/" aria-current="true">English</a></li>
+          
+          <li><a href="https://hardknocks.university/es/">Español</a></li>
+          
+          <li><a href="https://hardknocks.university/pt/">Português</a></li>
+          
+          <li><a href="https://hardknocks.university/fr/">Français</a></li>
+          
+          <li><a href="https://hardknocks.university/de/">Deutsch</a></li>
+          
+          <li><a href="https://hardknocks.university/ja/">日本語</a></li>
+          
+          <li class="lang-translate-link" id="google_translate_trigger" style="border-top: 1px solid var(--border); margin-top: 0.25rem; padding-top: 0.25rem;">
+            <a href="#" onclick="document.getElementById('google_translate_element').style.display='block';return false;">More languages...</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
@@ -71,12 +129,24 @@
     b.classList.toggle('open',open);
     b.setAttribute('aria-expanded',open);
   });
+  var lb=document.querySelector('.lang-toggle'),ld=document.querySelector('.lang-dropdown');
+  if(lb&&ld){
+    lb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=ld.classList.toggle('open');
+      lb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      ld.classList.remove('open');
+      lb.setAttribute('aria-expanded','false');
+    });
+  }
 })();
 </script>
 <main>
 <article class="page-content connect-page">
   <div class="page-inner">
-    <h1>Spyglass Connect</h1>
+    <h1>Connect</h1>
     <p class="page-subtitle">Your Minecraft world, on your phone.</p>
     <blockquote>
 <p><strong>Alpha Software</strong> — Spyglass Connect is in active development. Expect bugs, missing features, and rough edges.</p></blockquote>
@@ -89,7 +159,8 @@
 <li><strong>Scan</strong> the QR code shown on your PC from the Spyglass app on your phone</li>
 <li><strong>Done</strong> — your phone auto-reconnects whenever both devices are on the same WiFi</li>
 </ol>
-<p>Under the hood: QR code pairs devices via ECDH key exchange, then communicates over an encrypted WebSocket (AES-256-GCM). mDNS handles automatic reconnection.</p>
+<p>Under the hood: QR code pairs devices via ECDH key exchange, then communicates over an encrypted WebSocket (AES-256-GCM). mDNS handles automatic reconnection.
+Protocol version negotiation ensures both apps are compatible — if either side is outdated, you&rsquo;ll see a clear error message.</p>
 <h2 id="features">Features</h2>
 <h3 id="character-viewer">Character Viewer</h3>
 <p>See your player&rsquo;s full equipment — armor, held items, offhand, and all stats. Tap any item for its full Spyglass detail page.</p>
@@ -106,6 +177,7 @@
 <li><a href="https://github.com/beryndil/Spyglass-Connect">Spyglass Connect</a> running on your PC</li>
 <li>Both devices on the same WiFi network</li>
 <li>Minecraft Java Edition save files accessible on your PC</li>
+<li>Spyglass Connect protocol v2+ (both apps must support the same protocol version)</li>
 </ul>
 
   </div>

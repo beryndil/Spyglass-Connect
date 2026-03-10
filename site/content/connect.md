@@ -1,5 +1,5 @@
 ---
-title: "Spyglass Connect"
+title: "Connect"
 description: "Pair your phone with the Spyglass Connect desktop companion to view inventory, find chests, locate structures, and explore a map — all over local WiFi."
 subtitle: "Your Minecraft world, on your phone."
 cssClass: "connect-page"

@@ -13,12 +13,32 @@
 <meta property="og:url" content="https://hardknocks.university/">
 <meta property="og:site_name" content="Spyglass Connect">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://hardknocks.university/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
 
-
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Spyglass Connect — Your Minecraft Companion">
 <meta name="twitter:description" content="Your Minecraft world, on your phone. View inventory, find chests, locate structures, and explore a map — all streamed from your PC over local WiFi.">
+<meta name="twitter:image" content="https://hardknocks.university/images/og-image.png">
+
+
+
+
+<link rel="alternate" hreflang="es" href="https://hardknocks.university/es/">
+
+<link rel="alternate" hreflang="pt" href="https://hardknocks.university/pt/">
+
+<link rel="alternate" hreflang="fr" href="https://hardknocks.university/fr/">
+
+<link rel="alternate" hreflang="de" href="https://hardknocks.university/de/">
+
+<link rel="alternate" hreflang="ja" href="https://hardknocks.university/ja/">
+
+<link rel="alternate" hreflang="en-us" href="https://hardknocks.university/">
+
+<link rel="alternate" hreflang="x-default" href="https://hardknocks.university/">
 
 
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -35,7 +55,8 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Spyglass Connect",
-  "url": "https:\/\/hardknocks.university\/"
+  "url": "https:\/\/hardknocks.university\/",
+  "inLanguage": "en-us"
 }
 </script>
 
@@ -47,7 +68,7 @@
   "name": "Spyglass Connect",
   "description": "Browse blocks, items, recipes, mobs, biomes, enchantments, potions, structures, and trades — plus calculators for building and enchanting. All offline.",
   "url": "https:\/\/hardknocks.university\/",
-  "applicationCategory": "GameApplication",
+  "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Android 8.0+",
   "offers": {
     "@type": "Offer",
@@ -56,11 +77,25 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Beryndil"
+    "name": "Beryndil",
+    "url": "https://hardknocks.university/developer.html"
   }
 }
 </script>
 
+
+<div id="google_translate_element" style="display:none;"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'en,es,pt,fr,de,ja',
+    layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
 </head>
 <body><nav class="site-nav" role="navigation" aria-label="Main">
   <div class="nav-inner">
@@ -83,6 +118,30 @@
       
       <li><a href="/disclaimer/">Disclaimer</a></li>
       
+      <li class="nav-lang-switcher">
+        <button class="lang-toggle" aria-label="Change language" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="lang-current">English</span>
+        </button>
+        <ul class="lang-dropdown">
+          
+          <li><a href="https://hardknocks.university/" aria-current="true">English</a></li>
+          
+          <li><a href="https://hardknocks.university/es/">Español</a></li>
+          
+          <li><a href="https://hardknocks.university/pt/">Português</a></li>
+          
+          <li><a href="https://hardknocks.university/fr/">Français</a></li>
+          
+          <li><a href="https://hardknocks.university/de/">Deutsch</a></li>
+          
+          <li><a href="https://hardknocks.university/ja/">日本語</a></li>
+          
+          <li class="lang-translate-link" id="google_translate_trigger" style="border-top: 1px solid var(--border); margin-top: 0.25rem; padding-top: 0.25rem;">
+            <a href="#" onclick="document.getElementById('google_translate_element').style.display='block';return false;">More languages...</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
@@ -94,6 +153,18 @@
     b.classList.toggle('open',open);
     b.setAttribute('aria-expanded',open);
   });
+  var lb=document.querySelector('.lang-toggle'),ld=document.querySelector('.lang-dropdown');
+  if(lb&&ld){
+    lb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=ld.classList.toggle('open');
+      lb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      ld.classList.remove('open');
+      lb.setAttribute('aria-expanded','false');
+    });
+  }
 })();
 </script>
 <main>

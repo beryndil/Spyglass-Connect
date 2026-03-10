@@ -1,7 +1,8 @@
 baseURL = "https://hardknocks.university/"
-languageCode = "en-us"
 title = "Spyglass Connect"
-enableRobotsTXT = false
+enableRobotsTXT = true
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
 
 [sitemap]
   changefreq = "weekly"
@@ -11,6 +12,7 @@ enableRobotsTXT = false
   appName = "Spyglass Connect"
   tagline = "Your Minecraft Companion"
   description = "Browse blocks, items, recipes, mobs, biomes, enchantments, potions, structures, and trades — plus calculators for building and enchanting. All offline."
+  ogImage = "images/og-image.png"
   colorPrimary = "#C9A84C"
   colorSecondary = "#7c4dff"
   colorBackground = "#0E0C0A"
@@ -33,6 +35,49 @@ enableRobotsTXT = false
   calculators = 19
   themes = 15
 
+# ── Languages ────────────────────────────────────────
+[languages]
+  [languages.en]
+    languageCode = "en-us"
+    languageName = "English"
+    weight = 1
+  [languages.es]
+    languageCode = "es"
+    languageName = "Español"
+    weight = 2
+    [languages.es.params]
+      tagline = "Tu Compañero de Minecraft"
+      description = "Explora bloques, objetos, recetas, criaturas, biomas, encantamientos, pociones, estructuras y comercios — con calculadoras para construir y encantar. Todo sin conexión."
+  [languages.pt]
+    languageCode = "pt"
+    languageName = "Português"
+    weight = 3
+    [languages.pt.params]
+      tagline = "Seu Companheiro de Minecraft"
+      description = "Explore blocos, itens, receitas, criaturas, biomas, encantamentos, poções, estruturas e trocas — com calculadoras para construir e encantar. Tudo offline."
+  [languages.fr]
+    languageCode = "fr"
+    languageName = "Français"
+    weight = 4
+    [languages.fr.params]
+      tagline = "Votre Compagnon Minecraft"
+      description = "Parcourez les blocs, objets, recettes, créatures, biomes, enchantements, potions, structures et échanges — avec des calculateurs pour construire et enchanter. Tout hors ligne."
+  [languages.de]
+    languageCode = "de"
+    languageName = "Deutsch"
+    weight = 5
+    [languages.de.params]
+      tagline = "Dein Minecraft-Begleiter"
+      description = "Durchsuche Blöcke, Gegenstände, Rezepte, Kreaturen, Biome, Verzauberungen, Tränke, Strukturen und Handel — mit Rechnern zum Bauen und Verzaubern. Alles offline."
+  [languages.ja]
+    languageCode = "ja"
+    languageName = "日本語"
+    weight = 6
+    [languages.ja.params]
+      tagline = "あなたのマインクラフトコンパニオン"
+      description = "ブロック、アイテム、レシピ、モブ、バイオーム、エンチャント、ポーション、構造物、取引を閲覧 — 建築やエンチャント用の計算機付き。すべてオフライン対応。"
+
+# ── Menus (per language) ─────────────────────────────
 [[menus.main]]
   name = "Features"
   url = "/features/"
@@ -55,5 +100,135 @@ enableRobotsTXT = false
 
 [[menus.main]]
   name = "Disclaimer"
+  url = "/disclaimer/"
+  weight = 5
+
+# Spanish menu
+[[languages.es.menus.main]]
+  name = "Características"
+  url = "/features/"
+  weight = 1
+
+[[languages.es.menus.main]]
+  name = "Connect"
+  url = "/connect/"
+  weight = 2
+
+[[languages.es.menus.main]]
+  name = "Privacidad"
+  url = "/privacy-policy/"
+  weight = 3
+
+[[languages.es.menus.main]]
+  name = "Licencia"
+  url = "/license/"
+  weight = 4
+
+[[languages.es.menus.main]]
+  name = "Aviso legal"
+  url = "/disclaimer/"
+  weight = 5
+
+# Portuguese menu
+[[languages.pt.menus.main]]
+  name = "Recursos"
+  url = "/features/"
+  weight = 1
+
+[[languages.pt.menus.main]]
+  name = "Connect"
+  url = "/connect/"
+  weight = 2
+
+[[languages.pt.menus.main]]
+  name = "Privacidade"
+  url = "/privacy-policy/"
+  weight = 3
+
+[[languages.pt.menus.main]]
+  name = "Licença"
+  url = "/license/"
+  weight = 4
+
+[[languages.pt.menus.main]]
+  name = "Aviso legal"
+  url = "/disclaimer/"
+  weight = 5
+
+# French menu
+[[languages.fr.menus.main]]
+  name = "Fonctionnalités"
+  url = "/features/"
+  weight = 1
+
+[[languages.fr.menus.main]]
+  name = "Connect"
+  url = "/connect/"
+  weight = 2
+
+[[languages.fr.menus.main]]
+  name = "Confidentialité"
+  url = "/privacy-policy/"
+  weight = 3
+
+[[languages.fr.menus.main]]
+  name = "Licence"
+  url = "/license/"
+  weight = 4
+
+[[languages.fr.menus.main]]
+  name = "Avertissement"
+  url = "/disclaimer/"
+  weight = 5
+
+# German menu
+[[languages.de.menus.main]]
+  name = "Funktionen"
+  url = "/features/"
+  weight = 1
+
+[[languages.de.menus.main]]
+  name = "Connect"
+  url = "/connect/"
+  weight = 2
+
+[[languages.de.menus.main]]
+  name = "Datenschutz"
+  url = "/privacy-policy/"
+  weight = 3
+
+[[languages.de.menus.main]]
+  name = "Lizenz"
+  url = "/license/"
+  weight = 4
+
+[[languages.de.menus.main]]
+  name = "Haftungsausschluss"
+  url = "/disclaimer/"
+  weight = 5
+
+# Japanese menu
+[[languages.ja.menus.main]]
+  name = "機能"
+  url = "/features/"
+  weight = 1
+
+[[languages.ja.menus.main]]
+  name = "Connect"
+  url = "/connect/"
+  weight = 2
+
+[[languages.ja.menus.main]]
+  name = "プライバシー"
+  url = "/privacy-policy/"
+  weight = 3
+
+[[languages.ja.menus.main]]
+  name = "ライセンス"
+  url = "/license/"
+  weight = 4
+
+[[languages.ja.menus.main]]
+  name = "免責事項"
   url = "/disclaimer/"
   weight = 5

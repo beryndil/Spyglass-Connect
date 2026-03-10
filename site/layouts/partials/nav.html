@@ -1,6 +1,6 @@
 <nav class="site-nav" role="navigation" aria-label="Main">
   <div class="nav-inner">
-    <a class="nav-brand" href="{{ .Site.BaseURL }}">
+    <a class="nav-brand" href="{{ .Site.BaseURL }}{{ if ne .Language.Lang "en" }}{{ .Language.Lang }}/{{ end }}">
       <img src="{{ "images/spyglass-icon.png" | relURL }}" alt="" width="32" height="32" loading="eager">
       <span>Spyglass Connect</span>
     </a>
@@ -11,6 +11,20 @@
       {{ range .Site.Menus.main }}
       <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
       {{ end }}
+      <li class="nav-lang-switcher">
+        <button class="lang-toggle" aria-label="Change language" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="lang-current">{{ .Language.LanguageName }}</span>
+        </button>
+        <ul class="lang-dropdown">
+          {{ range .Site.Languages }}
+          <li><a href="{{ $.Site.BaseURL }}{{ if ne .Lang "en" }}{{ .Lang }}/{{ end }}"{{ if eq $.Language.Lang .Lang }} aria-current="true"{{ end }}>{{ .LanguageName }}</a></li>
+          {{ end }}
+          <li class="lang-translate-link" id="google_translate_trigger" style="border-top: 1px solid var(--border); margin-top: 0.25rem; padding-top: 0.25rem;">
+            <a href="#" onclick="document.getElementById('google_translate_element').style.display='block';return false;">More languages...</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
@@ -22,5 +36,17 @@
     b.classList.toggle('open',open);
     b.setAttribute('aria-expanded',open);
   });
+  var lb=document.querySelector('.lang-toggle'),ld=document.querySelector('.lang-dropdown');
+  if(lb&&ld){
+    lb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=ld.classList.toggle('open');
+      lb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      ld.classList.remove('open');
+      lb.setAttribute('aria-expanded','false');
+    });
+  }
 })();
 </script>

@@ -5,7 +5,8 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "{{ .Site.Title }}",
-  "url": "{{ .Site.BaseURL }}"
+  "url": "{{ .Site.BaseURL }}",
+  "inLanguage": "{{ .Language.LanguageCode }}"
 }
 </script>
 {{ if .IsHome }}
@@ -17,7 +18,7 @@
   "name": "{{ .Site.Params.appName }}",
   "description": "{{ .Site.Params.description }}",
   "url": "{{ .Site.BaseURL }}",
-  "applicationCategory": "GameApplication",
+  "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Android 8.0+",
   "offers": {
     "@type": "Offer",
@@ -26,7 +27,8 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Beryndil"
+    "name": "Beryndil",
+    "url": "https://hardknocks.university/developer.html"
   }
 }
 </script>
