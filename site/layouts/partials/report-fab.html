@@ -1,8 +1,10 @@
 {{- if ne .Language.Lang "en" -}}
 {{- $tooltips := dict "es" "Reportar error de traducción" "pt" "Reportar erro de tradução" "fr" "Signaler une erreur de traduction" "de" "Übersetzungsfehler melden" "ja" "翻訳エラーを報告" -}}
 {{- $tooltip := index $tooltips .Language.Lang -}}
+{{- $langLabels := dict "es" (dict "lang" "Idioma" "page" "Página" "wrong" "¿Qué texto es incorrecto?" "fix" "Corrección sugerida") "pt" (dict "lang" "Idioma" "page" "Página" "wrong" "Qual texto está errado?" "fix" "Correção sugerida") "fr" (dict "lang" "Langue " "page" "Page " "wrong" "Quel texte est incorrect ?" "fix" "Correction suggérée") "de" (dict "lang" "Sprache" "page" "Seite" "wrong" "Welcher Text ist falsch?" "fix" "Vorgeschlagene Korrektur") "ja" (dict "lang" "言語" "page" "ページ" "wrong" "どのテキストが間違っていますか？" "fix" "修正案") -}}
+{{- $labels := index $langLabels .Language.Lang | default (dict "lang" "Language" "page" "Page" "wrong" "What text is wrong?" "fix" "Suggested correction") -}}
 {{- $title := printf "[Website] %s — %s" .Language.LanguageName .Title -}}
-{{- $body := printf "**Language:** %s (%s)\n**Page:** %s (%s)\n\n### What text is wrong?\n\n\n### Suggested correction\n" .Language.LanguageName .Language.Lang .Title .Permalink -}}
+{{- $body := printf "**%s:** %s (%s)\n**%s:** %s (%s)\n\n### %s\n\n\n### %s\n" (index $labels "lang") .Language.LanguageName .Language.Lang (index $labels "page") .Title .Permalink (index $labels "wrong") (index $labels "fix") -}}
 {{- $qs := querify "labels" "translation" "title" $title "body" $body -}}
 {{- $url := printf "https://github.com/beryndil/Spyglass-Data/issues/new?%s" $qs -}}
 <div class="report-fab">
