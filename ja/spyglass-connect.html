@@ -384,7 +384,7 @@ section { position: relative; z-index: 1; padding: 5rem 1.5rem; }
    SCREENSHOTS SECTION
    ═══════════════════════════════════════ */
 .screenshots-section {
-  background: linear-gradient(to bottom, var(--bg-void) 0%, #5C3A24 8%, #5C3A24 92%, var(--bg-void) 100%);
+  background: linear-gradient(to bottom, var(--bg-void) 0%, #6B3410 8%, #6B3410 92%, var(--bg-void) 100%);
 }
 
 .howit-section {
@@ -770,19 +770,20 @@ footer {
 }
 .phone-screen {
   position: relative;
+  aspect-ratio: 520 / 1006;
 }
 .phone-screenshot {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 24px;
   position: absolute;
   top: 0; left: 0;
   opacity: 0;
   transition: opacity 0.4s ease;
+  object-fit: cover;
 }
 .phone-screenshot.active {
-  position: relative;
   opacity: 1;
 }
 
