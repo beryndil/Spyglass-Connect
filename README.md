@@ -1,3 +1,5 @@
+🌐 [English](README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
+
 # Spyglass Connect
 
 **Desktop companion for the [Spyglass](https://github.com/beryndil/Spyglass) Android app.**
