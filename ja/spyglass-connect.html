@@ -943,10 +943,33 @@ footer {
 }
 
 /* ── Report FAB ── */
-.report-fab{position:fixed;bottom:1.25rem;left:1.25rem;z-index:9999}
-.report-fab-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;background:var(--bg-deep);border:1px solid rgba(212,175,55,.15);border-radius:50%;color:var(--text-mid);cursor:pointer;transition:border-color .3s,color .3s;text-decoration:none}
-.report-fab-btn:hover{border-color:rgba(212,175,55,.3);color:var(--glow-primary)}
-.report-fab-btn svg{flex-shrink:0}
+.report-fab {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  z-index: 9999;
+}
+.report-fab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--bg-deep);
+  border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 100px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+}
+.report-fab-btn:hover {
+  border-color: rgba(212,175,55,0.3);
+  color: var(--glow-primary);
+}
+.report-fab-btn svg { flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -970,6 +993,7 @@ footer {
 <div class="report-fab">
   <a class="report-fab-btn" href="https://github.com/beryndil/Spyglass-Connect/issues/new?title=Translation+Error&body=%E8%A8%80%E8%AA%9E%3A%20%E6%97%A5%E6%9C%AC%E8%AA%9E%0A%E3%83%9A%E3%83%BC%E3%82%B8%3A%20Spyglass%20Connect%0A%0A%E3%81%A9%E3%81%AE%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%81%8C%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F%0A%0A%E4%BF%AE%E6%AD%A3%E6%A1%88%3A" target="_blank" rel="noopener" title="翻訳エラーを報告">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+    AI翻訳 · 問題を発見？こちらから修正にご協力ください
   </a>
 </div>
 
