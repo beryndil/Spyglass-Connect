@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -33,9 +34,14 @@ import com.spyglass.connect.BuildConfig
 import com.spyglass.connect.config.ConfigStore
 import com.spyglass.connect.model.WorldInfo
 import com.spyglass.connect.pairing.QrCodeGenerator
+import com.spyglass.connect.pterodactyl.PterodactylClient
+import com.spyglass.connect.pterodactyl.PteroServer
 import com.spyglass.connect.server.EncryptionManager
 import com.spyglass.connect.server.WebSocketServer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.awt.Desktop
 import java.io.File
 import java.text.SimpleDateFormat
@@ -255,6 +261,12 @@ private fun SettingsSection(onRefreshWorlds: () -> Unit, logCount: Int = 0) {
                     )
                 }
             }
+        }
+
+        // Remote Server (Pterodactyl)
+        item {
+            Spacer(Modifier.height(4.dp))
+            PterodactylSettingsSection(config, onRefreshWorlds)
         }
 
         // Window behavior
@@ -519,6 +531,239 @@ private fun SettingsSection(onRefreshWorlds: () -> Unit, logCount: Int = 0) {
                             fontFamily = FontFamily.Monospace,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                         )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PterodactylSettingsSection(
+    config: MutableState<ConfigStore.AppConfig>,
+    onRefreshWorlds: () -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    val ptero = config.value.pterodactyl
+
+    var panelUrl by remember { mutableStateOf(ptero.panelUrl) }
+    var apiKey by remember { mutableStateOf(ptero.apiKey) }
+    var testing by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var servers by remember { mutableStateOf<List<PteroServer>>(emptyList()) }
+    var showServerDropdown by remember { mutableStateOf(false) }
+    var connected by remember { mutableStateOf(ptero.enabled && ptero.selectedServerId.isNotBlank()) }
+
+    Text(
+        "Remote Server",
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface,
+    )
+    Text(
+        "Connect to a Pterodactyl-hosted Minecraft server",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+    )
+
+    Spacer(Modifier.height(4.dp))
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            if (connected) {
+                // Connected state — show server name and disconnect button
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Icon(
+                            Icons.Filled.Cloud,
+                            contentDescription = null,
+                            tint = Color(0xFF4CAF50),
+                            modifier = Modifier.size(20.dp),
+                        )
+                        Column {
+                            Text(
+                                ptero.selectedServerName,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.Medium,
+                            )
+                            Text(
+                                ptero.panelUrl,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            )
+                        }
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            ConfigStore.clearPterodactylConfig()
+                            config.value = ConfigStore.load()
+                            connected = false
+                            panelUrl = ""
+                            apiKey = ""
+                            servers = emptyList()
+                            onRefreshWorlds()
+                        },
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFF44336)),
+                    ) {
+                        Text("Disconnect")
+                    }
+                }
+            } else {
+                // Configuration fields
+                OutlinedTextField(
+                    value = panelUrl,
+                    onValueChange = { panelUrl = it; errorMessage = null },
+                    label = { Text("Panel URL") },
+                    placeholder = { Text("https://panel.example.com") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    ),
+                )
+
+                OutlinedTextField(
+                    value = apiKey,
+                    onValueChange = { apiKey = it; errorMessage = null },
+                    label = { Text("API Key") },
+                    placeholder = { Text("ptlc_...") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                    ),
+                )
+
+                if (errorMessage != null) {
+                    Text(
+                        errorMessage!!,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFFF44336),
+                    )
+                }
+
+                // Server selection dropdown (shown after successful connection test)
+                if (servers.isNotEmpty()) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedButton(
+                            onClick = { showServerDropdown = true },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
+                        ) {
+                            Icon(Icons.Filled.Dns, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Select Server (${servers.size} found)")
+                            Spacer(Modifier.weight(1f))
+                            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(18.dp))
+                        }
+                        DropdownMenu(
+                            expanded = showServerDropdown,
+                            onDismissRequest = { showServerDropdown = false },
+                        ) {
+                            servers.forEach { server ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            server.name,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                        )
+                                    },
+                                    onClick = {
+                                        showServerDropdown = false
+                                        val pteroConfig = ConfigStore.PterodactylConfig(
+                                            panelUrl = panelUrl.trimEnd('/'),
+                                            apiKey = apiKey,
+                                            selectedServerId = server.identifier,
+                                            selectedServerName = server.name,
+                                            enabled = true,
+                                        )
+                                        ConfigStore.setPterodactylConfig(pteroConfig)
+                                        config.value = ConfigStore.load()
+                                        connected = true
+                                        onRefreshWorlds()
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Connect button
+                Button(
+                    onClick = {
+                        if (panelUrl.isBlank() || apiKey.isBlank()) {
+                            errorMessage = "Panel URL and API key are required"
+                            return@Button
+                        }
+                        testing = true
+                        errorMessage = null
+                        scope.launch {
+                            try {
+                                val client = PterodactylClient(panelUrl.trimEnd('/'), apiKey)
+                                val result = withContext(Dispatchers.IO) {
+                                    val serverList = client.listServers()
+                                    client.close()
+                                    serverList
+                                }
+                                servers = result
+                                if (result.isEmpty()) {
+                                    errorMessage = "Connected, but no servers found for this API key"
+                                } else if (result.size == 1) {
+                                    // Auto-select if only one server
+                                    val server = result.first()
+                                    val pteroConfig = ConfigStore.PterodactylConfig(
+                                        panelUrl = panelUrl.trimEnd('/'),
+                                        apiKey = apiKey,
+                                        selectedServerId = server.identifier,
+                                        selectedServerName = server.name,
+                                        enabled = true,
+                                    )
+                                    ConfigStore.setPterodactylConfig(pteroConfig)
+                                    config.value = ConfigStore.load()
+                                    connected = true
+                                    onRefreshWorlds()
+                                }
+                            } catch (e: Exception) {
+                                errorMessage = "Connection failed: ${e.message}"
+                            } finally {
+                                testing = false
+                            }
+                        }
+                    },
+                    enabled = !testing && panelUrl.isNotBlank() && apiKey.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
+                ) {
+                    if (testing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text("Connecting...")
+                    } else {
+                        Icon(Icons.Filled.Cloud, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("Connect")
                     }
                 }
             }

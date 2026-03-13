@@ -12,12 +12,22 @@ import java.io.File
 object ConfigStore {
 
     @Serializable
+    data class PterodactylConfig(
+        val panelUrl: String = "",
+        val apiKey: String = "",
+        val selectedServerId: String = "",
+        val selectedServerName: String = "",
+        val enabled: Boolean = false,
+    )
+
+    @Serializable
     data class AppConfig(
         val customSaveDirs: MutableList<String> = mutableListOf(),
         val serverPort: Int = 29170,
         val autoDetectPrismLauncher: Boolean = true,
         val minimizeToTray: Boolean = false,
         val closeToTray: Boolean = false,
+        val pterodactyl: PterodactylConfig = PterodactylConfig(),
     )
 
     private val json = Json { prettyPrint = true; ignoreUnknownKeys = true }
@@ -70,5 +80,14 @@ object ConfigStore {
     fun setCloseToTray(enabled: Boolean) {
         val config = load()
         save(config.copy(closeToTray = enabled))
+    }
+
+    fun setPterodactylConfig(ptero: PterodactylConfig) {
+        val config = load()
+        save(config.copy(pterodactyl = ptero))
+    }
+
+    fun clearPterodactylConfig() {
+        setPterodactylConfig(PterodactylConfig())
     }
 }

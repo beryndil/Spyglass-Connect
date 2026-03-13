@@ -3,6 +3,9 @@ package com.spyglass.connect.minecraft
 import com.spyglass.connect.Log
 import com.spyglass.connect.config.ConfigStore
 import com.spyglass.connect.model.WorldInfo
+import com.spyglass.connect.pterodactyl.PterodactylClient
+import com.spyglass.connect.pterodactyl.RemoteWorldCache
+import com.spyglass.connect.pterodactyl.RemoteWorldDetector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -254,6 +257,30 @@ object SaveDetector {
             if (mods.isDirectory) return mods
         }
         return null
+    }
+
+    /**
+     * Detect worlds on a configured Pterodactyl server.
+     * Returns empty list if Pterodactyl is not configured or disabled.
+     */
+    suspend fun detectRemoteWorlds(cache: RemoteWorldCache = RemoteWorldCache()): List<WorldInfo> {
+        val config = ConfigStore.load()
+        val ptero = config.pterodactyl
+        if (!ptero.enabled || ptero.panelUrl.isBlank() || ptero.apiKey.isBlank() || ptero.selectedServerId.isBlank()) {
+            return emptyList()
+        }
+
+        return try {
+            val client = PterodactylClient(ptero.panelUrl, ptero.apiKey)
+            try {
+                RemoteWorldDetector.detectWorlds(client, ptero.selectedServerId, ptero.selectedServerName, cache)
+            } finally {
+                client.close()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Remote world detection failed", e)
+            emptyList()
+        }
     }
 
     /** Extract seed — location varies between Minecraft versions. */

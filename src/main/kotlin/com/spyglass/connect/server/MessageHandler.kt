@@ -1,8 +1,13 @@
 package com.spyglass.connect.server
 
 import com.spyglass.connect.Log
+import com.spyglass.connect.config.ConfigStore
 import com.spyglass.connect.minecraft.*
 import com.spyglass.connect.model.*
+import com.spyglass.connect.pterodactyl.PterodactylClient
+import com.spyglass.connect.pterodactyl.RemoteWorldCache
+import com.spyglass.connect.pterodactyl.RemoteWorldPoller
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
@@ -16,6 +21,8 @@ import java.io.File
 class MessageHandler(
     private val worldsProvider: () -> List<WorldInfo>,
     private val searchIndex: ItemSearchIndex,
+    private val scope: CoroutineScope? = null,
+    private val onWorldChanged: (suspend (Set<String>) -> Unit)? = null,
 ) {
 
     companion object {
@@ -30,8 +37,17 @@ class MessageHandler(
     /** Cached player UUID from the last player data request (used for stats/advancements). */
     private var cachedPlayerUuid: String? = null
 
+    /** Track whether the current world is remote (ptero://) for polling vs file-watching. */
+    var isRemoteWorld: Boolean = false
+        private set
+    private var remoteServerId: String? = null
+    private var remoteWorldPath: String? = null
+    private val remoteWorldCache = RemoteWorldCache()
+    private var remotePoller: RemoteWorldPoller? = null
+    private var pterodactylClient: PterodactylClient? = null
+
     /** Handle an incoming message and return a response (or null for no response). */
-    fun handle(message: SpyglassMessage): SpyglassMessage? {
+    suspend fun handle(message: SpyglassMessage): SpyglassMessage? {
         Log.d(TAG, "Handling ${message.type}")
         return when (message.type) {
             MessageType.SELECT_WORLD -> handleSelectWorld(message)
@@ -58,11 +74,25 @@ class MessageHandler(
         )
     }
 
-    private fun handleSelectWorld(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleSelectWorld(message: SpyglassMessage): SpyglassMessage {
         val payload = json.decodeFromJsonElement(SelectWorldPayload.serializer(), message.payload)
 
         // Find the world across all configured save directories
         val world = worldsProvider().firstOrNull { it.folderName == payload.folderName }
+
+        // Stop any existing remote poller
+        remotePoller?.stop()
+        remotePoller = null
+        pterodactylClient?.close()
+        pterodactylClient = null
+        isRemoteWorld = false
+        remoteServerId = null
+        remoteWorldPath = null
+
+        // Check if this is a remote (Pterodactyl) world
+        if (world?.sourcePath?.startsWith("ptero://") == true) {
+            return handleSelectRemoteWorld(message, world)
+        }
 
         val worldDir = if (world?.sourcePath?.isNotEmpty() == true) {
             File(world.sourcePath)
@@ -86,6 +116,52 @@ class MessageHandler(
 
         // Return world list with confirmation
         return worldListMessage()
+    }
+
+    /** Handle selecting a remote Pterodactyl world. */
+    private suspend fun handleSelectRemoteWorld(message: SpyglassMessage, world: WorldInfo): SpyglassMessage {
+        val uri = world.sourcePath // ptero://{serverId}/{worldPath}
+        val withoutScheme = uri.removePrefix("ptero://")
+        val serverId = withoutScheme.substringBefore("/")
+        val worldPath = "/" + withoutScheme.substringAfter("/", "")
+
+        val config = ConfigStore.load().pterodactyl
+        if (!config.enabled || config.apiKey.isBlank()) {
+            return errorResponse(message.requestId, ErrorCode.WORLD_NOT_FOUND, "Pterodactyl not configured")
+        }
+
+        try {
+            val client = PterodactylClient(config.panelUrl, config.apiKey)
+            pterodactylClient = client
+
+            // Materialize the world (download essential files to local cache)
+            Log.i(TAG, "Materializing remote world ptero://$serverId$worldPath...")
+            val cacheDir = remoteWorldCache.materializeWorld(client, serverId, worldPath)
+
+            selectedWorldDir = cacheDir
+            isRemoteWorld = true
+            remoteServerId = serverId
+            remoteWorldPath = worldPath
+            cachedContainers = null
+            cachedPlayerUuid = null
+            cachedPets = null
+
+            // Start polling for changes
+            if (scope != null && onWorldChanged != null) {
+                val poller = RemoteWorldPoller(scope) { changes ->
+                    invalidateCache()
+                    onWorldChanged.invoke(changes)
+                }
+                poller.start(client, remoteWorldCache, serverId, worldPath)
+                remotePoller = poller
+            }
+
+            Log.i(TAG, "Selected remote world: $cacheDir (from ptero://$serverId$worldPath)")
+            return worldListMessage()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to materialize remote world", e)
+            return errorResponse(message.requestId, ErrorCode.WORLD_NOT_FOUND, "Failed to load remote world: ${e.message}")
+        }
     }
 
     private fun handleRequestPlayerList(message: SpyglassMessage): SpyglassMessage {
@@ -133,9 +209,16 @@ class MessageHandler(
         )
     }
 
-    private fun handleRequestChests(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestChests(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
+
+        // For remote worlds, ensure region files are downloaded first
+        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
+            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
+            Log.i(TAG, "Downloading region files for chest scan...")
+            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, "overworld")
+        }
 
         // Use cached containers or scan fresh
         val containers = cachedContainers ?: run {
@@ -162,9 +245,16 @@ class MessageHandler(
         )
     }
 
-    private fun handleRequestStructures(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestStructures(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
+
+        // For remote worlds, ensure region files are downloaded
+        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
+            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
+            Log.i(TAG, "Downloading region files for structure scan...")
+            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, "overworld")
+        }
 
         val structures = StructureScanner.scanWorld(worldDir)
         val payload = StructureLocationsPayload(
@@ -179,11 +269,20 @@ class MessageHandler(
         )
     }
 
-    private fun handleRequestMap(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestMap(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
         val req = json.decodeFromJsonElement(RequestMapPayload.serializer(), message.payload)
+
+        // For remote worlds, ensure region files are downloaded for the requested dimension
+        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
+            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
+            val dimension = req.dimension
+            Log.i(TAG, "Downloading region files for map render ($dimension)...")
+            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, dimension)
+        }
+
         val tiles = MapRenderer.renderTiles(worldDir, req.centerX, req.centerZ, req.radiusChunks, req.dimension)
 
         val playerData = PlayerParser.parse(worldDir)
@@ -259,9 +358,16 @@ class MessageHandler(
         )
     }
 
-    private fun handleRequestPets(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestPets(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
+
+        // For remote worlds, ensure entity files are downloaded first
+        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
+            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
+            Log.i(TAG, "Downloading entity files for pet scan...")
+            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, "overworld")
+        }
 
         val pets = cachedPets ?: run {
             Log.i(TAG, "Scanning entities for pets in ${worldDir.name}...")

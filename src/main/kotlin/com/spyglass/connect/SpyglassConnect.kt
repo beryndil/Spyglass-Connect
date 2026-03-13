@@ -117,9 +117,10 @@ private fun startApp(lock: ServerSocket) {
         LaunchedEffect(refreshTrigger) {
             worldsLoaded = false
             withContext(Dispatchers.IO) {
-                val detected = SaveDetector.detectWorlds()
+                val local = SaveDetector.detectWorlds()
+                val remote = SaveDetector.detectRemoteWorlds()
                 worlds.clear()
-                worlds.addAll(detected)
+                worlds.addAll(local + remote)
             }
             worldsLoaded = true
         }

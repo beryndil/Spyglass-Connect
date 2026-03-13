@@ -36,9 +36,15 @@ class WebSocketServer {
     val encryption = EncryptionManager.loadOrCreate()
     private val searchIndex = ItemSearchIndex()
     @Volatile private var worldsProvider: () -> List<WorldInfo> = { emptyList() }
+    private val handlerScope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO + kotlinx.coroutines.SupervisorJob())
     private val messageHandler = MessageHandler(
         worldsProvider = { worldsProvider() },
         searchIndex = searchIndex,
+        scope = handlerScope,
+        onWorldChanged = { changes ->
+            invalidateCache()
+            notifyWorldChanged("", changes.toList())
+        },
     )
 
     /** Set the worlds provider (called from Compose to wire in-memory state). */
