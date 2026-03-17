@@ -359,6 +359,12 @@ class WebSocketServer {
         sessionManager.broadcast(messageJson, requiredCapability = Capability.PLAYER_DATA)
     }
 
+    /** Disconnect a client by ID and remove from the connected devices list. */
+    suspend fun disconnectClient(clientId: String) {
+        sessionManager.disconnectClient(clientId)
+        connectedDevices.removeAll { it.id == clientId }
+    }
+
     /** Observable count of device log entries received (for UI notification). */
     val deviceLogCount: kotlinx.coroutines.flow.StateFlow<Int> = messageHandler.deviceLogCount
 }

@@ -169,6 +169,9 @@ private fun startApp(lock: ServerSocket) {
             serverPort = WebSocketServer.DEFAULT_PORT,
             deviceLogCount = server.deviceLogCount,
             onRefreshWorlds = { refreshTrigger++ },
+            onDisconnectDevice = { clientId ->
+                scope.launch { server.disconnectClient(clientId) }
+            },
             onCloseRequest = {
                 val config = ConfigStore.load()
                 if (config.closeToTray) hideToTray() else shutdown()

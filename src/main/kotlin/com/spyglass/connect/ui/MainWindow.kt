@@ -59,6 +59,7 @@ fun MainWindow(
     serverPort: Int,
     deviceLogCount: StateFlow<Int>,
     onRefreshWorlds: () -> Unit,
+    onDisconnectDevice: (String) -> Unit = {},
     onCloseRequest: () -> Unit,
     onMinimize: () -> Unit = {},
     windowVisible: Boolean = true,
@@ -136,7 +137,7 @@ fun MainWindow(
                     }
 
                     // Server status
-                    ServerStatusCard(serverState.value, connectedDevices, lanIp, serverPort)
+                    ServerStatusCard(serverState.value, connectedDevices, lanIp, serverPort, onDisconnectDevice)
 
                     val logCount by deviceLogCount.collectAsState()
 
@@ -777,6 +778,7 @@ private fun ServerStatusCard(
     connectedDevices: List<WebSocketServer.ConnectedDevice>,
     lanIp: String,
     port: Int,
+    onDisconnect: (String) -> Unit = {},
 ) {
     val (statusText, statusColor) = when (state) {
         WebSocketServer.ServerState.RUNNING -> "Running on $lanIp:$port" to Color(0xFF4CAF50)
@@ -840,12 +842,24 @@ private fun ServerStatusCard(
                             device.deviceName,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f),
                         )
                         Text(
                             "Connected",
                             style = MaterialTheme.typography.labelSmall,
                             color = Color(0xFF4CAF50),
                         )
+                        IconButton(
+                            onClick = { onDisconnect(device.id) },
+                            modifier = Modifier.size(28.dp),
+                        ) {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Disconnect",
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                modifier = Modifier.size(16.dp),
+                            )
+                        }
                     }
                 }
             }

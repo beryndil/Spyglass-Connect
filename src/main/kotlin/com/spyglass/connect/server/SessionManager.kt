@@ -64,6 +64,17 @@ class SessionManager {
     /** Get count of connected clients. */
     suspend fun connectionCount(): Int = mutex.withLock { sessions.size }
 
+    /** Forcefully close and remove a client session. */
+    suspend fun disconnectClient(id: String) {
+        val session = mutex.withLock { sessions.remove(id) }
+        if (session != null) {
+            try {
+                session.session.close(CloseReason(CloseReason.Codes.NORMAL, "Disconnected by server"))
+            } catch (_: Exception) { /* already closed */ }
+            Log.i("Session", "Force-disconnected [$id] (${session.deviceName})")
+        }
+    }
+
     /** Send an encrypted message to all paired sessions that support the given capability. */
     suspend fun broadcast(message: String, requiredCapability: String? = null) {
         val active = activeSessions().filter {
