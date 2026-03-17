@@ -7,18 +7,23 @@
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . }}{{ else }}Hard Knocks University — a semi-vanilla Minecraft server with Java + Bedrock crossplay.{{ end }}{{ end }}">
   <meta name="theme-color" content="#2ecc71">
   <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index, follow">
 
   {{/* Open Graph */}}
-  <meta property="og:title" content="{{ if .IsSection }}Hard Knocks University{{ else }}{{ .Title }} — Hard Knocks University{{ end }}">
+  <meta property="og:title" content="{{ if .IsSection }}Hard Knocks University — Minecraft Server{{ else }}{{ .Title }} — Hard Knocks University{{ end }}">
   <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}Semi-vanilla Minecraft server with Java + Bedrock crossplay. Join at mc.hardknocks.university{{ end }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hard Knocks University">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://hardknocks.university/images/spyglass-icon.png">
+  <meta property="og:image:alt" content="Hard Knocks University">
 
   {{/* Twitter Card */}}
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="{{ if .IsSection }}Hard Knocks University{{ else }}{{ .Title }}{{ end }}">
+  <meta name="twitter:title" content="{{ if .IsSection }}Hard Knocks University — Minecraft Server{{ else }}{{ .Title }} — Hard Knocks University{{ end }}">
   <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}Semi-vanilla Minecraft server with Java + Bedrock crossplay{{ end }}">
+  <meta name="twitter:image" content="https://hardknocks.university/images/spyglass-icon.png">
 
   {{/* Canonical */}}
   <link rel="canonical" href="{{ .Permalink }}">
@@ -36,18 +41,37 @@
   {{/* Stylesheet */}}
   <link rel="stylesheet" href="/css/server.css">
 
-  {{/* JSON-LD on homepage */}}
+  {{/* JSON-LD structured data */}}
   {{ if .IsSection }}
+  {{/* Homepage — GameServer schema */}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Hard Knocks University",
+    "url": "https://hardknocks.university/server/",
+    "description": "Semi-vanilla Minecraft server with Java and Bedrock crossplay",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://hardknocks.university/server/faq/",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "VideoGame",
     "name": "Hard Knocks University",
-    "description": "Semi-vanilla Minecraft server with Java and Bedrock crossplay",
+    "description": "Semi-vanilla Minecraft server with Java and Bedrock crossplay. Join at mc.hardknocks.university",
     "url": "https://hardknocks.university/server/",
-    "gamePlatform": ["PC", "Mobile"],
+    "gamePlatform": ["PC", "Mobile", "Xbox", "PlayStation", "Nintendo Switch"],
     "applicationCategory": "Game",
     "operatingSystem": "Cross-platform",
+    "numberOfPlayers": {
+      "@type": "QuantitativeValue",
+      "minValue": 1
+    },
     "gameServer": {
       "@type": "GameServer",
       "name": "Hard Knocks University",
@@ -56,6 +80,90 @@
         "name": "Minecraft"
       },
       "serverStatus": "Online"
+    }
+  }
+  </script>
+  {{ else if eq .File.ContentBaseName "faq" }}
+  {{/* FAQ page — FAQPage schema */}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": "Hard Knocks University FAQ",
+    "url": "{{ .Permalink }}",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I join the server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Add mc.hardknocks.university to your server list. Java Edition connects directly; Bedrock Edition uses port 19132."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What version is the server running?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The server runs Minecraft 1.21.11 (Mounts of Mayhem) with Java and Bedrock crossplay enabled."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use Optifine or Sodium?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Performance mods like Optifine, Sodium, Lithium, and cosmetic shader packs are all allowed. X-ray texture packs and hacked clients are not allowed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do land claims work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can claim areas of land to protect your builds from griefing. Claimed land prevents other players from building, breaking, or interacting within your territory unless you grant them access."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens when I die?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A grave spawns at your death location keeping your items safe. You won't get a compass, directional arrow, or coordinates — you'll need to find your way back yourself."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will the world ever reset?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The world is permanent. Major Minecraft updates that add new terrain will be handled by expanding the world border, not resetting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are there custom items or economy plugins?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The server is as close to vanilla as possible. Plugins are only used for protection, security, and quality of life."
+        }
+      }
+    ]
+  }
+  </script>
+  {{ else }}
+  {{/* All other subpages — WebPage schema */}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ .Title }} — Hard Knocks University",
+    "description": "{{ with .Description }}{{ . }}{{ else }}{{ .Title }} for the Hard Knocks University Minecraft server{{ end }}",
+    "url": "{{ .Permalink }}",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Hard Knocks University",
+      "url": "https://hardknocks.university/server/"
     }
   }
   </script>
