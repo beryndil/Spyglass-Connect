@@ -478,8 +478,21 @@ class MessageHandler(
      * Returns null if no world is selected or no player UUID is cached.
      */
     fun buildPlayerDataPush(): SpyglassMessage? {
-        val worldDir = selectedWorldDir ?: return null
-        val playerData = PlayerParser.parseByUuid(worldDir, cachedPlayerUuid) ?: return null
+        val worldDir = selectedWorldDir
+        if (worldDir == null) {
+            Log.d(TAG, "Push skipped: no world selected")
+            return null
+        }
+        val playerData = try {
+            PlayerParser.parseByUuid(worldDir, cachedPlayerUuid)
+        } catch (e: Exception) {
+            Log.w(TAG, "Push failed: PlayerParser error: ${e.message}")
+            null
+        }
+        if (playerData == null) {
+            Log.d(TAG, "Push skipped: parseByUuid returned null (worldDir=$worldDir, uuid=${cachedPlayerUuid?.take(8)})")
+            return null
+        }
         cachedPlayerUuid = playerData.playerUuid
         return SpyglassMessage(
             type = MessageType.PLAYER_DATA,

@@ -11,23 +11,12 @@ weight: 1
 - Keep chat civil. Disagreements happen; toxicity doesn't have to.
 - No spamming or excessive use of caps.
 
-## No Griefing or Stealing
-
-- **Do not grief, steal from, or damage another player's builds or items** — even on unclaimed land.
-- If it's not yours, leave it alone. This is non-negotiable.
-- Accidental damage? Let the owner or staff know.
-
 ## No Cheating or Exploits
 
 - **No x-ray, fly hacks, kill aura, or any form of cheating.**
 - No exploiting bugs or glitches for unfair advantage. Report them instead.
 - **Allowed mods**: performance mods (Optifine, Sodium, Lithium), minimaps without cave/entity radar, cosmetic shaders.
 - **Not allowed**: x-ray texture packs, auto-clickers, macros that play for you, hacked clients.
-
-## PvP Etiquette
-
-- PvP is consensual. Don't attack players who haven't agreed to fight.
-- No spawn killing or trap killing.
 
 ## Staff Compliance
 
