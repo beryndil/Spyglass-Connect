@@ -122,16 +122,13 @@ a:hover {
   padding: 5rem 1.5rem 4rem;
   position: relative;
   overflow: hidden;
+  background: url('/images/hero-forest.webp') center/cover no-repeat;
 }
 .hero::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, var(--emerald-glow) 0%, transparent 70%);
+  inset: 0;
+  background: rgba(15, 15, 26, 0.7);
   pointer-events: none;
 }
 
@@ -631,6 +628,9 @@ details .faq-answer {
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
+  .hero {
+    background-image: url('/images/hero-forest-mobile.webp');
+  }
   .hero h1 {
     font-size: 2.25rem;
   }
