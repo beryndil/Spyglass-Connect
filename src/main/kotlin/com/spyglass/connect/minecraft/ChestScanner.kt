@@ -37,13 +37,17 @@ object ChestScanner {
      * Fair play is always enabled: LootTable containers are skipped, and InhabitedTime
      * filtering is auto-detected (used on vanilla, disabled on Paper which zeroes it).
      */
-    fun scanWorld(
+    suspend fun scanWorld(
         worldDir: File,
-        onProgress: ((dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
+        onProgress: (suspend (dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
     ): List<ContainerInfo> {
         val containers = mutableListOf<ContainerInfo>()
         for (dimension in listOf("overworld", "the_nether", "the_end")) {
-            containers.addAll(scanDimension(worldDir, dimension, onProgress))
+            val priorCount = containers.size
+            val wrappedProgress: (suspend (String, Int, Int, String, Int) -> Unit)? = onProgress?.let { cb ->
+                { dim, cur, tot, file, dimFound -> cb(dim, cur, tot, file, priorCount + dimFound) }
+            }
+            containers.addAll(scanDimension(worldDir, dimension, wrappedProgress))
         }
         return containers
     }
@@ -55,27 +59,35 @@ object ChestScanner {
     private const val MIN_INHABITED_TICKS = 20L
 
     /**
-     * Sample the first region file to check if InhabitedTime is tracked.
+     * Sample multiple region files to check if InhabitedTime is tracked.
      * Paper/Spigot servers zero this field for all chunks, making it useless.
-     * Returns true if at least one chunk has InhabitedTime > 0.
+     * Returns true if at least one chunk across sampled files has InhabitedTime > 0.
+     *
+     * Samples up to 5 region files spread across the list to handle Chunky-loaded worlds
+     * where the first region(s) may be entirely pre-generated with InhabitedTime = 0.
      */
     private fun hasInhabitedTimeData(regionFiles: List<File>): Boolean {
-        val sample = regionFiles.firstOrNull() ?: return false
-        val chunks = AnvilReader.readRegionChunks(sample)
-        return chunks.any { chunk ->
-            val v = NbtHelper.long(chunk, "InhabitedTime", -1L).let { t ->
-                if (t >= 0) t
-                else NbtHelper.long(NbtHelper.compound(chunk, "Level"), "InhabitedTime", 0L)
+        if (regionFiles.isEmpty()) return false
+        // Sample up to 5 files spread evenly across the list
+        val step = maxOf(1, regionFiles.size / 5)
+        val samples = (regionFiles.indices step step).take(5).map { regionFiles[it] }
+        return samples.any { file ->
+            val chunks = AnvilReader.readRegionChunks(file)
+            chunks.any { chunk ->
+                val v = NbtHelper.long(chunk, "InhabitedTime", -1L).let { t ->
+                    if (t >= 0) t
+                    else NbtHelper.long(NbtHelper.compound(chunk, "Level"), "InhabitedTime", 0L)
+                }
+                v > 0
             }
-            v > 0
         }
     }
 
     /** Scan all containers in a single dimension. Processes region files sequentially to avoid OOM. */
-    fun scanDimension(
+    suspend fun scanDimension(
         worldDir: File,
         dimension: String,
-        onProgress: ((dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
+        onProgress: (suspend (dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
     ): List<ContainerInfo> {
         val regionFiles = AnvilReader.regionFiles(worldDir, dimension)
         Log.d(TAG, "[$dimension] Found ${regionFiles.size} region files in ${worldDir.absolutePath}")

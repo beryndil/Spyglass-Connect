@@ -232,19 +232,16 @@ class MessageHandler(
         val containers = cachedContainers ?: run {
             Log.i(TAG, "Scanning chests in ${worldDir.name}...")
             ChestScanner.scanWorld(worldDir) { dimension, current, total, regionFile, containersFound ->
-                sendIntermediate?.let { send ->
-                    val progress = SpyglassMessage(
-                        type = MessageType.SCAN_PROGRESS,
-                        payload = json.encodeToJsonElement(ScanProgressPayload(
-                            dimension = dimension,
-                            currentRegion = current,
-                            totalRegions = total,
-                            regionFile = regionFile,
-                            containersFound = containersFound,
-                        )),
-                    )
-                    kotlinx.coroutines.runBlocking { send(progress) }
-                }
+                sendIntermediate?.invoke(SpyglassMessage(
+                    type = MessageType.SCAN_PROGRESS,
+                    payload = json.encodeToJsonElement(ScanProgressPayload(
+                        dimension = dimension,
+                        currentRegion = current,
+                        totalRegions = total,
+                        regionFile = regionFile,
+                        containersFound = containersFound,
+                    )),
+                ))
             }.also {
                 Log.i(TAG, "Found ${it.size} containers")
                 cachedContainers = it
@@ -322,7 +319,7 @@ class MessageHandler(
         )
     }
 
-    private fun handleSearchItems(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleSearchItems(message: SpyglassMessage): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
