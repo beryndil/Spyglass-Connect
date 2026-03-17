@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — Hard Knocks University</title>
+  <meta name="description" content="Frequently asked questions about Hard Knocks University Minecraft server">
+  <meta name="theme-color" content="#2ecc71">
+  <meta name="color-scheme" content="dark">
+
+  
+  <meta property="og:title" content="FAQ — Hard Knocks University">
+  <meta property="og:description" content="Frequently asked questions about Hard Knocks University Minecraft server">
+  <meta property="og:url" content="https://hardknocks.university/server/faq/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hard Knocks University">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FAQ">
+  <meta name="twitter:description" content="Frequently asked questions about Hard Knocks University Minecraft server">
+
+  
+  <link rel="canonical" href="https://hardknocks.university/server/faq/">
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/server.css">
+
+  
+  
+</head>
+<body>
+  <nav class="server-nav">
+    <div class="server-nav-inner">
+      <a href="/server/" class="server-nav-brand">
+        <span class="brand-icon">&#9961;</span> Hard Knocks
+      </a>
+      <button class="nav-toggle" onclick="document.querySelector('.server-nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+      <ul class="server-nav-links">
+        <li><a href="/server/" >Home</a></li>
+        <li><a href="/server/rules/" >Rules</a></li>
+        <li><a href="/server/join/" >Join</a></li>
+        <li><a href="/server/features/" >Features</a></li>
+        <li><a href="/server/faq/" class="active">FAQ</a></li>
+        <li><a href="/server/vote/" >Vote</a></li>
+        <li><a href="/server/staff/" >Staff</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+<div class="page-container">
+  <h1>FAQ</h1>
+  <p class="page-subtitle">Questions we get asked a lot.</p>
+  <details>
+<summary>How do I join the server?</summary>
+<div class="faq-answer">
+Add <code>mc.hardknocks.university</code> to your server list. Java Edition connects directly; Bedrock Edition uses port <code>19132</code>. Check the full <a href="/server/join/">How to Join</a> guide for step-by-step instructions.
+</div>
+</details>
+<details>
+<summary>What version is the server running?</summary>
+<div class="faq-answer">
+The server runs Minecraft <strong>1.21.1</strong> with Java and Bedrock crossplay enabled.
+</div>
+</details>
+<details>
+<summary>Can I use Optifine or Sodium?</summary>
+<div class="faq-answer">
+Yes. Performance mods like Optifine, Sodium, Lithium, and cosmetic shader packs are all allowed. Minimaps are fine as long as they don't show caves or entities. X-ray texture packs and hacked clients are not allowed.
+</div>
+</details>
+<details>
+<summary>How do land claims work?</summary>
+<div class="faq-answer">
+You can claim areas of land to protect your builds from griefing. Claimed land prevents other players from building, breaking, or interacting within your territory unless you grant them access.
+</div>
+</details>
+<details>
+<summary>What happens when I die?</summary>
+<div class="faq-answer">
+A grave spawns at your death location keeping your items safe. You won't get a compass, directional arrow, or coordinates — you'll need to remember where you were and find your way back. Your items are protected; the journey back is part of the game.
+</div>
+</details>
+<details>
+<summary>Will the world ever reset?</summary>
+<div class="faq-answer">
+<strong>No.</strong> The world is permanent. Your builds are here to stay. Major Minecraft updates that add new terrain generation will be handled by expanding the world border, not resetting.
+</div>
+</details>
+<details>
+<summary>Is there a Discord server?</summary>
+<div class="faq-answer">
+Coming soon. Stay tuned.
+</div>
+</details>
+<details>
+<summary>How do I apply for staff?</summary>
+<div class="faq-answer">
+Staff applications will open when the community grows. For now, be active, be helpful, and be a good member of the community — that's the best application.
+</div>
+</details>
+<details>
+<summary>Are there custom items or economy plugins?</summary>
+<div class="faq-answer">
+No. The server is as close to vanilla as possible. No custom items, no server currency, no teleportation commands. Plugins are only used for protection, security, and quality of life.
+</div>
+</details>
+
+</div>
+</main>
+
+  <footer class="server-footer">
+    <p>&copy; 2026 Hard Knocks University. Not affiliated with Mojang or Microsoft.</p>
+    <p><a href="/en/">Spyglass App</a></p>
+  </footer>
+
+  <script>
+  function copyIP() {
+    navigator.clipboard.writeText('mc.hardknocks.university').then(function() {
+      var tip = document.querySelector('.copy-tooltip');
+      if (tip) {
+        tip.classList.add('show');
+        setTimeout(function() { tip.classList.remove('show'); }, 1500);
+      }
+    });
+  }
+  </script>
+</body>
+</html>

@@ -1,77 +1,88 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spyglass Connect</title><link>https://hardknocks.university/</link><description>Recent content on Spyglass Connect</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://hardknocks.university/index.xml" rel="self" type="application/rss+xml"/><item><title>Connect</title><link>https://hardknocks.university/connect/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hardknocks.university/connect/</guid><description>&lt;blockquote>
-&lt;p>&lt;strong>Alpha Software&lt;/strong> — Spyglass Connect is in active development. Expect bugs, missing features, and rough edges.&lt;/p>&lt;/blockquote>
-&lt;h2 id="overview">Overview&lt;/h2>
-&lt;p>Spyglass Connect is a desktop companion app that reads your Minecraft Java Edition save files and streams the data to your phone over local WiFi. No cloud servers, no accounts — everything stays on your network.&lt;/p>
-&lt;p>&lt;strong>&lt;a href="https://github.com/beryndil/Spyglass-Connect">Get Spyglass Connect for Desktop&lt;/a>&lt;/strong>&lt;/p>
-&lt;h2 id="how-it-works">How It Works&lt;/h2>
-&lt;ol>
-&lt;li>&lt;strong>Launch&lt;/strong> Spyglass Connect on your PC (Windows, macOS, or Linux)&lt;/li>
-&lt;li>&lt;strong>Scan&lt;/strong> the QR code shown on your PC from the Spyglass app on your phone&lt;/li>
-&lt;li>&lt;strong>Done&lt;/strong> — your phone auto-reconnects whenever both devices are on the same WiFi&lt;/li>
-&lt;/ol>
-&lt;p>Under the hood: QR code pairs devices via ECDH key exchange, then communicates over an encrypted WebSocket (AES-256-GCM). mDNS handles automatic reconnection.
-Protocol version negotiation ensures both apps are compatible — if either side is outdated, you&amp;rsquo;ll see a clear error message.&lt;/p></description></item><item><title>Disclaimer</title><link>https://hardknocks.university/disclaimer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hardknocks.university/disclaimer/</guid><description>&lt;blockquote>
-&lt;p>&lt;strong>Alpha Software&lt;/strong> — Spyglass and Spyglass Connect are in active development. Expect bugs, missing features, and rough edges.&lt;/p>&lt;/blockquote>
-&lt;h2 id="not-affiliated-with-mojang">Not Affiliated with Mojang&lt;/h2>
-&lt;p>&lt;strong>Spyglass is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft.&lt;/strong> Minecraft is a trademark of Mojang Studios. All game data, names, and images are used for informational and reference purposes only.&lt;/p>
-&lt;h2 id="trademarks">Trademarks&lt;/h2>
-&lt;p>&amp;ldquo;Minecraft&amp;rdquo; is a trademark of Mojang Studios, a subsidiary of Microsoft Corporation. All other trademarks, trade names, and logos mentioned in this application are the property of their respective owners.&lt;/p></description></item><item><title>Features</title><link>https://hardknocks.university/features/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hardknocks.university/features/</guid><description>&lt;blockquote>
-&lt;p>&lt;strong>Alpha Software&lt;/strong> — Spyglass Connect is in active development. Expect bugs, missing features, and rough edges.&lt;/p>&lt;/blockquote>
-&lt;h2 id="spyglass-connect">Spyglass Connect&lt;/h2>
-&lt;p>Pair your phone with the &lt;a href="https://github.com/beryndil/Spyglass-Connect">Spyglass Connect&lt;/a> desktop companion to access your Minecraft world data over local WiFi. No cloud servers, no accounts — everything stays on your network.&lt;/p>
-&lt;table>
- &lt;thead>
- &lt;tr>
- &lt;th>Feature&lt;/th>
- &lt;th>Description&lt;/th>
- &lt;/tr>
- &lt;/thead>
- &lt;tbody>
- &lt;tr>
- &lt;td>&lt;strong>QR Pairing&lt;/strong>&lt;/td>
- &lt;td>Scan a QR code to connect — auto-reconnects whenever you&amp;rsquo;re on the same WiFi&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;strong>Character Viewer&lt;/strong>&lt;/td>
- &lt;td>See your full equipment — armor, weapons, tools, and enchantments&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;strong>Inventory Viewer&lt;/strong>&lt;/td>
- &lt;td>Browse your complete inventory, armor, offhand, and ender chest&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;strong>Chest Finder&lt;/strong>&lt;/td>
- &lt;td>Search for any item across all containers — chests, barrels, shulker boxes, hoppers&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;strong>Structure Locator&lt;/strong>&lt;/td>
- &lt;td>Find villages, temples, monuments, strongholds, and more with coordinates and distance&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;strong>Overhead Map&lt;/strong>&lt;/td>
- &lt;td>Interactive terrain map with structure markers and player position&lt;/td>
- &lt;/tr>
- &lt;/tbody>
-&lt;/table>
-&lt;p>Fully encrypted (ECDH + AES-256-GCM). Auto-reconnects via mDNS.
-Protocol v2 with version negotiation — incompatible versions show a clear update message.&lt;/p></description></item><item><title>License</title><link>https://hardknocks.university/license/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hardknocks.university/license/</guid><description>&lt;p>Copyright (c) 2026 Beryndil. All rights reserved.&lt;/p>
-&lt;h2 id="1-permitted-use">1. Permitted Use&lt;/h2>
-&lt;p>You are granted a non-exclusive, non-transferable, revocable license to use the Spyglass application as distributed through official release channels for personal, non-commercial purposes.&lt;/p>
-&lt;h2 id="2-restrictions">2. Restrictions&lt;/h2>
-&lt;p>You may NOT, without the prior written consent of the copyright holder:&lt;/p>
-&lt;ul>
-&lt;li>Copy, reproduce, or duplicate the source code or application&lt;/li>
-&lt;li>Modify, adapt, translate, or create derivative works based on the source code or application&lt;/li>
-&lt;li>Distribute, sublicense, lease, rent, loan, or otherwise transfer the source code or application to any third party&lt;/li>
-&lt;li>Reverse-engineer, decompile, disassemble, or otherwise attempt to derive the source code from the compiled application&lt;/li>
-&lt;li>Use the source code or application for any commercial purpose&lt;/li>
-&lt;li>Remove, alter, or obscure any proprietary notices, labels, or marks&lt;/li>
-&lt;/ul>
-&lt;h2 id="3-third-party-assets">3. Third-Party Assets&lt;/h2>
-&lt;p>This application includes third-party assets that are subject to their own licenses:&lt;/p></description></item><item><title>Privacy Policy</title><link>https://hardknocks.university/privacy-policy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hardknocks.university/privacy-policy/</guid><description>&lt;blockquote>
-&lt;p>Spyglass Connect is a free, ad-supported Android app created by Beryndil. This policy explains what data the app collects, how it is used, and the choices you have.&lt;/p>&lt;/blockquote>
-&lt;h2 id="1-information-we-collect">1. Information We Collect&lt;/h2>
-&lt;p>Spyglass itself does &lt;strong>not&lt;/strong> collect any personal information such as names, email addresses, or account credentials. The app does not require you to create an account.&lt;/p>
-&lt;p>The following third-party services may collect data when enabled:&lt;/p>
-&lt;h2 id="2-google-admob">2. Google AdMob&lt;/h2>
-&lt;p>Spyglass displays banner ads via &lt;a href="https://support.google.com/admob/answer/6128543">Google AdMob&lt;/a>. AdMob and its mediation partners may collect:&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spyglass Connect</title>
+    <link>https://hardknocks.university/</link>
+    <description>Recent content on Spyglass Connect</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://hardknocks.university/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Server Rules</title>
+      <link>https://hardknocks.university/server/rules/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/rules/</guid>
+      <description>&lt;h2 id=&#34;respect--communication&#34;&gt;Respect &amp;amp; Communication&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Treat every player with respect — no harassment, hate speech, or discrimination.&lt;/li&gt;&#xA;&lt;li&gt;Keep chat civil. Disagreements happen; toxicity doesn&amp;rsquo;t have to.&lt;/li&gt;&#xA;&lt;li&gt;No spamming or excessive use of caps.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;no-griefing-or-stealing&#34;&gt;No Griefing or Stealing&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Do not grief, steal from, or damage another player&amp;rsquo;s builds or items&lt;/strong&gt; — even on unclaimed land.&lt;/li&gt;&#xA;&lt;li&gt;If it&amp;rsquo;s not yours, leave it alone. This is non-negotiable.&lt;/li&gt;&#xA;&lt;li&gt;Accidental damage? Let the owner or staff know.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;no-cheating-or-exploits&#34;&gt;No Cheating or Exploits&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;No x-ray, fly hacks, kill aura, or any form of cheating.&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;No exploiting bugs or glitches for unfair advantage. Report them instead.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Allowed mods&lt;/strong&gt;: performance mods (Optifine, Sodium, Lithium), minimaps without cave/entity radar, cosmetic shaders.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Not allowed&lt;/strong&gt;: x-ray texture packs, auto-clickers, macros that play for you, hacked clients.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;pvp-etiquette&#34;&gt;PvP Etiquette&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;PvP is consensual. Don&amp;rsquo;t attack players who haven&amp;rsquo;t agreed to fight.&lt;/li&gt;&#xA;&lt;li&gt;No spawn killing or trap killing.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;staff-compliance&#34;&gt;Staff Compliance&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Follow staff instructions. They&amp;rsquo;re here to keep the server fair and fun.&lt;/li&gt;&#xA;&lt;li&gt;Don&amp;rsquo;t impersonate staff or lie about staff endorsement.&lt;/li&gt;&#xA;&lt;li&gt;Appeals are welcome — argue your case respectfully.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;common-sense&#34;&gt;Common Sense&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;If it feels wrong, it probably is. Use good judgment.&lt;/li&gt;&#xA;&lt;li&gt;These rules can&amp;rsquo;t cover everything — staff reserve the right to act on behavior that harms the community, even if it&amp;rsquo;s not explicitly listed.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;em&gt;Breaking rules may result in warnings, temporary bans, or permanent bans depending on severity. Repeated offenses escalate.&lt;/em&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to Join</title>
+      <link>https://hardknocks.university/server/join/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/join/</guid>
+      <description>&lt;h2 id=&#34;java-edition&#34;&gt;Java Edition&lt;/h2&gt;&#xA;&lt;ol class=&#34;steps&#34;&gt;&#xA;&lt;li&gt;Open Minecraft &lt;strong&gt;Java Edition&lt;/strong&gt; (version 1.21.1)&lt;/li&gt;&#xA;&lt;li&gt;Click &lt;strong&gt;Multiplayer&lt;/strong&gt; from the main menu&lt;/li&gt;&#xA;&lt;li&gt;Click &lt;strong&gt;Add Server&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;Enter the server address: &lt;code&gt;mc.hardknocks.university&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;Click &lt;strong&gt;Done&lt;/strong&gt;, then double-click the server to connect&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;bedrock-edition&#34;&gt;Bedrock Edition&lt;/h2&gt;&#xA;&lt;ol class=&#34;steps&#34;&gt;&#xA;&lt;li&gt;Open Minecraft &lt;strong&gt;Bedrock Edition&lt;/strong&gt; (Windows, mobile, or console)&lt;/li&gt;&#xA;&lt;li&gt;Go to the &lt;strong&gt;Servers&lt;/strong&gt; tab&lt;/li&gt;&#xA;&lt;li&gt;Scroll down and click &lt;strong&gt;Add Server&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;Server Address: &lt;code&gt;mc.hardknocks.university&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;Port: &lt;code&gt;19132&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;Click &lt;strong&gt;Save&lt;/strong&gt;, then tap the server to join&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;div class=&#34;info-box&#34;&gt;&#xA;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The server runs version &lt;strong&gt;1.21.1&lt;/strong&gt;. Make sure your game is on the correct version before connecting. Bedrock crossplay is handled automatically — no extra setup needed.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Server Features</title>
+      <link>https://hardknocks.university/server/features/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/features/</guid>
+      <description>&lt;h2 id=&#34;performance&#34;&gt;Performance&lt;/h2&gt;&#xA;&lt;p&gt;The server runs on optimized software to keep gameplay smooth. No lag, no excuses. Chunk loading, entity ticking, and redstone all run at full speed without cutting corners.&lt;/p&gt;&#xA;&lt;h2 id=&#34;security&#34;&gt;Security&lt;/h2&gt;&#xA;&lt;p&gt;Anti-cheat protection keeps the playing field level. Account security measures prevent unauthorized access. You play fair, we make sure everyone else does too.&lt;/p&gt;&#xA;&lt;h2 id=&#34;land-protection&#34;&gt;Land Protection&lt;/h2&gt;&#xA;&lt;p&gt;Claim your territory and control who can build, break, or interact within it. Your builds are safe whether you&amp;rsquo;re online or off. No more logging in to find your house flattened.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>FAQ</title>
+      <link>https://hardknocks.university/server/faq/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/faq/</guid>
+      <description>&lt;details&gt;&#xA;&lt;summary&gt;How do I join the server?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;Add &lt;code&gt;mc.hardknocks.university&lt;/code&gt; to your server list. Java Edition connects directly; Bedrock Edition uses port &lt;code&gt;19132&lt;/code&gt;. Check the full &lt;a href=&#34;https://hardknocks.university/server/join/&#34;&gt;How to Join&lt;/a&gt; guide for step-by-step instructions.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;What version is the server running?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;The server runs Minecraft &lt;strong&gt;1.21.1&lt;/strong&gt; with Java and Bedrock crossplay enabled.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;Can I use Optifine or Sodium?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;Yes. Performance mods like Optifine, Sodium, Lithium, and cosmetic shader packs are all allowed. Minimaps are fine as long as they don&#39;t show caves or entities. X-ray texture packs and hacked clients are not allowed.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;How do land claims work?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;You can claim areas of land to protect your builds from griefing. Claimed land prevents other players from building, breaking, or interacting within your territory unless you grant them access.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;What happens when I die?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;A grave spawns at your death location keeping your items safe. You won&#39;t get a compass, directional arrow, or coordinates — you&#39;ll need to remember where you were and find your way back. Your items are protected; the journey back is part of the game.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;Will the world ever reset?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;&lt;strong&gt;No.&lt;/strong&gt; The world is permanent. Your builds are here to stay. Major Minecraft updates that add new terrain generation will be handled by expanding the world border, not resetting.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;Is there a Discord server?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;Coming soon. Stay tuned.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;How do I apply for staff?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;Staff applications will open when the community grows. For now, be active, be helpful, and be a good member of the community — that&#39;s the best application.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;&#xA;&lt;details&gt;&#xA;&lt;summary&gt;Are there custom items or economy plugins?&lt;/summary&gt;&#xA;&lt;div class=&#34;faq-answer&#34;&gt;&#xA;No. The server is as close to vanilla as possible. No custom items, no server currency, no teleportation commands. Plugins are only used for protection, security, and quality of life.&#xA;&lt;/div&gt;&#xA;&lt;/details&gt;</description>
+    </item>
+    <item>
+      <title>Vote for Us</title>
+      <link>https://hardknocks.university/server/vote/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/vote/</guid>
+      <description>&lt;p&gt;Voting helps Hard Knocks University climb the server rankings so new players can find us. It takes less than a minute and makes a real difference.&lt;/p&gt;&#xA;&lt;h2 id=&#34;where-to-vote&#34;&gt;Where to Vote&lt;/h2&gt;&#xA;&lt;div class=&#34;vote-grid&#34;&gt;&#xA;&lt;div class=&#34;vote-card&#34;&gt;&#xA;&lt;h3 id=&#34;minecraft-mp&#34;&gt;Minecraft-MP&lt;/h3&gt;&#xA;&lt;p&gt;&lt;a href=&#34;&#34;&gt;Vote on Minecraft-MP&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;div class=&#34;vote-card&#34;&gt;&#xA;&lt;h3 id=&#34;planetminecraft&#34;&gt;PlanetMinecraft&lt;/h3&gt;&#xA;&lt;p&gt;&lt;a href=&#34;&#34;&gt;Vote on PlanetMinecraft&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;div class=&#34;vote-card&#34;&gt;&#xA;&lt;h3 id=&#34;topg&#34;&gt;TopG&lt;/h3&gt;&#xA;&lt;p&gt;&lt;a href=&#34;&#34;&gt;Vote on TopG&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;div class=&#34;vote-card&#34;&gt;&#xA;&lt;h3 id=&#34;mc-server-list&#34;&gt;MC Server List&lt;/h3&gt;&#xA;&lt;p&gt;&lt;a href=&#34;&#34;&gt;Vote on MC Server List&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;h2 id=&#34;why-vote&#34;&gt;Why Vote?&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Visibility&lt;/strong&gt; — Higher rankings mean more players discover the server&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Community growth&lt;/strong&gt; — A bigger community means more builds, more collaboration, more fun&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;It&amp;rsquo;s free&lt;/strong&gt; — Takes 30 seconds, costs nothing&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;rewards&#34;&gt;Rewards&lt;/h2&gt;&#xA;&lt;p&gt;Vote rewards are being finalized. They&amp;rsquo;ll be cosmetic or quality-of-life only — nothing that gives a gameplay advantage. This is a vanilla server, after all.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Staff</title>
+      <link>https://hardknocks.university/server/staff/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/server/staff/</guid>
+      <description>&lt;div class=&#34;staff-grid&#34;&gt;&#xA;&lt;div class=&#34;staff-card&#34;&gt;&#xA;&lt;p class=&#34;role&#34;&gt;Owner&lt;/p&gt;&#xA;&lt;h3 id=&#34;beryndil&#34;&gt;Beryndil&lt;/h3&gt;&#xA;&lt;p&gt;Server founder, developer, and lead administrator. Builds the tools, sets the rules, keeps the lights on.&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;h2 id=&#34;roles&#34;&gt;Roles&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Owner&lt;/strong&gt; — Full server administration, plugin configuration, final say on policy&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Admin&lt;/strong&gt; — Day-to-day management, rule enforcement, player support&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Moderator&lt;/strong&gt; — Chat moderation, handling reports, welcoming new players&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;em&gt;Interested in joining the team? Staff applications will open as the community grows. Be active, be helpful, and be a good community member — that&amp;rsquo;s the best resume.&lt;/em&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Connect</title>
+      <link>https://hardknocks.university/connect/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/connect/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Alpha Software&lt;/strong&gt; — Spyglass Connect is in active development. Expect bugs, missing features, and rough edges.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;Spyglass Connect is a desktop companion app that reads your Minecraft Java Edition save files and streams the data to your phone over local WiFi. No cloud servers, no accounts — everything stays on your network.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/beryndil/Spyglass-Connect&#34;&gt;Get Spyglass Connect for Desktop&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;how-it-works&#34;&gt;How It Works&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;Launch&lt;/strong&gt; Spyglass Connect on your PC (Windows, macOS, or Linux)&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Scan&lt;/strong&gt; the QR code shown on your PC from the Spyglass app on your phone&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Done&lt;/strong&gt; — your phone auto-reconnects whenever both devices are on the same WiFi&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Under the hood: QR code pairs devices via ECDH key exchange, then communicates over an encrypted WebSocket (AES-256-GCM). mDNS handles automatic reconnection.&#xA;Protocol version negotiation ensures both apps are compatible — if either side is outdated, you&amp;rsquo;ll see a clear error message.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Disclaimer</title>
+      <link>https://hardknocks.university/disclaimer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/disclaimer/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Alpha Software&lt;/strong&gt; — Spyglass and Spyglass Connect are in active development. Expect bugs, missing features, and rough edges.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;not-affiliated-with-mojang&#34;&gt;Not Affiliated with Mojang&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Spyglass is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft.&lt;/strong&gt; Minecraft is a trademark of Mojang Studios. All game data, names, and images are used for informational and reference purposes only.&lt;/p&gt;&#xA;&lt;h2 id=&#34;trademarks&#34;&gt;Trademarks&lt;/h2&gt;&#xA;&lt;p&gt;&amp;ldquo;Minecraft&amp;rdquo; is a trademark of Mojang Studios, a subsidiary of Microsoft Corporation. All other trademarks, trade names, and logos mentioned in this application are the property of their respective owners.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Features</title>
+      <link>https://hardknocks.university/features/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/features/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;Alpha Software&lt;/strong&gt; — Spyglass Connect is in active development. Expect bugs, missing features, and rough edges.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;spyglass-connect&#34;&gt;Spyglass Connect&lt;/h2&gt;&#xA;&lt;p&gt;Pair your phone with the &lt;a href=&#34;https://github.com/beryndil/Spyglass-Connect&#34;&gt;Spyglass Connect&lt;/a&gt; desktop companion to access your Minecraft world data over local WiFi. No cloud servers, no accounts — everything stays on your network.&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Feature&lt;/th&gt;&#xA;          &lt;th&gt;Description&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;QR Pairing&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Scan a QR code to connect — auto-reconnects whenever you&amp;rsquo;re on the same WiFi&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Character Viewer&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;See your full equipment — armor, weapons, tools, and enchantments&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Inventory Viewer&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Browse your complete inventory, armor, offhand, and ender chest&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Chest Finder&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Search for any item across all containers — chests, barrels, shulker boxes, hoppers&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Structure Locator&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Find villages, temples, monuments, strongholds, and more with coordinates and distance&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Overhead Map&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Interactive terrain map with structure markers and player position&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;Fully encrypted (ECDH + AES-256-GCM). Auto-reconnects via mDNS.&#xA;Protocol v2 with version negotiation — incompatible versions show a clear update message.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>License</title>
+      <link>https://hardknocks.university/license/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/license/</guid>
+      <description>&lt;p&gt;Copyright (c) 2026 Beryndil. All rights reserved.&lt;/p&gt;&#xA;&lt;h2 id=&#34;1-permitted-use&#34;&gt;1. Permitted Use&lt;/h2&gt;&#xA;&lt;p&gt;You are granted a non-exclusive, non-transferable, revocable license to use the Spyglass application as distributed through official release channels for personal, non-commercial purposes.&lt;/p&gt;&#xA;&lt;h2 id=&#34;2-restrictions&#34;&gt;2. Restrictions&lt;/h2&gt;&#xA;&lt;p&gt;You may NOT, without the prior written consent of the copyright holder:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Copy, reproduce, or duplicate the source code or application&lt;/li&gt;&#xA;&lt;li&gt;Modify, adapt, translate, or create derivative works based on the source code or application&lt;/li&gt;&#xA;&lt;li&gt;Distribute, sublicense, lease, rent, loan, or otherwise transfer the source code or application to any third party&lt;/li&gt;&#xA;&lt;li&gt;Reverse-engineer, decompile, disassemble, or otherwise attempt to derive the source code from the compiled application&lt;/li&gt;&#xA;&lt;li&gt;Use the source code or application for any commercial purpose&lt;/li&gt;&#xA;&lt;li&gt;Remove, alter, or obscure any proprietary notices, labels, or marks&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;3-third-party-assets&#34;&gt;3. Third-Party Assets&lt;/h2&gt;&#xA;&lt;p&gt;This application includes third-party assets that are subject to their own licenses:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Privacy Policy</title>
+      <link>https://hardknocks.university/privacy-policy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hardknocks.university/privacy-policy/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;Spyglass Connect is a free, ad-supported Android app created by Beryndil. This policy explains what data the app collects, how it is used, and the choices you have.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;1-information-we-collect&#34;&gt;1. Information We Collect&lt;/h2&gt;&#xA;&lt;p&gt;Spyglass itself does &lt;strong&gt;not&lt;/strong&gt; collect any personal information such as names, email addresses, or account credentials. The app does not require you to create an account.&lt;/p&gt;&#xA;&lt;p&gt;The following third-party services may collect data when enabled:&lt;/p&gt;&#xA;&lt;h2 id=&#34;2-google-admob&#34;&gt;2. Google AdMob&lt;/h2&gt;&#xA;&lt;p&gt;Spyglass displays banner ads via &lt;a href=&#34;https://support.google.com/admob/answer/6128543&#34;&gt;Google AdMob&lt;/a&gt;. AdMob and its mediation partners may collect:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

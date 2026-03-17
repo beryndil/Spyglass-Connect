@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Features — Hard Knocks University</title>
+  <meta name="description" content="Features and plugins on Hard Knocks University Minecraft server">
+  <meta name="theme-color" content="#2ecc71">
+  <meta name="color-scheme" content="dark">
+
+  
+  <meta property="og:title" content="Server Features — Hard Knocks University">
+  <meta property="og:description" content="Features and plugins on Hard Knocks University Minecraft server">
+  <meta property="og:url" content="https://hardknocks.university/server/features/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hard Knocks University">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Server Features">
+  <meta name="twitter:description" content="Features and plugins on Hard Knocks University Minecraft server">
+
+  
+  <link rel="canonical" href="https://hardknocks.university/server/features/">
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/server.css">
+
+  
+  
+</head>
+<body>
+  <nav class="server-nav">
+    <div class="server-nav-inner">
+      <a href="/server/" class="server-nav-brand">
+        <span class="brand-icon">&#9961;</span> Hard Knocks
+      </a>
+      <button class="nav-toggle" onclick="document.querySelector('.server-nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+      <ul class="server-nav-links">
+        <li><a href="/server/" >Home</a></li>
+        <li><a href="/server/rules/" >Rules</a></li>
+        <li><a href="/server/join/" >Join</a></li>
+        <li><a href="/server/features/" class="active">Features</a></li>
+        <li><a href="/server/faq/" >FAQ</a></li>
+        <li><a href="/server/vote/" >Vote</a></li>
+        <li><a href="/server/staff/" >Staff</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+<div class="page-container">
+  <h1>Server Features</h1>
+  <p class="page-subtitle">Plugins that protect, not plugins that change.</p>
+  <h2 id="performance">Performance</h2>
+<p>The server runs on optimized software to keep gameplay smooth. No lag, no excuses. Chunk loading, entity ticking, and redstone all run at full speed without cutting corners.</p>
+<h2 id="security">Security</h2>
+<p>Anti-cheat protection keeps the playing field level. Account security measures prevent unauthorized access. You play fair, we make sure everyone else does too.</p>
+<h2 id="land-protection">Land Protection</h2>
+<p>Claim your territory and control who can build, break, or interact within it. Your builds are safe whether you&rsquo;re online or off. No more logging in to find your house flattened.</p>
+<h2 id="graves">Graves</h2>
+<p>When you die, your items stay safe at your death location in a grave. Here&rsquo;s the catch — and it&rsquo;s intentional:</p>
+<ul>
+<li><strong>No compass</strong> pointing to your grave</li>
+<li><strong>No directional arrows</strong> in your HUD</li>
+<li><strong>No coordinates</strong> displayed in chat</li>
+</ul>
+<p>You retrace your steps and find it the old-fashioned way. It&rsquo;s Minecraft, not GPS. Your items are protected, but the adventure of getting them back is yours.</p>
+<div class="info-box">
+<p><strong>Why?</strong> Because handing you a compass and a waypoint removes the tension and exploration that makes death meaningful. The grave protects your items — but you earn them back.</p>
+</div>
+<h2 id="crossplay">Crossplay</h2>
+<p>Java and Bedrock players share the same world. No separate servers, no compromises. Play with your friends no matter what platform they&rsquo;re on — PC, phone, console, or tablet.</p>
+<hr>
+<p><em>We don&rsquo;t add plugins to change the game — we add them to protect it.</em></p>
+
+</div>
+</main>
+
+  <footer class="server-footer">
+    <p>&copy; 2026 Hard Knocks University. Not affiliated with Mojang or Microsoft.</p>
+    <p><a href="/en/">Spyglass App</a></p>
+  </footer>
+
+  <script>
+  function copyIP() {
+    navigator.clipboard.writeText('mc.hardknocks.university').then(function() {
+      var tip = document.querySelector('.copy-tooltip');
+      if (tip) {
+        tip.classList.add('show');
+        setTimeout(function() { tip.classList.remove('show'); }, 1500);
+      }
+    });
+  }
+  </script>
+</body>
+</html>

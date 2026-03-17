@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote for Us — Hard Knocks University</title>
+  <meta name="description" content="Vote for Hard Knocks University on Minecraft server lists">
+  <meta name="theme-color" content="#2ecc71">
+  <meta name="color-scheme" content="dark">
+
+  
+  <meta property="og:title" content="Vote for Us — Hard Knocks University">
+  <meta property="og:description" content="Vote for Hard Knocks University on Minecraft server lists">
+  <meta property="og:url" content="https://hardknocks.university/server/vote/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hard Knocks University">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Vote for Us">
+  <meta name="twitter:description" content="Vote for Hard Knocks University on Minecraft server lists">
+
+  
+  <link rel="canonical" href="https://hardknocks.university/server/vote/">
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/server.css">
+
+  
+  
+</head>
+<body>
+  <nav class="server-nav">
+    <div class="server-nav-inner">
+      <a href="/server/" class="server-nav-brand">
+        <span class="brand-icon">&#9961;</span> Hard Knocks
+      </a>
+      <button class="nav-toggle" onclick="document.querySelector('.server-nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+      <ul class="server-nav-links">
+        <li><a href="/server/" >Home</a></li>
+        <li><a href="/server/rules/" >Rules</a></li>
+        <li><a href="/server/join/" >Join</a></li>
+        <li><a href="/server/features/" >Features</a></li>
+        <li><a href="/server/faq/" >FAQ</a></li>
+        <li><a href="/server/vote/" class="active">Vote</a></li>
+        <li><a href="/server/staff/" >Staff</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+<div class="page-container">
+  <h1>Vote for Us</h1>
+  <p class="page-subtitle">Help more players find the server.</p>
+  <p>Voting helps Hard Knocks University climb the server rankings so new players can find us. It takes less than a minute and makes a real difference.</p>
+<h2 id="where-to-vote">Where to Vote</h2>
+<div class="vote-grid">
+<div class="vote-card">
+<h3 id="minecraft-mp">Minecraft-MP</h3>
+<p><a href="">Vote on Minecraft-MP</a></p>
+</div>
+<div class="vote-card">
+<h3 id="planetminecraft">PlanetMinecraft</h3>
+<p><a href="">Vote on PlanetMinecraft</a></p>
+</div>
+<div class="vote-card">
+<h3 id="topg">TopG</h3>
+<p><a href="">Vote on TopG</a></p>
+</div>
+<div class="vote-card">
+<h3 id="mc-server-list">MC Server List</h3>
+<p><a href="">Vote on MC Server List</a></p>
+</div>
+</div>
+<h2 id="why-vote">Why Vote?</h2>
+<ul>
+<li><strong>Visibility</strong> — Higher rankings mean more players discover the server</li>
+<li><strong>Community growth</strong> — A bigger community means more builds, more collaboration, more fun</li>
+<li><strong>It&rsquo;s free</strong> — Takes 30 seconds, costs nothing</li>
+</ul>
+<h2 id="rewards">Rewards</h2>
+<p>Vote rewards are being finalized. They&rsquo;ll be cosmetic or quality-of-life only — nothing that gives a gameplay advantage. This is a vanilla server, after all.</p>
+<hr>
+<p><em>Voting links will be updated once the server is listed on each platform.</em></p>
+
+</div>
+</main>
+
+  <footer class="server-footer">
+    <p>&copy; 2026 Hard Knocks University. Not affiliated with Mojang or Microsoft.</p>
+    <p><a href="/en/">Spyglass App</a></p>
+  </footer>
+
+  <script>
+  function copyIP() {
+    navigator.clipboard.writeText('mc.hardknocks.university').then(function() {
+      var tip = document.querySelector('.copy-tooltip');
+      if (tip) {
+        tip.classList.add('show');
+        setTimeout(function() { tip.classList.remove('show'); }, 1500);
+      }
+    });
+  }
+  </script>
+</body>
+</html>

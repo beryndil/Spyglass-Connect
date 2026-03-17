@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff — Hard Knocks University</title>
+  <meta name="description" content="Staff team at Hard Knocks University Minecraft server">
+  <meta name="theme-color" content="#2ecc71">
+  <meta name="color-scheme" content="dark">
+
+  
+  <meta property="og:title" content="Staff — Hard Knocks University">
+  <meta property="og:description" content="Staff team at Hard Knocks University Minecraft server">
+  <meta property="og:url" content="https://hardknocks.university/server/staff/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hard Knocks University">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Staff">
+  <meta name="twitter:description" content="Staff team at Hard Knocks University Minecraft server">
+
+  
+  <link rel="canonical" href="https://hardknocks.university/server/staff/">
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/server.css">
+
+  
+  
+</head>
+<body>
+  <nav class="server-nav">
+    <div class="server-nav-inner">
+      <a href="/server/" class="server-nav-brand">
+        <span class="brand-icon">&#9961;</span> Hard Knocks
+      </a>
+      <button class="nav-toggle" onclick="document.querySelector('.server-nav-links').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+      <ul class="server-nav-links">
+        <li><a href="/server/" >Home</a></li>
+        <li><a href="/server/rules/" >Rules</a></li>
+        <li><a href="/server/join/" >Join</a></li>
+        <li><a href="/server/features/" >Features</a></li>
+        <li><a href="/server/faq/" >FAQ</a></li>
+        <li><a href="/server/vote/" >Vote</a></li>
+        <li><a href="/server/staff/" class="active">Staff</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+<div class="page-container">
+  <h1>Staff</h1>
+  <p class="page-subtitle">The people keeping the server running.</p>
+  <div class="staff-grid">
+<div class="staff-card">
+<p class="role">Owner</p>
+<h3 id="beryndil">Beryndil</h3>
+<p>Server founder, developer, and lead administrator. Builds the tools, sets the rules, keeps the lights on.</p>
+</div>
+</div>
+<h2 id="roles">Roles</h2>
+<ul>
+<li><strong>Owner</strong> — Full server administration, plugin configuration, final say on policy</li>
+<li><strong>Admin</strong> — Day-to-day management, rule enforcement, player support</li>
+<li><strong>Moderator</strong> — Chat moderation, handling reports, welcoming new players</li>
+</ul>
+<hr>
+<p><em>Interested in joining the team? Staff applications will open as the community grows. Be active, be helpful, and be a good community member — that&rsquo;s the best resume.</em></p>
+
+</div>
+</main>
+
+  <footer class="server-footer">
+    <p>&copy; 2026 Hard Knocks University. Not affiliated with Mojang or Microsoft.</p>
+    <p><a href="/en/">Spyglass App</a></p>
+  </footer>
+
+  <script>
+  function copyIP() {
+    navigator.clipboard.writeText('mc.hardknocks.university').then(function() {
+      var tip = document.querySelector('.copy-tooltip');
+      if (tip) {
+        tip.classList.add('show');
+        setTimeout(function() { tip.classList.remove('show'); }, 1500);
+      }
+    });
+  }
+  </script>
+</body>
+</html>
