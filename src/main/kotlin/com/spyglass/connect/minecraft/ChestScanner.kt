@@ -37,10 +37,13 @@ object ChestScanner {
      * Fair play is always enabled: LootTable containers are skipped, and InhabitedTime
      * filtering is auto-detected (used on vanilla, disabled on Paper which zeroes it).
      */
-    fun scanWorld(worldDir: File): List<ContainerInfo> {
+    fun scanWorld(
+        worldDir: File,
+        onProgress: ((dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
+    ): List<ContainerInfo> {
         val containers = mutableListOf<ContainerInfo>()
         for (dimension in listOf("overworld", "the_nether", "the_end")) {
-            containers.addAll(scanDimension(worldDir, dimension))
+            containers.addAll(scanDimension(worldDir, dimension, onProgress))
         }
         return containers
     }
@@ -69,7 +72,11 @@ object ChestScanner {
     }
 
     /** Scan all containers in a single dimension. Processes region files sequentially to avoid OOM. */
-    fun scanDimension(worldDir: File, dimension: String): List<ContainerInfo> {
+    fun scanDimension(
+        worldDir: File,
+        dimension: String,
+        onProgress: ((dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
+    ): List<ContainerInfo> {
         val regionFiles = AnvilReader.regionFiles(worldDir, dimension)
         Log.d(TAG, "[$dimension] Found ${regionFiles.size} region files in ${worldDir.absolutePath}")
         if (regionFiles.isEmpty()) return emptyList()
@@ -79,7 +86,8 @@ object ChestScanner {
         Log.i(TAG, "[$dimension] InhabitedTime filtering: ${if (useInhabitedTime) "enabled (vanilla)" else "disabled (Paper/zeroed)"}")
 
         val allContainers = mutableListOf<ContainerInfo>()
-        for (regionFile in regionFiles) {
+        for ((index, regionFile) in regionFiles.withIndex()) {
+            onProgress?.invoke(dimension, index + 1, regionFiles.size, regionFile.name, allContainers.size)
             val chunks = AnvilReader.readRegionChunks(regionFile)
             var skippedChunks = 0
             var totalBlockEntities = 0

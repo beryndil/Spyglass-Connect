@@ -173,7 +173,14 @@ class WebSocketServer {
                         // Handle normal messages — dispatch to IO to avoid blocking WebSocket event loop
                         log("← ${message.type} from [$clientId]")
                         val response = withContext(Dispatchers.IO) {
-                            messageHandler.handle(message)
+                            messageHandler.handle(message) { intermediate ->
+                                val intermediateJson = json.encodeToString(SpyglassMessage.serializer(), intermediate)
+                                if (clientEncryption.isReady) {
+                                    session.send(Frame.Text(clientEncryption.encrypt(intermediateJson)))
+                                } else {
+                                    session.send(Frame.Text(intermediateJson))
+                                }
+                            }
                         }
                         if (response != null) {
                             log("→ ${response.type} to [$clientId]")

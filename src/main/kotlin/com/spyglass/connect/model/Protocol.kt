@@ -33,6 +33,7 @@ object MessageType {
     const val PLAYER_STATS = "player_stats"
     const val PLAYER_ADVANCEMENTS = "player_advancements"
     const val PETS_LIST = "pets_list"
+    const val SCAN_PROGRESS = "scan_progress"
 
     // Phone → Desktop
     const val SELECT_WORLD = "select_world"
@@ -274,6 +275,17 @@ data class PetData(
 data class PetsListPayload(
     val worldName: String,
     val pets: List<PetData>,
+)
+
+// ── Scan progress payload ────────────────────────────────────────────────────
+
+@Serializable
+data class ScanProgressPayload(
+    val dimension: String,
+    val currentRegion: Int,
+    val totalRegions: Int,
+    val regionFile: String,
+    val containersFound: Int,
 )
 
 // ── Payload data classes (Phone → Desktop) ──────────────────────────────────

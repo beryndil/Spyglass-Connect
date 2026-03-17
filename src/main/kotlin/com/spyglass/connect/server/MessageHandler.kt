@@ -47,13 +47,16 @@ class MessageHandler(
     private var pterodactylClient: PterodactylClient? = null
 
     /** Handle an incoming message and return a response (or null for no response). */
-    suspend fun handle(message: SpyglassMessage): SpyglassMessage? {
+    suspend fun handle(
+        message: SpyglassMessage,
+        sendIntermediate: (suspend (SpyglassMessage) -> Unit)? = null,
+    ): SpyglassMessage? {
         Log.d(TAG, "Handling ${message.type}")
         return when (message.type) {
             MessageType.SELECT_WORLD -> handleSelectWorld(message)
             MessageType.REQUEST_PLAYER_LIST -> handleRequestPlayerList(message)
             MessageType.REQUEST_PLAYER -> handleRequestPlayer(message)
-            MessageType.REQUEST_CHESTS -> handleRequestChests(message)
+            MessageType.REQUEST_CHESTS -> handleRequestChests(message, sendIntermediate)
             MessageType.REQUEST_STRUCTURES -> handleRequestStructures(message)
             MessageType.REQUEST_MAP -> handleRequestMap(message)
             MessageType.SEARCH_ITEMS -> handleSearchItems(message)
@@ -209,7 +212,10 @@ class MessageHandler(
         )
     }
 
-    private suspend fun handleRequestChests(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestChests(
+        message: SpyglassMessage,
+        sendIntermediate: (suspend (SpyglassMessage) -> Unit)? = null,
+    ): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
@@ -225,7 +231,21 @@ class MessageHandler(
         // Use cached containers or scan fresh
         val containers = cachedContainers ?: run {
             Log.i(TAG, "Scanning chests in ${worldDir.name}...")
-            ChestScanner.scanWorld(worldDir).also {
+            ChestScanner.scanWorld(worldDir) { dimension, current, total, regionFile, containersFound ->
+                sendIntermediate?.let { send ->
+                    val progress = SpyglassMessage(
+                        type = MessageType.SCAN_PROGRESS,
+                        payload = json.encodeToJsonElement(ScanProgressPayload(
+                            dimension = dimension,
+                            currentRegion = current,
+                            totalRegions = total,
+                            regionFile = regionFile,
+                            containersFound = containersFound,
+                        )),
+                    )
+                    kotlinx.coroutines.runBlocking { send(progress) }
+                }
+            }.also {
                 Log.i(TAG, "Found ${it.size} containers")
                 cachedContainers = it
                 searchIndex.build(it)
