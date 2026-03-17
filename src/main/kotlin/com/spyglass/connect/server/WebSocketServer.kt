@@ -43,11 +43,6 @@ class WebSocketServer {
         scope = handlerScope,
         onWorldChanged = { changes ->
             invalidateCache(changes)
-            // Push player data proactively if player/level files changed
-            if (changes.contains("player") || changes.contains("level")) {
-                pushPlayerData()
-            }
-            // Always notify WORLD_CHANGED so Android knows what categories changed
             notifyWorldChanged("", changes.toList())
         },
     )
@@ -335,8 +330,13 @@ class WebSocketServer {
         else -> null
     }
 
-    /** Notify all connected clients of a world change. */
+    /** Notify all connected clients of a world change + push player data if relevant. */
     suspend fun notifyWorldChanged(worldName: String, categories: List<String>) {
+        // Push player data proactively when player/level files changed
+        if (categories.contains("player") || categories.contains("level")) {
+            pushPlayerData()
+        }
+
         val payload = WorldChangedPayload(worldName, categories)
         val message = SpyglassMessage(
             type = MessageType.WORLD_CHANGED,
