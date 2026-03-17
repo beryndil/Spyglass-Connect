@@ -8,7 +8,7 @@ weight: 2
 ## Java Edition
 
 <ol class="steps">
-<li>Open Minecraft <strong>Java Edition</strong> (version 1.21.1)</li>
+<li>Open Minecraft <strong>Java Edition</strong> (version 1.21.11)</li>
 <li>Click <strong>Multiplayer</strong> from the main menu</li>
 <li>Click <strong>Add Server</strong></li>
 <li>Enter the server address: <code>mc.hardknocks.university</code></li>
@@ -28,7 +28,7 @@ weight: 2
 
 <div class="info-box">
 
-**Note:** The server runs version **1.21.1**. Make sure your game is on the correct version before connecting. Bedrock crossplay is handled automatically — no extra setup needed.
+**Note:** The server runs version **1.21.11** (Mounts of Mayhem). Make sure your game is on the correct version before connecting. Bedrock crossplay is handled automatically — no extra setup needed.
 
 </div>
 
