@@ -42,7 +42,12 @@ class WebSocketServer {
         searchIndex = searchIndex,
         scope = handlerScope,
         onWorldChanged = { changes ->
-            invalidateCache()
+            invalidateCache(changes)
+            // Push player data proactively if player/level files changed
+            if (changes.contains("player") || changes.contains("level")) {
+                pushPlayerData()
+            }
+            // Always notify WORLD_CHANGED so Android knows what categories changed
             notifyWorldChanged("", changes.toList())
         },
     )
@@ -342,8 +347,16 @@ class WebSocketServer {
     }
 
     /** Invalidate cached data (when file watcher detects changes). */
-    fun invalidateCache() {
-        messageHandler.invalidateCache()
+    fun invalidateCache(categories: Set<String> = emptySet()) {
+        messageHandler.invalidateCache(categories)
+    }
+
+    /** Push player data to all connected clients (server-initiated, no requestId). */
+    private suspend fun pushPlayerData() {
+        val message = messageHandler.buildPlayerDataPush() ?: return
+        val messageJson = json.encodeToString(SpyglassMessage.serializer(), message)
+        Log.i(TAG, "Pushing PLAYER_DATA to clients")
+        sessionManager.broadcast(messageJson, requiredCapability = Capability.PLAYER_DATA)
     }
 
     /** Observable count of device log entries received (for UI notification). */

@@ -108,7 +108,7 @@ private fun startApp(lock: ServerSocket) {
 
         val worldWatcher = remember {
             WorldWatcher(scope) { categories ->
-                server.invalidateCache()
+                server.invalidateCache(categories)
                 server.notifyWorldChanged("", categories.toList())
             }.also { watcher[0] = it }
         }

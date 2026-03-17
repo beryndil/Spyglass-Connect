@@ -152,7 +152,7 @@ class MessageHandler(
             // Start polling for changes
             if (scope != null && onWorldChanged != null) {
                 val poller = RemoteWorldPoller(scope) { changes ->
-                    invalidateCache()
+                    invalidateCache(changes)
                     onWorldChanged.invoke(changes)
                 }
                 poller.start(client, remoteWorldCache, serverId, worldPath)
@@ -473,11 +473,41 @@ class MessageHandler(
     private val _deviceLogCount = kotlinx.coroutines.flow.MutableStateFlow(0)
     val deviceLogCount: kotlinx.coroutines.flow.StateFlow<Int> = _deviceLogCount
 
-    /** Invalidate cached data (called when file watcher detects changes). */
-    fun invalidateCache() {
-        cachedContainers = null
-        cachedPlayerUuid = null
-        cachedPets = null
-        searchIndex.clear()
+    /**
+     * Build an unsolicited PLAYER_DATA push message (no requestId).
+     * Returns null if no world is selected or no player UUID is cached.
+     */
+    fun buildPlayerDataPush(): SpyglassMessage? {
+        val worldDir = selectedWorldDir ?: return null
+        val playerData = PlayerParser.parseByUuid(worldDir, cachedPlayerUuid) ?: return null
+        cachedPlayerUuid = playerData.playerUuid
+        return SpyglassMessage(
+            type = MessageType.PLAYER_DATA,
+            payload = json.encodeToJsonElement(playerData),
+        )
+    }
+
+    /**
+     * Invalidate cached data (called when file watcher detects changes).
+     * If [categories] is provided, only invalidate caches relevant to those categories.
+     * Empty set = full invalidation (backwards compat).
+     */
+    fun invalidateCache(categories: Set<String> = emptySet()) {
+        if (categories.isEmpty()) {
+            // Full invalidation
+            cachedContainers = null
+            cachedPlayerUuid = null
+            cachedPets = null
+            searchIndex.clear()
+            return
+        }
+
+        val hasRegionChange = categories.any { it.startsWith("region_") }
+        if (hasRegionChange) {
+            cachedContainers = null
+            cachedPets = null
+            searchIndex.clear()
+        }
+        // Player/level changes don't need to nuke container/pet caches
     }
 }
