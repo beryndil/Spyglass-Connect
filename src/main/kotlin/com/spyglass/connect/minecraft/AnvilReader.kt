@@ -114,6 +114,50 @@ object AnvilReader {
     }
 
     /**
+     * Quick check: does this region file contain any chunk with InhabitedTime >= threshold?
+     * Only reads the offset table + InhabitedTime from each chunk header — does NOT parse
+     * block entities, making this much faster than a full readRegionChunks().
+     */
+    fun hasVisitedChunks(regionFile: File, minInhabitedTicks: Long): Boolean {
+        if (!regionFile.exists() || regionFile.length() < SECTOR_SIZE) return false
+
+        RandomAccessFile(regionFile, "r").use { raf ->
+            val header = ByteArray(SECTOR_SIZE)
+            raf.readFully(header)
+
+            for (i in 0 until HEADER_ENTRIES) {
+                val baseIdx = i * 4
+                val offset = ((header[baseIdx].toInt() and 0xFF) shl 16) or
+                    ((header[baseIdx + 1].toInt() and 0xFF) shl 8) or
+                    (header[baseIdx + 2].toInt() and 0xFF)
+                val sectors = header[baseIdx + 3].toInt() and 0xFF
+                if (offset == 0 || sectors == 0) continue
+
+                try {
+                    val byteOffset = offset.toLong() * SECTOR_SIZE
+                    if (byteOffset >= raf.length()) continue
+                    raf.seek(byteOffset)
+                    val length = raf.readInt()
+                    if (length <= 1 || length > sectors * SECTOR_SIZE) continue
+                    val compressionType = raf.readByte().toInt() and 0xFF
+                    val compressed = ByteArray(length - 1)
+                    raf.readFully(compressed)
+                    val nbt = decompressChunk(compressed, compressionType) ?: continue
+
+                    val inhabited = NbtHelper.long(nbt, "InhabitedTime", -1L).let { v ->
+                        if (v >= 0) v
+                        else NbtHelper.long(NbtHelper.compound(nbt, "Level"), "InhabitedTime", 0L)
+                    }
+                    if (inhabited >= minInhabitedTicks) return true
+                } catch (_: Exception) {
+                    // Skip corrupt chunks
+                }
+            }
+        }
+        return false
+    }
+
+    /**
      * Get all region files for a dimension within a world directory.
      */
     fun regionFiles(worldDir: File, dimension: String = "overworld"): List<File> {

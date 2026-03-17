@@ -3,6 +3,10 @@ package com.spyglass.connect.minecraft
 import com.spyglass.connect.Log
 import com.spyglass.connect.model.ContainerInfo
 import com.spyglass.connect.model.ItemStack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import net.querz.nbt.tag.CompoundTag
 import net.querz.nbt.tag.ListTag
 import java.io.File
@@ -89,13 +93,27 @@ object ChestScanner {
         dimension: String,
         onProgress: (suspend (dimension: String, currentRegion: Int, totalRegions: Int, regionFile: String, containersFound: Int) -> Unit)? = null,
     ): List<ContainerInfo> {
-        val regionFiles = AnvilReader.regionFiles(worldDir, dimension)
-        Log.d(TAG, "[$dimension] Found ${regionFiles.size} region files in ${worldDir.absolutePath}")
-        if (regionFiles.isEmpty()) return emptyList()
+        val allRegionFiles = AnvilReader.regionFiles(worldDir, dimension)
+        Log.d(TAG, "[$dimension] Found ${allRegionFiles.size} region files in ${worldDir.absolutePath}")
+        if (allRegionFiles.isEmpty()) return emptyList()
 
         // Auto-detect: use InhabitedTime filtering only if the server actually tracks it
-        val useInhabitedTime = hasInhabitedTimeData(regionFiles)
+        val useInhabitedTime = hasInhabitedTimeData(allRegionFiles)
         Log.i(TAG, "[$dimension] InhabitedTime filtering: ${if (useInhabitedTime) "enabled (vanilla)" else "disabled (Paper/zeroed)"}")
+
+        // Pre-filter: skip entire region files that have no visited chunks (parallel)
+        val regionFiles = if (useInhabitedTime && allRegionFiles.size > 20) {
+            Log.i(TAG, "[$dimension] Pre-filtering ${allRegionFiles.size} regions for visited chunks...")
+            coroutineScope {
+                allRegionFiles.map { file ->
+                    async(Dispatchers.IO) { file to AnvilReader.hasVisitedChunks(file, MIN_INHABITED_TICKS) }
+                }.awaitAll()
+            }.filter { it.second }.map { it.first }.also {
+                Log.i(TAG, "[$dimension] ${it.size} of ${allRegionFiles.size} regions have visited chunks")
+            }
+        } else {
+            allRegionFiles
+        }
 
         val allContainers = mutableListOf<ContainerInfo>()
         for ((index, regionFile) in regionFiles.withIndex()) {
