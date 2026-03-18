@@ -58,7 +58,7 @@ class MessageHandler(
             MessageType.REQUEST_PLAYER -> handleRequestPlayer(message)
             MessageType.REQUEST_CHESTS -> handleRequestChests(message, sendIntermediate)
             MessageType.REQUEST_STRUCTURES -> handleRequestStructures(message)
-            MessageType.REQUEST_MAP -> handleRequestMap(message)
+            MessageType.REQUEST_MAP -> handleRequestMap(message, sendIntermediate)
             MessageType.SEARCH_ITEMS -> handleSearchItems(message)
             MessageType.REQUEST_STATS -> handleRequestStats(message)
             MessageType.REQUEST_ADVANCEMENTS -> handleRequestAdvancements(message)
@@ -219,12 +219,9 @@ class MessageHandler(
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
-        // For remote worlds, ensure region files are downloaded first
-        // Always invalidate container cache — region files may have changed on the server
-        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
-            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
-            Log.i(TAG, "Downloading region files for chest scan...")
-            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, "overworld")
+        // For remote worlds, skip full region download (OOM risk on large worlds).
+        // Scan only locally-cached region files from prior map renders.
+        if (isRemoteWorld) {
             cachedContainers = null
         }
 
@@ -268,12 +265,8 @@ class MessageHandler(
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
-        // For remote worlds, ensure region files are downloaded
-        if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
-            val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
-            Log.i(TAG, "Downloading region files for structure scan...")
-            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, "overworld")
-        }
+        // For remote worlds, skip full region download (OOM risk on large worlds).
+        // Scan only locally-cached region files from prior map renders.
 
         val structures = StructureScanner.scanWorld(worldDir)
         val payload = StructureLocationsPayload(
@@ -288,34 +281,71 @@ class MessageHandler(
         )
     }
 
-    private suspend fun handleRequestMap(message: SpyglassMessage): SpyglassMessage {
+    private suspend fun handleRequestMap(
+        message: SpyglassMessage,
+        sendIntermediate: (suspend (SpyglassMessage) -> Unit)? = null,
+    ): SpyglassMessage {
         val worldDir = selectedWorldDir
             ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "No world selected")
 
         val req = json.decodeFromJsonElement(RequestMapPayload.serializer(), message.payload)
 
-        // For remote worlds, ensure region files are downloaded for the requested dimension
+        // For remote worlds, download only the region files needed for this map area
         if (isRemoteWorld && remoteServerId != null && remoteWorldPath != null) {
             val client = pterodactylClient ?: return errorResponse(message.requestId, ErrorCode.NO_WORLD, "Pterodactyl client not available")
             val dimension = req.dimension
             Log.i(TAG, "Downloading region files for map render ($dimension)...")
-            remoteWorldCache.ensureRegionFiles(client, remoteServerId!!, remoteWorldPath!!, dimension)
+            remoteWorldCache.ensureRegionFilesForArea(
+                client, remoteServerId!!, remoteWorldPath!!,
+                req.centerX, req.centerZ, req.radiusChunks, dimension,
+            )
         }
 
-        val tiles = MapRenderer.renderTiles(worldDir, req.centerX, req.centerZ, req.radiusChunks, req.dimension)
+        val allTiles = MapRenderer.renderTiles(worldDir, req.centerX, req.centerZ, req.radiusChunks, req.dimension)
 
         val playerData = PlayerParser.parse(worldDir)
-        val payload = MapRenderPayload(
-            worldName = worldDir.name,
-            tiles = tiles,
-            playerX = playerData?.posX ?: 0.0,
-            playerZ = playerData?.posZ ?: 0.0,
-        )
+        val px = playerData?.posX ?: 0.0
+        val pz = playerData?.posZ ?: 0.0
+        val worldName = worldDir.name
 
+        // Sort tiles by Chebyshev distance from center chunk, then send in batches.
+        // Close tiles arrive first for instant feedback.
+        val centerChunkX = req.centerX shr 4
+        val centerChunkZ = req.centerZ shr 4
+        val sorted = allTiles.sortedBy { maxOf(
+            kotlin.math.abs(it.chunkX - centerChunkX),
+            kotlin.math.abs(it.chunkZ - centerChunkZ),
+        ) }
+
+        // Split into batches: inner (0-3), mid (4-5), outer (6+)
+        val inner = sorted.filter { maxOf(kotlin.math.abs(it.chunkX - centerChunkX), kotlin.math.abs(it.chunkZ - centerChunkZ)) <= 3 }
+        val mid = sorted.filter { val d = maxOf(kotlin.math.abs(it.chunkX - centerChunkX), kotlin.math.abs(it.chunkZ - centerChunkZ)); d in 4..5 }
+        val outer = sorted.filter { maxOf(kotlin.math.abs(it.chunkX - centerChunkX), kotlin.math.abs(it.chunkZ - centerChunkZ)) >= 6 }
+        val batches = listOf(inner, mid, outer).filter { it.isNotEmpty() }
+
+        if (batches.isEmpty()) {
+            return SpyglassMessage(
+                type = MessageType.MAP_RENDER,
+                requestId = message.requestId,
+                payload = json.encodeToJsonElement(MapRenderPayload(worldName, emptyList(), px, pz)),
+            )
+        }
+
+        // Send all but the last batch as intermediate, return the last as the response
+        for (i in 0 until batches.lastIndex) {
+            val payload = MapRenderPayload(worldName, batches[i], px, pz)
+            sendIntermediate?.invoke(SpyglassMessage(
+                type = MessageType.MAP_RENDER,
+                requestId = message.requestId,
+                payload = json.encodeToJsonElement(payload),
+            ))
+        }
+
+        val finalPayload = MapRenderPayload(worldName, batches.last(), px, pz)
         return SpyglassMessage(
             type = MessageType.MAP_RENDER,
             requestId = message.requestId,
-            payload = json.encodeToJsonElement(payload),
+            payload = json.encodeToJsonElement(finalPayload),
         )
     }
 
