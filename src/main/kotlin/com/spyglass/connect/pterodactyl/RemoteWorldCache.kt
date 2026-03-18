@@ -150,6 +150,81 @@ class RemoteWorldCache {
     }
 
     /**
+     * Download only the specific region files needed for a map area.
+     * Much faster than ensureRegionFiles() which downloads ALL region files.
+     */
+    suspend fun ensureRegionFilesForArea(
+        client: PterodactylClient,
+        serverId: String,
+        worldPath: String,
+        centerX: Int,
+        centerZ: Int,
+        radiusChunks: Int,
+        dimension: String = "overworld",
+    ): File {
+        val cacheDir = worldCacheDir(serverId, worldPath)
+        val remotePath = if (worldPath == "/") "" else worldPath
+        val paper = isPaperLayout(serverId, worldPath)
+
+        val remoteRegionDir = when (dimension) {
+            "nether" -> if (paper) "${remotePath}_nether/DIM-1/region" else "$remotePath/DIM-1/region"
+            "end" -> if (paper) "${remotePath}_the_end/DIM1/region" else "$remotePath/DIM1/region"
+            else -> "$remotePath/region"
+        }
+        val localRegionDir = when (dimension) {
+            "nether" -> File(cacheDir, "DIM-1/region")
+            "end" -> File(cacheDir, "DIM1/region")
+            else -> File(cacheDir, "region")
+        }
+
+        // Calculate which region files contain the requested chunks
+        val centerChunkX = centerX shr 4
+        val centerChunkZ = centerZ shr 4
+        val regionFiles = mutableSetOf<String>()
+        for (cx in (centerChunkX - radiusChunks)..(centerChunkX + radiusChunks)) {
+            for (cz in (centerChunkZ - radiusChunks)..(centerChunkZ + radiusChunks)) {
+                regionFiles.add("r.${cx shr 5}.${cz shr 5}.mca")
+            }
+        }
+
+        Log.i(TAG, "Map area needs ${regionFiles.size} region file(s) for $dimension")
+
+        // Download only the needed region files — skip any already on disk
+        var downloaded = 0
+        var cached = 0
+        for (fileName in regionFiles) {
+            val remoteFull = "$remoteRegionDir/$fileName"
+            val localFile = File(localRegionDir, fileName)
+
+            // Use disk cache — only download if the file doesn't exist locally
+            if (localFile.exists()) {
+                cached++
+                continue
+            }
+
+            for (attempt in 1..3) {
+                try {
+                    val bytes = client.downloadFile(serverId, remoteFull)
+                    localRegionDir.mkdirs()
+                    localFile.writeBytes(bytes)
+                    downloaded++
+                    Log.d(TAG, "Downloaded $fileName (${bytes.size} bytes)")
+                    break
+                } catch (e: Exception) {
+                    if (attempt < 3) {
+                        delay(500L * attempt)
+                    } else {
+                        Log.w(TAG, "Failed to download $fileName: ${e.message}")
+                    }
+                }
+            }
+        }
+        Log.i(TAG, "Region files: $cached cached, $downloaded downloaded, ${regionFiles.size} needed")
+
+        return cacheDir
+    }
+
+    /**
      * Refresh a world's essential files, checking for changes via modifiedAt timestamps.
      * Returns the set of change categories detected.
      */
@@ -248,6 +323,17 @@ class RemoteWorldCache {
                 val lastKnown = fileTimestamps[cacheKey]
 
                 if (lastKnown == file.modifiedAt && localFile.exists()) continue
+
+                // For large region files (.mca), use disk cache — only re-download
+                // if modifiedAt is newer than what we last downloaded
+                if (localFile.exists() && file.name.endsWith(".mca")) {
+                    if (lastKnown == null) {
+                        // First run after restart — trust the disk cache
+                        fileTimestamps[cacheKey] = file.modifiedAt
+                        continue
+                    }
+                    // modifiedAt changed → re-download below
+                }
 
                 var downloaded = false
                 for (attempt in 1..3) {

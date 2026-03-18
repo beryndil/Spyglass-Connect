@@ -283,7 +283,21 @@ object SaveDetector {
         return try {
             val client = PterodactylClient(ptero.panelUrl, ptero.apiKey)
             try {
-                RemoteWorldDetector.detectWorlds(client, ptero.selectedServerId, ptero.selectedServerName, cache)
+                // Retry on rate limit (429) with exponential backoff
+                for (attempt in 1..3) {
+                    try {
+                        return RemoteWorldDetector.detectWorlds(client, ptero.selectedServerId, ptero.selectedServerName, cache)
+                    } catch (e: Exception) {
+                        if (e.message?.contains("429") == true && attempt < 3) {
+                            val waitSec = attempt * 10L
+                            Log.w(TAG, "Pterodactyl rate limited, retrying in ${waitSec}s (attempt $attempt/3)")
+                            kotlinx.coroutines.delay(waitSec * 1000)
+                        } else {
+                            throw e
+                        }
+                    }
+                }
+                emptyList()
             } finally {
                 client.close()
             }

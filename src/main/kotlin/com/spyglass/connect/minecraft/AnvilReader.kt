@@ -27,6 +27,53 @@ object AnvilReader {
     private const val COMPRESSION_NONE = 3
 
     /**
+     * Read only the chunks at the specified local coordinates from a region file.
+     * [chunkCoords] contains absolute chunk coordinates — only the low 5 bits are used
+     * to index into the region header.  This avoids decompressing all 1024 chunks.
+     */
+    fun readChunksAt(regionFile: File, chunkCoords: Set<Pair<Int, Int>>): List<CompoundTag> {
+        if (!regionFile.exists() || regionFile.length() < SECTOR_SIZE || chunkCoords.isEmpty()) return emptyList()
+
+        val chunks = mutableListOf<CompoundTag>()
+
+        RandomAccessFile(regionFile, "r").use { raf ->
+            val header = ByteArray(SECTOR_SIZE)
+            raf.readFully(header)
+
+            for ((cx, cz) in chunkCoords) {
+                val i = (cx and 31) + (cz and 31) * 32
+                val baseIdx = i * 4
+                val offset = ((header[baseIdx].toInt() and 0xFF) shl 16) or
+                    ((header[baseIdx + 1].toInt() and 0xFF) shl 8) or
+                    (header[baseIdx + 2].toInt() and 0xFF)
+                val sectors = header[baseIdx + 3].toInt() and 0xFF
+
+                if (offset == 0 || sectors == 0) continue
+
+                try {
+                    val byteOffset = offset.toLong() * SECTOR_SIZE
+                    if (byteOffset >= raf.length()) continue
+
+                    raf.seek(byteOffset)
+                    val length = raf.readInt()
+                    if (length <= 1 || length > sectors * SECTOR_SIZE) continue
+
+                    val compressionType = raf.readByte().toInt() and 0xFF
+                    val compressed = ByteArray(length - 1)
+                    raf.readFully(compressed)
+
+                    val nbt = decompressChunk(compressed, compressionType) ?: continue
+                    chunks.add(nbt)
+                } catch (_: Exception) {
+                    // Skip corrupt chunks
+                }
+            }
+        }
+
+        return chunks
+    }
+
+    /**
      * Read all chunks from a region file, extracting block entities.
      * Returns a list of (chunkNBT, chunkX, chunkZ) for further processing.
      */

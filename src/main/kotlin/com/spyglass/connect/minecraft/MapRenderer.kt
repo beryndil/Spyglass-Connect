@@ -2,8 +2,6 @@ package com.spyglass.connect.minecraft
 
 import com.spyglass.connect.model.MapTile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import net.querz.nbt.tag.CompoundTag
 import net.querz.nbt.tag.LongArrayTag
@@ -64,29 +62,27 @@ object MapRenderer {
 
         if (regionWork.isEmpty()) return tiles
 
+        // Process regions sequentially so only one region's NBT is in memory at a time
         return runBlocking(Dispatchers.IO) {
-            regionWork.map { (regionFile, chunkCoords) ->
-                async {
-                    val result = mutableListOf<MapTile>()
-                    val chunks = AnvilReader.readRegionChunks(regionFile)
-                    for (chunkNbt in chunks) {
-                        val chunkX = extractChunkX(chunkNbt) ?: continue
-                        val chunkZ = extractChunkZ(chunkNbt) ?: continue
-                        if ((chunkX to chunkZ) !in chunkCoords) continue
+            regionWork.flatMap { (regionFile, chunkCoords) ->
+                val result = mutableListOf<MapTile>()
+                val chunks = AnvilReader.readChunksAt(regionFile, chunkCoords)
+                for (chunkNbt in chunks) {
+                    val chunkX = extractChunkX(chunkNbt) ?: continue
+                    val chunkZ = extractChunkZ(chunkNbt) ?: continue
 
-                        val image = renderChunkTile(chunkNbt)
-                        if (image != null) {
-                            result.add(MapTile(
-                                chunkX = chunkX,
-                                chunkZ = chunkZ,
-                                dimension = dimension,
-                                imageBase64 = imageToBase64(image),
-                            ))
-                        }
+                    val image = renderChunkTile(chunkNbt)
+                    if (image != null) {
+                        result.add(MapTile(
+                            chunkX = chunkX,
+                            chunkZ = chunkZ,
+                            dimension = dimension,
+                            imageBase64 = imageToBase64(image),
+                        ))
                     }
-                    result
                 }
-            }.awaitAll().flatten()
+                result
+            }
         }
     }
 
