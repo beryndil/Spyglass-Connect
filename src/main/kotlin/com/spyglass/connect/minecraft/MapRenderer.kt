@@ -100,10 +100,14 @@ object MapRenderer {
 
         if (sections.isEmpty()) return null
 
+        // 1.18+ stores heightmap values relative to the bottom of the world.
+        // yPos is the minimum section Y index (e.g. -4 for overworld = Y -64).
+        val minBuildHeight = NbtHelper.int(chunkNbt, "yPos", 0) * CHUNK_SIZE
+
         for (x in 0 until CHUNK_SIZE) {
             for (z in 0 until CHUNK_SIZE) {
                 val y = if (heightmap != null) {
-                    heightmap[z * CHUNK_SIZE + x] - 1 // Heightmap is 1 above the surface
+                    minBuildHeight + heightmap[z * CHUNK_SIZE + x] - 1
                 } else {
                     estimateHeight(sections)
                 }
