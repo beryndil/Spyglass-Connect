@@ -2,6 +2,7 @@ package com.spyglass.connect.minecraft
 
 import com.spyglass.connect.Log
 import com.spyglass.connect.model.ContainerInfo
+import com.spyglass.connect.model.EnchantmentData
 import com.spyglass.connect.model.ItemStack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -205,7 +206,115 @@ object ChestScanner {
             val count = maxOf(NbtHelper.int(item, "Count", 0), NbtHelper.int(item, "count", 0))
                 .coerceAtLeast(1)
             val slot = NbtHelper.int(item, "Slot", -1)
-            ItemStack(id = id, count = count, slot = slot)
+            val enchantments = parseEnchantments(item)
+            val damage = extractDamage(item)
+            val customName = extractCustomName(item)
+            ItemStack(
+                id = id,
+                count = count,
+                slot = slot,
+                enchantments = enchantments,
+                damage = damage,
+                customName = customName,
+            )
         }
+    }
+
+    /**
+     * Extract enchantments from an item compound.
+     * Handles three NBT formats:
+     * - 1.13–1.20.4: tag.Enchantments / tag.StoredEnchantments
+     * - 1.20.5–1.21.1: components."minecraft:enchantments".levels
+     * - 1.21.2+: components."minecraft:enchantments" (direct map)
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun parseEnchantments(item: CompoundTag): List<EnchantmentData> {
+        val result = mutableListOf<EnchantmentData>()
+
+        // 1.13–1.20.4 format: tag.Enchantments
+        val tag = NbtHelper.compound(item, "tag")
+        if (tag != null) {
+            val enchList = tag.get("Enchantments") as? ListTag<CompoundTag>
+            enchList?.forEach { ench ->
+                val enchId = NbtHelper.string(ench, "id").removePrefix("minecraft:")
+                val level = NbtHelper.int(ench, "lvl", 1)
+                if (enchId.isNotBlank()) result.add(EnchantmentData(enchId, level))
+            }
+            if (result.isNotEmpty()) return result
+
+            val storedList = tag.get("StoredEnchantments") as? ListTag<CompoundTag>
+            storedList?.forEach { ench ->
+                val enchId = NbtHelper.string(ench, "id").removePrefix("minecraft:")
+                val level = NbtHelper.int(ench, "lvl", 1)
+                if (enchId.isNotBlank()) result.add(EnchantmentData(enchId, level))
+            }
+            if (result.isNotEmpty()) return result
+        }
+
+        // 1.20.5+ format: components."minecraft:enchantments"
+        val components = NbtHelper.compound(item, "components")
+        if (components != null) {
+            val enchComp = NbtHelper.compound(components, "minecraft:enchantments")
+                ?: NbtHelper.compound(components, "minecraft:stored_enchantments")
+            if (enchComp != null) {
+                val levels = NbtHelper.compound(enchComp, "levels")
+                val source = levels ?: enchComp
+                for (key in source.keySet()) {
+                    if (levels == null && !key.contains(":")) continue
+                    val enchId = key.removePrefix("minecraft:")
+                    val level = NbtHelper.int(source, key, 1)
+                    if (level > 0) result.add(EnchantmentData(enchId, level))
+                }
+            }
+        }
+
+        return result
+    }
+
+    /** Extract damage value from an item (durability used). */
+    private fun extractDamage(item: CompoundTag): Int {
+        val tag = NbtHelper.compound(item, "tag")
+        if (tag != null) {
+            val dmg = NbtHelper.int(tag, "Damage")
+            if (dmg > 0) return dmg
+        }
+        val components = NbtHelper.compound(item, "components")
+        if (components != null) {
+            return NbtHelper.int(components, "minecraft:damage")
+        }
+        return 0
+    }
+
+    /** Extract custom name from an item in a container. */
+    private fun extractCustomName(item: CompoundTag): String? {
+        // 1.13–1.20.4: tag.display.Name
+        val tag = NbtHelper.compound(item, "tag")
+        if (tag != null) {
+            val display = NbtHelper.compound(tag, "display")
+            if (display != null) {
+                val nameJson = NbtHelper.string(display, "Name")
+                if (nameJson.isNotBlank()) return stripJsonName(nameJson)
+            }
+        }
+        // 1.20.5+: components."minecraft:custom_name"
+        val components = NbtHelper.compound(item, "components")
+        if (components != null) {
+            val name = NbtHelper.string(components, "minecraft:custom_name")
+            if (name.isNotBlank()) return stripJsonName(name)
+        }
+        return null
+    }
+
+    /** Strip JSON text component wrapper: {"text":"My Sword"} → "My Sword" */
+    private fun stripJsonName(raw: String): String {
+        if (raw.startsWith("{")) {
+            return try {
+                val textMatch = Regex(""""text"\s*:\s*"([^"]*?)"""").find(raw)
+                textMatch?.groupValues?.get(1) ?: raw
+            } catch (_: Exception) {
+                raw
+            }
+        }
+        return raw.trim('"')
     }
 }

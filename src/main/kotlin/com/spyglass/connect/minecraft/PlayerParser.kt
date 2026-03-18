@@ -460,12 +460,15 @@ object PlayerParser {
         if (components != null) {
             val enchComp = NbtHelper.compound(components, "minecraft:enchantments")
                 ?: NbtHelper.compound(components, "minecraft:stored_enchantments")
-            val levels = NbtHelper.compound(enchComp, "levels")
-            levels?.let { lvls ->
-                for (key in lvls.keySet()) {
+            if (enchComp != null) {
+                // Try levels sub-compound first (1.20.5–1.21.1)
+                val levels = NbtHelper.compound(enchComp, "levels")
+                val source = levels ?: enchComp  // Fallback: direct map (1.21.2+)
+                for (key in source.keySet()) {
+                    if (levels == null && !key.contains(":")) continue  // skip metadata keys
                     val enchId = key.removePrefix("minecraft:")
-                    val level = NbtHelper.int(lvls, key, 1)
-                    result.add(EnchantmentData(enchId, level))
+                    val level = NbtHelper.int(source, key, 1)
+                    if (level > 0) result.add(EnchantmentData(enchId, level))
                 }
             }
         }
