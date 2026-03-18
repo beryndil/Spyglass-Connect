@@ -142,30 +142,17 @@ object MapRenderer {
         if (packed.isEmpty()) return IntArray(count)
 
         val result = IntArray(count)
-        val bitsPerEntry = (packed.size * 64) / count
-        if (bitsPerEntry <= 0 || bitsPerEntry > 32) return IntArray(count)
+        val bitsPerEntry = maxOf(1, (packed.size * 64) / count)
+        if (bitsPerEntry > 32) return IntArray(count)
 
+        val entriesPerLong = 64 / bitsPerEntry
         val mask = (1L shl bitsPerEntry) - 1L
-        var bitIndex = 0
 
         for (i in 0 until count) {
-            val longIndex = bitIndex / 64
-            val bitOffset = bitIndex % 64
-
+            val longIndex = i / entriesPerLong
+            val bitOffset = (i % entriesPerLong) * bitsPerEntry
             if (longIndex >= packed.size) break
-
-            val value = if (bitOffset + bitsPerEntry <= 64) {
-                (packed[longIndex] ushr bitOffset) and mask
-            } else {
-                val lo = packed[longIndex] ushr bitOffset
-                val hi = if (longIndex + 1 < packed.size) {
-                    packed[longIndex + 1] shl (64 - bitOffset)
-                } else 0L
-                (lo or hi) and mask
-            }
-
-            result[i] = value.toInt()
-            bitIndex += bitsPerEntry
+            result[i] = ((packed[longIndex] ushr bitOffset) and mask).toInt()
         }
 
         return result
